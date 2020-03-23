@@ -35,6 +35,6 @@ Route::get('/initialize/{game_id}', 'GamestateController@initialize');
 Route::post('/deploy/{game_id})', 'GamestateController@deploy');
 Route::post('/attack/{game_id}', 'GamestateController@attack');
 Route::post('/fortify/{game_id}', 'GamestateController@fortify');
-Route::get('/map', 'GameController@showGame');
+Route::get('/game/{game_id}', 'GameController@showGame');
 Route::get('/{game_id}', 'GamestateController@get_current_state');
 
