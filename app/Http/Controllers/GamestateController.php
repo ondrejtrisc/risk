@@ -17,9 +17,7 @@ class GamestateController extends Controller
         $state = new stdClass();
         $state->players = $players;
         $state->territories = [];
-        $state->turn = 0;
-        $state->phase = 'deploy';
-
+        
         $territoryNames = ['brazil', 'argentina', 'peru', 'venezuela'];
 
         foreach ($territoryNames as $name)
@@ -71,6 +69,25 @@ class GamestateController extends Controller
             }
         }
 
+        //sets the first player's turn
+        $state->turn = 0;
+
+        //sets the phase to deploy
+        $state->phase = 'deploy';
+        $state->attackerDice = null;
+        $state->defenderDice = null;
+
+        //calculates how many units the first player can deploy
+        $playerHeldTerritories = 0;
+        foreach ($state->territories as $territory)
+        {
+            if ($territory->player === $state->$players[$state->turn])
+            {
+                $playerHeldTerritories++;
+            }
+        }
+        $state->$unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+
         $gamestate->state = json_encode($state);
 
         $gamestate->save();
@@ -99,18 +116,21 @@ class GamestateController extends Controller
         $requestPayload = file_get_contents("php://input");
         $object = json_decode($requestPayload);
 
-        //deploys the units
-        foreach ($state->territories as $territory)
-        {
-            if ($territory->player === $state->players[$state->turn])
-            {
-                $name = $territory->name;
-                $territory->units += $object->$name;
-            }
-        }
+        $state->territories = $object;
+
+        // //deploys the units
+        // foreach ($state->territories as $territory)
+        // {
+        //     if ($territory->player === $state->players[$state->turn])
+        //     {
+        //         $name = $territory->name;
+        //         $territory->units += $object->$name;
+        //     }
+        // }
 
         //changes the phase to attack
         $state->phase = 'attack';
+        $state->unitsToDeploy = null;
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -136,7 +156,7 @@ class GamestateController extends Controller
         $object = json_decode($requestPayload);
         $fromName = $object->attackingTerritory;
         $toName = $object->defendingTerritory;
-        $blitz = $object->blitz;
+        $blitz = ($object->blitz == 'true');
 
         //locates the attacking territory
         foreach ($state->territories as $territory)
@@ -167,6 +187,7 @@ class GamestateController extends Controller
             {
                 $fromDice[] = rand(1, 6);
             }
+            $state->attackerDice = $fromDice;
             rsort($fromDice);
             
             $toDiceNumber = min($toTerritory->units, 2);
@@ -175,6 +196,7 @@ class GamestateController extends Controller
             {
                 $toDice[] = rand(1, 6);
             }
+            $state->defenderDice = $toDice;
             rsort($toDice);
 
             for ($i = 0; $i < min($fromDiceNumber, $toDiceNumber); $i++)
@@ -197,7 +219,7 @@ class GamestateController extends Controller
                 break;
             }
         }
-        while ($blitz === 'true' && $fromTerritory->units > 1);
+        while ($blitz == 'true' && $fromTerritory->units > 1);
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -245,6 +267,7 @@ class GamestateController extends Controller
             }
         }
 
+        //moves the units
         $fromTerritory->units -= $units;
         $toTerritory->units += $units;
 
@@ -260,6 +283,19 @@ class GamestateController extends Controller
 
         //changes the phase to deploy
         $state->phase = 'deploy';
+        $state->attackerDice = null;
+        $state->defenderDice = null;
+
+        //calculates how many units the next player can deploy
+        $playerHeldTerritories = 0;
+        foreach ($state->territories as $territory)
+        {
+            if ($territory->player === $state->$players[$state->turn])
+            {
+                $playerHeldTerritories++;
+            }
+        }
+        $state->$unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
