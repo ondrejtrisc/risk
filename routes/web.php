@@ -34,3 +34,7 @@ Route::get('/test', 'GamestateController@test');
 Route::get('/initialize/{game_id}', 'GamestateController@initialize');
 Route::get('/{game_id}', 'GamestateController@get_current_state');
 Route::post('/attack/{game_id}', 'GamestateController@attack');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
