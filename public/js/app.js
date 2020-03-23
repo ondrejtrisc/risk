@@ -51837,8 +51837,8 @@ if (document.getElementById('root') !== null) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\prog\bootcamp\projects\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\prog\bootcamp\projects\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
