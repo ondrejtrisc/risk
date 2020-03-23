@@ -33,7 +33,9 @@ Route::delete('/games/{id}/delete', 'GameController@delete');
 Route::get('/test', 'GamestateController@test');
 Route::get('/initialize/{game_id}', 'GamestateController@initialize');
 Route::get('/{game_id}', 'GamestateController@get_current_state');
+Route::post('/deploy/{game_id})', 'GamestateController@deploy');
 Route::post('/attack/{game_id}', 'GamestateController@attack');
+Route::post('/fortify/{game_id}', 'GamestateController@fortify');
 
 Auth::routes();
 
