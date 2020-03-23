@@ -120,4 +120,8 @@ class GameController extends Controller
         // dd($gamestate);
         return redirect('/'.$id);
     }
+
+    public function showGame() {
+        return view('map/map');
+    }
 }
