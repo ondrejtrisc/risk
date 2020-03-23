@@ -46415,8 +46415,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Map */ "./resources/js/Components/Map.jsx");
-/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
-/* harmony import */ var _Functions_update__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Functions/update */ "./resources/js/Functions/update.js");
+/* harmony import */ var _PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PhaseBreadcrumb */ "./resources/js/Components/PhaseBreadcrumb.jsx");
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
+/* harmony import */ var _Functions_update__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Functions/update */ "./resources/js/Functions/update.js");
+/* harmony import */ var _PlayerList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PlayerList */ "./resources/js/Components/PlayerList.jsx");
+/* harmony import */ var _ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ButtonBlitz */ "./resources/js/Components/ButtonBlitz.jsx");
+/* harmony import */ var _InfoCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./InfoCard */ "./resources/js/Components/InfoCard.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46444,6 +46448,10 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
+
+
 var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
@@ -46460,85 +46468,129 @@ var App = /*#__PURE__*/function (_Component) {
       activePlayer: 1,
       firstTerritory: '',
       secondTerritory: '',
-      blitz: 'false'
+      blitz: false,
+      game_id: 10,
+      currentPhase: 'deploy',
+      units_to_deploy: 10,
+      deployed_units: []
     };
-    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
+    _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      _Functions_update__WEBPACK_IMPORTED_MODULE_3__["default"].getInitialStateOfGame(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getInitialStateOfGame(this);
     }
   }, {
-    key: "handleClick",
-    value: function handleClick(event) {
-      // validates if the click is on a territory
-      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].territoryClick(event, this.state.territories) === false) {
-        console.log('this is not a territory');
-        return;
-      } // validates if a territory is selected or not
+    key: "handleBlitzClick",
+    value: function handleBlitzClick() {
+      this.state.blitz == true ? this.setState({
+        blitz: false
+      }) : this.setState({
+        blitz: true
+      });
+    }
+  }, {
+    key: "handleMapClick",
+    value: function handleMapClick(event) {
+      if (this.state.currentPhase === 'combat') {
+        // validates if the click is on a territory
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
+          console.log('this is not a territory');
+          return;
+        } // validates if a territory is selected or not
 
 
-      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].isTerritorySelected(this.state.firstTerritory) === false) {
-        //validates if the player owns this territory
-        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].canPlayerSelectTerritory(event, this.state.territories, this.state.activePlayer) === true) {
-          //selects the territory
-          _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].selectTerritory(event);
-          this.setState({
-            firstTerritory: event.target.id
-          });
-          return;
-        } else {
-          console.log('player doesnt own this territory');
-          return;
-        }
-      } //validates if the click is not on the same territory
-      else if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].thisTerritoryAlreadySelected(event, this.state) === true) {
-          _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].deselectSameTerritory(event);
-          this.setState({
-            firstTerritory: ''
-          });
-          return;
-        } // validates if the click is not on a different territory the player owns
-        else if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].differentTerritoryAlreadySelected(event, this.state.territories, this.state.firstTerritory) === true) {
-            console.log('player has chosen a different territory already');
-            _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].deselectOldTerritory(this.state.firstTerritory);
-            _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].selectTerritory(event);
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isTerritorySelected(this) === false) {
+          //validates if the player owns this territory
+          if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {
+            //selects the territory
+            _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
             this.setState({
               firstTerritory: event.target.id
             });
             return;
-          } // finds the two territory objects
+          } else {
+            console.log('player doesnt own this territory');
+            return;
+          }
+        } //validates if the click is not on the same territory
+        else if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].thisTerritoryAlreadySelected(event, this) === true) {
+            _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectSameTerritory(event);
+            this.setState({
+              firstTerritory: ''
+            });
+            return;
+          } // validates if the click is not on a different territory the player owns
+          else if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].differentTerritoryAlreadySelected(event, this) === true) {
+              _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectOldTerritory(this);
+              _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
+              this.setState({
+                firstTerritory: event.target.id
+              });
+              return;
+            } // finds the two territory objects
 
 
-      var attackingTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].findFirstSelectedObject(this.state.territories, this.state.firstTerritory);
-      var defendingTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].findSecondSelectedObject(event, this.state.territories); //validates if the objects are neighbours
+        var attackingTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].findFirstSelectedObject(this.state.territories, this.state.firstTerritory);
+        var defendingTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].findSecondSelectedObject(event, this.state.territories); //validates if the objects are neighbours
 
-      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].areNeighbours(attackingTerritory, defendingTerritory) === false) {
-        console.log('not neighbours');
-        return;
-      } //checks if second territory is an enemy territory
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].areNeighbours(attackingTerritory, defendingTerritory) === false) {
+          console.log('not neighbours');
+          return;
+        } //checks if second territory is an enemy territory
 
 
-      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_2__["default"].isEnemyTerritory(attackingTerritory, defendingTerritory) === false) {
-        return;
-      } else {
-        //sends attack to server
-        _Functions_update__WEBPACK_IMPORTED_MODULE_3__["default"].sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this.state.blitz, this);
-        _Functions_update__WEBPACK_IMPORTED_MODULE_3__["default"].colorTerritories(this.state);
-        _Functions_update__WEBPACK_IMPORTED_MODULE_3__["default"].addNumberOfUnits(this.state);
-      }
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isEnemyTerritory(attackingTerritory, defendingTerritory) === false) {
+          return;
+        } else {
+          //sends attack to server
+          _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this);
+        }
+      } else if (this.state.currentPhase === 'deploy') {
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
+          console.log('not territory');
+          return;
+        }
+
+        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {}
+      } else if (this.state.currentPhase === 'fortify') {}
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "App"
+        className: "container"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row d-flex flex-row justify-content-center align-items-end"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Map__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        handleClick: this.handleClick
-      }));
+        handleMapClick: this.handleMapClick
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col flex-row justify-content-space-between"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        blitz: this.state.blitz,
+        handleBlitzClick: this.handleBlitzClick
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-secondary mr-3"
+      }, "Cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-secondary"
+      }, "Continent Values")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col d-flex flex-row justify-content-center align-items-baseline"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-success btn-block"
+      }, "Next phase"))));
     }
   }]);
 
@@ -46546,6 +46598,138 @@ var App = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
+
+/***/ }),
+
+/***/ "./resources/js/Components/ButtonBlitz.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/Components/ButtonBlitz.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var ButtonBlitz = /*#__PURE__*/function (_Component) {
+  _inherits(ButtonBlitz, _Component);
+
+  var _super = _createSuper(ButtonBlitz);
+
+  function ButtonBlitz(props) {
+    _classCallCheck(this, ButtonBlitz);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(ButtonBlitz, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return _this.props.handleBlitzClick();
+        },
+        type: "button",
+        className: this.props.blitz ? "btn btn-danger mr-3" : "btn btn-success mr-3"
+      }, this.props.blitz ? "Blitz Attack" : "Normal Attack"));
+    }
+  }]);
+
+  return ButtonBlitz;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (ButtonBlitz);
+
+/***/ }),
+
+/***/ "./resources/js/Components/InfoCard.jsx":
+/*!**********************************************!*\
+  !*** ./resources/js/Components/InfoCard.jsx ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var InfoCard = /*#__PURE__*/function (_Component) {
+  _inherits(InfoCard, _Component);
+
+  var _super = _createSuper(InfoCard);
+
+  function InfoCard() {
+    _classCallCheck(this, InfoCard);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(InfoCard, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card ml-5 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, "Information about the game Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis molestias reprehenderit quibusdam eos voluptate, quidem fugiat vero necessitatibus rerum eum soluta culpa laboriosam, pariatur at saepe excepturi. Id, accusamus modi?"));
+    }
+  }]);
+
+  return InfoCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (InfoCard);
 
 /***/ }),
 
@@ -46606,7 +46790,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         height: "519.068",
         enableBackground: "new",
         version: "1",
-        onClick: this.props.handleClick
+        onClick: this.props.handleMapClick
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("defs", {
         id: "defs5"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("linearGradient", {
@@ -51211,6 +51395,151 @@ var Map = /*#__PURE__*/function (_React$Component) {
 
 /***/ }),
 
+/***/ "./resources/js/Components/PhaseBreadcrumb.jsx":
+/*!*****************************************************!*\
+  !*** ./resources/js/Components/PhaseBreadcrumb.jsx ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var PhaseBreadcrumb = /*#__PURE__*/function (_Component) {
+  _inherits(PhaseBreadcrumb, _Component);
+
+  var _super = _createSuper(PhaseBreadcrumb);
+
+  function PhaseBreadcrumb() {
+    _classCallCheck(this, PhaseBreadcrumb);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PhaseBreadcrumb, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "h-50"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+        "aria-label": "breadcrumb"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
+        className: "breadcrumb"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "breadcrumb-item"
+      }, "Deploy"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "breadcrumb-item"
+      }, "Combat"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "breadcrumb-item active",
+        "aria-current": "page"
+      }, "Enforce"))));
+    }
+  }]);
+
+  return PhaseBreadcrumb;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (PhaseBreadcrumb);
+
+/***/ }),
+
+/***/ "./resources/js/Components/PlayerList.jsx":
+/*!************************************************!*\
+  !*** ./resources/js/Components/PlayerList.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var PlayerList = /*#__PURE__*/function (_Component) {
+  _inherits(PlayerList, _Component);
+
+  var _super = _createSuper(PlayerList);
+
+  function PlayerList() {
+    _classCallCheck(this, PlayerList);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PlayerList, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group mb-4 ml-5"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item active"
+      }, "Player 1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item"
+      }, "Player 2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item"
+      }, "Player 3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item"
+      }, "Player 4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item"
+      }, "Player 5")));
+    }
+  }]);
+
+  return PlayerList;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (PlayerList);
+
+/***/ }),
+
 /***/ "./resources/js/Functions/update.js":
 /*!******************************************!*\
   !*** ./resources/js/Functions/update.js ***!
@@ -51242,7 +51571,7 @@ var update = {
     });
   },
   getInitialStateOfGame: function getInitialStateOfGame(object) {
-    fetch('./initialize/8').then(function (promise) {
+    fetch("../initialize/".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
       object.setState({
@@ -51252,14 +51581,14 @@ var update = {
       update.addNumberOfUnits(object.state);
     });
   },
-  sendAttackToServer: function sendAttackToServer(attacking, defending, blitz, object) {
+  sendAttackToServer: function sendAttackToServer(attacking, defending, object) {
     var toSend = {
       attackingTerritory: attacking,
       defendingTerritory: defending,
-      blitz: blitz
+      blitz: object.state.blitz
     };
     console.log(toSend);
-    fetch('./attack/8', {
+    fetch("../attack/".concat(object.state.game_id), {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -51336,9 +51665,9 @@ var neighbours = {
   "eastern_australia": ["new_guinea", "western_australia"]
 };
 var validate = {
-  territoryClick: function territoryClick(event, territories) {
+  territoryClick: function territoryClick(event, object) {
     var validClick = false;
-    territories.map(function (territory) {
+    object.state.territories.map(function (territory) {
       if (event.target.id === territory.name) {
         validClick = true;
         return '';
@@ -51348,8 +51677,8 @@ var validate = {
     });
     return validClick;
   },
-  isTerritorySelected: function isTerritorySelected(firstTerritory) {
-    if (firstTerritory === "") {
+  isTerritorySelected: function isTerritorySelected(object) {
+    if (object.state.firstTerritory === "") {
       return false;
     } else {
       return true;
@@ -51373,12 +51702,12 @@ var validate = {
     });
     return isTrue;
   },
-  canPlayerSelectTerritory: function canPlayerSelectTerritory(event, territories, activePlayer) {
+  canPlayerSelectTerritory: function canPlayerSelectTerritory(event, object) {
     var canSelect = false;
     var territorySelected = event.target.id;
-    territories.map(function (territory) {
+    object.state.territories.map(function (territory) {
       if (territory.name === territorySelected) {
-        if (territory.player === activePlayer) {
+        if (territory.player === object.state.activePlayer) {
           canSelect = true;
           return '';
         } else {
@@ -51390,25 +51719,25 @@ var validate = {
     });
     return canSelect;
   },
-  selectTerritory: function selectTerritory(event, state) {
+  selectTerritory: function selectTerritory(event) {
     event.target.classList.toggle("selected");
   },
-  thisTerritoryAlreadySelected: function thisTerritoryAlreadySelected(event, state) {
-    if (state.firstTerritory === event.target.id) {
+  thisTerritoryAlreadySelected: function thisTerritoryAlreadySelected(event, object) {
+    if (object.state.firstTerritory === event.target.id) {
       return true;
     } else {
       return false;
     }
   },
-  differentTerritoryAlreadySelected: function differentTerritoryAlreadySelected(event, territories, firstTerritory) {
+  differentTerritoryAlreadySelected: function differentTerritoryAlreadySelected(event, object) {
     var newTerritoryObject = event.target.id;
-    var oldTerritoryObject = firstTerritory; //this.state.firstTerritory
+    var oldTerritoryObject = object.state.firstTerritory; //this.state.firstTerritory
 
-    territories.map(function (territory) {
+    object.state.territories.map(function (territory) {
       if (event.target.id === territory.name) {
         newTerritoryObject = territory;
         return '';
-      } else if (firstTerritory === territory.name) {
+      } else if (object.state.firstTerritory === territory.name) {
         oldTerritoryObject = territory;
         return '';
       } else {
@@ -51425,8 +51754,8 @@ var validate = {
   deselectSameTerritory: function deselectSameTerritory(event) {
     event.target.classList.toggle("selected");
   },
-  deselectOldTerritory: function deselectOldTerritory(firstTerritory) {
-    document.getElementById(firstTerritory).classList.toggle('selected');
+  deselectOldTerritory: function deselectOldTerritory(object) {
+    document.getElementById("".concat(object.state.firstTerritory)).classList.toggle('selected');
   },
   findFirstSelectedObject: function findFirstSelectedObject(territories, firstTerritory) {
     var firstTerritoryObject = "first territory not found";

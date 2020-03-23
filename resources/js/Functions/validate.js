@@ -3,9 +3,9 @@ let neighbours =  {
 }
 
 const validate = {
-  territoryClick: function(event, territories) {
+  territoryClick: function(event, object) {
     let validClick = false
-    territories.map(territory => {
+    object.state.territories.map(territory => {
       if(event.target.id === territory.name) {
         validClick = true
         return ''
@@ -16,8 +16,8 @@ const validate = {
     return validClick;
   },
 
-  isTerritorySelected: function(firstTerritory) {
-    if (firstTerritory === "") {
+  isTerritorySelected: function(object) {
+    if (object.state.firstTerritory === "") {
       return false;
       } else {
         return true;
@@ -41,12 +41,12 @@ const validate = {
     return isTrue;
   },
   
-  canPlayerSelectTerritory: function(event, territories, activePlayer) {
+  canPlayerSelectTerritory: function(event, object) {
     let canSelect = false
     let territorySelected = event.target.id
-    territories.map(territory => {
+    object.state.territories.map(territory => {
       if(territory.name === territorySelected) {
-        if(territory.player === activePlayer) {
+        if(territory.player === object.state.activePlayer) {
           canSelect = true
           return ''
         } else {
@@ -59,27 +59,27 @@ const validate = {
     return canSelect;
   },
     
-  selectTerritory: function(event, state) {
+  selectTerritory: function(event) {
     event.target.classList.toggle("selected")
   },
 
 
-  thisTerritoryAlreadySelected: function(event, state) {
-    if (state.firstTerritory === event.target.id) {
+  thisTerritoryAlreadySelected: function(event, object) {
+    if (object.state.firstTerritory === event.target.id) {
       return true;
       } else {
         return false; 
       }
   },
 
-  differentTerritoryAlreadySelected: function(event, territories, firstTerritory) {
+  differentTerritoryAlreadySelected: function(event, object) {
     let newTerritoryObject = event.target.id
-    let oldTerritoryObject = firstTerritory //this.state.firstTerritory
-    territories.map(territory => {
+    let oldTerritoryObject = object.state.firstTerritory //this.state.firstTerritory
+    object.state.territories.map(territory => {
       if(event.target.id === territory.name) {
         newTerritoryObject = territory
         return ''
-      } else if (firstTerritory === territory.name) {
+      } else if (object.state.firstTerritory === territory.name) {
         oldTerritoryObject = territory
         return ''
       } else {
@@ -97,8 +97,8 @@ const validate = {
     event.target.classList.toggle("selected");
   },
 
-  deselectOldTerritory: function(firstTerritory) {
-    document.getElementById(firstTerritory).classList.toggle('selected')
+  deselectOldTerritory: function(object) {
+    document.getElementById(`${object.state.firstTerritory}`).classList.toggle('selected')
   },
 
   findFirstSelectedObject: function(territories, firstTerritory) {

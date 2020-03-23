@@ -22,7 +22,7 @@ const update = {
 
 
   getInitialStateOfGame: function(object) {
-    fetch('./initialize/8')
+    fetch(`../initialize/${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
         object.setState({territories: data.territories})
@@ -31,14 +31,14 @@ const update = {
       })
 },
 
-  sendAttackToServer: function(attacking, defending, blitz, object) {
+  sendAttackToServer: function(attacking, defending, object) {
     let toSend = {
       attackingTerritory: attacking,
       defendingTerritory: defending,
-      blitz: blitz
+      blitz: object.state.blitz
     }
     console.log(toSend)
-    fetch('./attack/8', 
+    fetch(`../attack/${object.state.game_id}`, 
     {
         method: "POST",
         headers: {

@@ -13,7 +13,7 @@ class Map extends React.Component {
         height="519.068"
         enableBackground="new"
         version="1"
-        onClick={this.props.handleClick}
+        onClick={this.props.handleMapClick}
       >
         <defs id="defs5">
           <linearGradient id="linearGradient11165">
