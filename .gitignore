@@ -11,4 +11,8 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /public/js/app.js.map
+<<<<<<< Updated upstream
 /public/mix-manifest.json
+=======
+/public/mix-manifest.json
+>>>>>>> Stashed changes
