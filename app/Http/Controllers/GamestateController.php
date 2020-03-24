@@ -102,8 +102,15 @@ class GamestateController extends Controller
 
     public function get_current_state($game_id)
     {
-        $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
-        return $gamestate->state;
+        try
+        {
+            $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
+            return $gamestate->state;
+        }
+        catch (Exception $err)
+        {
+            return json_encode(new stdClass());
+        }
     }
 
     public function deploy($game_id)
