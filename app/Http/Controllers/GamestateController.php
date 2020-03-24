@@ -116,7 +116,7 @@ class GamestateController extends Controller
         $requestPayload = file_get_contents("php://input");
         $object = json_decode($requestPayload);
 
-        $state->territories = $object;
+        $state->territories = $object->territories;
 
         // //deploys the units
         // foreach ($state->territories as $territory)
