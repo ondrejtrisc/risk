@@ -118,10 +118,10 @@ class GameController extends Controller
         $gamestate = new GamestateController;
         $gamestate->create_initial($id, $user_colours);
         // dd($gamestate);
-        return redirect('/'.$id);
+        return redirect('/initialize/'.$id);
     }
 
-    public function showGame() {
-        return view('map/map');
+    public function play($id) {
+        return view('map/map'); //   '/game/'.$id
     }
 }
