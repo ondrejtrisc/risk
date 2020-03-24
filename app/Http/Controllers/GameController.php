@@ -118,7 +118,8 @@ class GameController extends Controller
         $gamestate = new GamestateController;
         $gamestate->create_initial($id, $user_colours);
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
-        $game_id = Game::findOrFail($id);
+        $game = Game::findOrFail($id);
+        $game_id = $id;
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
         return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
@@ -126,8 +127,9 @@ class GameController extends Controller
 
     public function play($id) {
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
-        $game_id = Game::findOrFail($id);
-        $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game_id));
+        $game = Game::findOrFail($id);
+        $game_id = $id;
+        $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
         return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
     }
