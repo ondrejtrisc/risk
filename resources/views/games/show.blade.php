@@ -48,7 +48,6 @@
                   @if(Auth::user()->id == $game->founder_user_id)  
                     @if($num_users == $game->max_players)
                       <form action="{{ action('GameController@launch', [$game->id]) }}" method="get">
-                        @csrf
                         <button type="submit">Launch the game</button>
                       </form>
                     @else

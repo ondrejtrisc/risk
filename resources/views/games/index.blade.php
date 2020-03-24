@@ -99,7 +99,6 @@
                                   {{-- {{dd($num_users[$game->id])}} --}}
                                   @if($num_users[$game->id] == $game->max_players)
                                     <form action="{{ action('GameController@launch', [$game->id]) }}" method="get">  
-                                      @csrf
                                       <button type="submit">Launch the game</button>
                                     </form>
                                   @endif
