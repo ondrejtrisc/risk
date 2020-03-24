@@ -127,7 +127,7 @@ class GameController extends Controller
     public function play($id) {
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
         $game_id = Game::findOrFail($id);
-        $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
+        $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game_id));
         $colour = $colours[$index];
         return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
     }
