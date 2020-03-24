@@ -17,9 +17,9 @@ class App extends Component {
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 10,
+      game_id: 12,
       currentPhase: 'deploy',
-      units_to_deploy: 10,
+      unitsToDeploy: 3,
       deployed_units: []
     }
     this.handleMapClick = this.handleMapClick.bind(this)
@@ -29,6 +29,7 @@ class App extends Component {
 
   componentDidMount() {
     update.getInitialStateOfGame(this)
+    update.addNumberOfUnits(this.state)
 
   }
 
@@ -37,7 +38,9 @@ class App extends Component {
   }
 
   handleMapClick(event) {
-    if(this.state.currentPhase === 'combat') {
+
+    // ATTACK PHASE
+    if(this.state.currentPhase === 'attack') {
           // validates if the click is on a territory
       if(validate.territoryClick(event, this) === false) {
         console.log('this is not a territory')
@@ -94,26 +97,46 @@ class App extends Component {
       }
     } 
     
+    // DEPLOY PHASE
     else if(this.state.currentPhase === 'deploy') {
+
+      //Is it a territory?
       if(validate.territoryClick(event, this) === false) {
         console.log('not territory')
         return;
       } 
 
+      //is it owned by player?
       if(validate.canPlayerSelectTerritory(event,this) === true) {
-
-    }
-  }
-    
+        if(this.state.unitsToDeploy > 0) {
+          let updatedTerritories = JSON.parse(JSON.stringify(this.state.territories))
+          updatedTerritories.map(territory => {
+            if(event.target.id === territory.name) {
+              territory.units += 1
+            }
+          })
+          this.setState({territories: updatedTerritories})
+          this.setState({unitsToDeploy: this.state.unitsToDeploy - 1})
+          } else {
+            console.log('sending data to server')
+            update.sendDeployToServer(this)
+          }
+        } 
+      }
+      
+      
     else if(this.state.currentPhase === 'fortify') {
       
       }
 
-    }
+    
+  }
 
   
 
   render() {
+    update.addNumberOfUnits(this.state)
+    update.colorTerritories(this.state)
     return (
       <div className="container">
 
