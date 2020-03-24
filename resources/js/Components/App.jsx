@@ -49,7 +49,7 @@ class App extends Component {
       update.sendDeployToServer(this)
       this.setState({phase: 'attack'})
     } else if(this.state.phase === 'fortify') {
-      this.setState({phase: 'deploy'})
+      this.setState({phase: 'endTurn'})
     }
   }
 

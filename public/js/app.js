@@ -46513,7 +46513,7 @@ var App = /*#__PURE__*/function (_Component) {
         });
       } else if (this.state.phase === 'fortify') {
         this.setState({
-          phase: 'deploy'
+          phase: 'endTurn'
         });
       }
     }
