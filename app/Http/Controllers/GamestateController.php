@@ -81,12 +81,12 @@ class GamestateController extends Controller
         $playerHeldTerritories = 0;
         foreach ($state->territories as $territory)
         {
-            if ($territory->player === $state->$players[$state->turn])
+            if ($territory->player === $state->players[$state->turn])
             {
                 $playerHeldTerritories++;
             }
         }
-        $state->$unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+        $state->unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
 
         $gamestate->state = json_encode($state);
 
@@ -290,12 +290,12 @@ class GamestateController extends Controller
         $playerHeldTerritories = 0;
         foreach ($state->territories as $territory)
         {
-            if ($territory->player === $state->$players[$state->turn])
+            if ($territory->player === $state->players[$state->turn])
             {
                 $playerHeldTerritories++;
             }
         }
-        $state->$unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+        $state->unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
