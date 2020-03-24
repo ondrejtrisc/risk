@@ -112,16 +112,16 @@ class GameController extends Controller
         // dd($this->usersIdStrToArrOfUsersIds($game));
         $game->status = 'launched';
         $game->save();
-        $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
-        $user_colours = array_slice($colours, 0, count($this->usersIdStrToArrOfUsers($game)));
+        // $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
+        // $user_colours = array_slice($colours, 0, count($this->usersIdStrToArrOfUsers($game)));
         // dd($user_colours);
-        $gamestate = new GamestateController;
-        $gamestate->create_initial($id, $user_colours);
+        // $gamestate = new GamestateController;
+        // $gamestate->create_initial($id, $user_colours);
         // dd($gamestate);
         return redirect('/initialize/'.$id);
     }
 
     public function play($id) {
-        return view('map/map'); //   '/game/'.$id
+        return view('map/map'); //     'game/'.$id
     }
 }

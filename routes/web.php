@@ -26,7 +26,7 @@ Route::get('/games/create', 'GameController@create');
 Route::get('/games/{id}', 'GameController@show');
 Route::post('/games/store', 'GameController@store');
 Route::post('/games/{id}/leave', 'GameController@leave');
-// Route::post('/games/{id}/launch', 'GameController@launch');
+Route::get('/games/{id}/launch', 'GameController@launch');
 Route::get('/games/{id}/edit', 'GameController@edit');
 Route::post('/games/{id}/edit', 'GameController@update');
 Route::delete('/games/{id}/delete', 'GameController@delete');
