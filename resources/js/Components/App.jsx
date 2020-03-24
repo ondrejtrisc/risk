@@ -15,10 +15,11 @@ class App extends Component {
     this.state = {
       territories: [],
       activePlayer: 1,
+      currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 13,
+      game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
       phase: 'deploy',
       unitsToDeploy: 3,
       endOfPhase: false,
@@ -34,9 +35,6 @@ class App extends Component {
   componentDidMount() {
     update.getStateOfGame(this)
     update.addNumberOfUnits(this.state)
-    console.log(document.querySelector('meta[name="game_id"]').getAttribute('content'))
-    console.log(document.querySelector('meta[name="color"]').getAttribute('content'))
-
 
   }
 
@@ -157,6 +155,8 @@ class App extends Component {
   
 
   render() {
+    console.log(this.state)
+
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
     console.log(this.state.phase)

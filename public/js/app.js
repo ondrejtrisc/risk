@@ -46468,10 +46468,11 @@ var App = /*#__PURE__*/function (_Component) {
     _this.state = {
       territories: [],
       activePlayer: 1,
+      currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 13,
+      game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
       phase: 'deploy',
       unitsToDeploy: 3,
       endOfPhase: false,
@@ -46488,8 +46489,6 @@ var App = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
-      console.log(document.querySelector('meta[name="game_id"]').getAttribute('content'));
-      console.log(document.querySelector('meta[name="color"]').getAttribute('content'));
     }
   }, {
     key: "handleBlitzClick",
@@ -46622,6 +46621,7 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      console.log(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
       console.log(this.state.phase);
@@ -52009,8 +52009,8 @@ if (document.getElementById('root') !== null) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
