@@ -10,7 +10,7 @@ class ButtonBlitz extends Component {
       <>
         <button onClick={() => this.props.handleBlitzClick()} 
                 type="button" 
-                className={(this.props.blitz) ? "btn btn-danger mr-3" : "btn btn-success mr-3"}>
+                className={(this.props.blitz) ? "btn btn-danger mr-3" : "btn btn-warning mr-3"}>
                   {
                   (this.props.blitz) ? "Blitz Attack" : "Normal Attack"
                   }

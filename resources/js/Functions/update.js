@@ -21,8 +21,8 @@ const update = {
   },
 
 
-  getInitialStateOfGame: function(object) {
-    fetch(`../initialize/${object.state.game_id}`)
+  getStateOfGame: function(object) {
+    fetch(`../${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
         object.setState({territories: data.territories})

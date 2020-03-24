@@ -6,6 +6,7 @@ import update from '../Functions/update'
 import PlayerList from './PlayerList';
 import ButtonBlitz from './ButtonBlitz';
 import InfoCard from './InfoCard';
+import NextPhaseButton from './NextPhaseButton';
 
 
 class App extends Component {
@@ -17,19 +18,25 @@ class App extends Component {
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 12,
-      currentPhase: 'deploy',
+      game_id: 13,
+      phase: 'deploy',
       unitsToDeploy: 3,
+      endOfPhase: false,
       deployed_units: []
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
+    this.handleNextPhaseClick = this.handleNextPhaseClick.bind(this)
+
 
   }
 
   componentDidMount() {
-    update.getInitialStateOfGame(this)
+    update.getStateOfGame(this)
     update.addNumberOfUnits(this.state)
+    console.log(document.querySelector('meta[name="game_id"]').getAttribute('content'))
+    console.log(document.querySelector('meta[name="color"]').getAttribute('content'))
+
 
   }
 
@@ -37,10 +44,22 @@ class App extends Component {
     (this.state.blitz == true) ? this.setState({blitz: false}) : this.setState({blitz: true})
   }
 
+  handleNextPhaseClick() {
+    if(this.state.phase === 'attack') {
+      this.setState({phase: 'fortify'})
+    } else if(this.state.phase === 'deploy' && this.state.endOfPhase === true) {
+      update.sendDeployToServer(this)
+      this.setState({phase: 'attack'})
+    } else if(this.state.phase === 'fortify') {
+      this.setState({phase: 'deploy'})
+    }
+  }
+
   handleMapClick(event) {
 
     // ATTACK PHASE
-    if(this.state.currentPhase === 'attack') {
+    if(this.state.phase === 'attack') {
+      this.setState({endOfPhase: true})
           // validates if the click is on a territory
       if(validate.territoryClick(event, this) === false) {
         console.log('this is not a territory')
@@ -98,7 +117,7 @@ class App extends Component {
     } 
     
     // DEPLOY PHASE
-    else if(this.state.currentPhase === 'deploy') {
+    else if(this.state.phase === 'deploy') {
 
       //Is it a territory?
       if(validate.territoryClick(event, this) === false) {
@@ -114,18 +133,21 @@ class App extends Component {
             if(event.target.id === territory.name) {
               territory.units += 1
             }
-          })
-          this.setState({territories: updatedTerritories})
-          this.setState({unitsToDeploy: this.state.unitsToDeploy - 1})
-          } else {
-            console.log('sending data to server')
-            update.sendDeployToServer(this)
+          }) 
+            if(this.state.unitsToDeploy === 1) {
+              this.setState({territories: updatedTerritories})
+              this.setState({unitsToDeploy: this.state.unitsToDeploy - 1})
+              this.setState({endOfPhase: true})
+            } else {
+              this.setState({territories: updatedTerritories})
+              this.setState({unitsToDeploy: this.state.unitsToDeploy - 1})
+            }
           }
         } 
       }
       
       
-    else if(this.state.currentPhase === 'fortify') {
+    else if(this.state.phase === 'fortify') {
       
       }
 
@@ -137,6 +159,20 @@ class App extends Component {
   render() {
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
+    console.log(this.state.phase)
+    let phaseValue = "0%"
+    let phaseDesc = ''
+    if(this.state.phase === 'deploy') {
+      phaseValue = "33%"
+      phaseDesc = 'Deploy'
+    } else if (this.state.phase === 'attack') {
+      phaseValue = "66%"
+      phaseDesc = 'Attack'
+    } else if (this.state.phase === 'fortify') {
+      phaseValue = "100%"
+      phaseDesc = 'Fortify'
+
+    }
     return (
       <div className="container">
 
@@ -158,11 +194,17 @@ class App extends Component {
             <button type="button" className="btn btn-secondary mr-3">Cards</button>
             <button type="button" className="btn btn-secondary">Continent Values</button>
           </div>
-          <div className="col d-flex flex-row justify-content-center align-items-baseline">
-            <PhaseBreadcrumb />
+          <div className="col d-flex flex-row justify-content-stretch">
+            <PhaseBreadcrumb  phase={this.state.phase}
+                              phaseValue={phaseValue}
+                              phaseDesc={phaseDesc}
+                              />
           </div>
           <div className="col">
-            <button type="button" className="btn btn-success btn-block">Next phase</button>
+            <NextPhaseButton  handleNextPhaseClick={this.handleNextPhaseClick}
+                              phaseDesc={phaseDesc}
+                              endOfPhase={this.state.endOfPhase}
+            />
           </div>
         </div>
       </div>

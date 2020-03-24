@@ -46421,6 +46421,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PlayerList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PlayerList */ "./resources/js/Components/PlayerList.jsx");
 /* harmony import */ var _ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ButtonBlitz */ "./resources/js/Components/ButtonBlitz.jsx");
 /* harmony import */ var _InfoCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./InfoCard */ "./resources/js/Components/InfoCard.jsx");
+/* harmony import */ var _NextPhaseButton__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./NextPhaseButton */ "./resources/js/Components/NextPhaseButton.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46452,6 +46453,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
@@ -46469,21 +46471,25 @@ var App = /*#__PURE__*/function (_Component) {
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 12,
-      currentPhase: 'deploy',
+      game_id: 13,
+      phase: 'deploy',
       unitsToDeploy: 3,
+      endOfPhase: false,
       deployed_units: []
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
+    _this.handleNextPhaseClick = _this.handleNextPhaseClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getInitialStateOfGame(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
+      console.log(document.querySelector('meta[name="game_id"]').getAttribute('content'));
+      console.log(document.querySelector('meta[name="color"]').getAttribute('content'));
     }
   }, {
     key: "handleBlitzClick",
@@ -46495,11 +46501,32 @@ var App = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "handleNextPhaseClick",
+    value: function handleNextPhaseClick() {
+      if (this.state.phase === 'attack') {
+        this.setState({
+          phase: 'fortify'
+        });
+      } else if (this.state.phase === 'deploy' && this.state.endOfPhase === true) {
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendDeployToServer(this);
+        this.setState({
+          phase: 'attack'
+        });
+      } else if (this.state.phase === 'fortify') {
+        this.setState({
+          phase: 'deploy'
+        });
+      }
+    }
+  }, {
     key: "handleMapClick",
     value: function handleMapClick(event) {
       // ATTACK PHASE
-      if (this.state.currentPhase === 'attack') {
-        // validates if the click is on a territory
+      if (this.state.phase === 'attack') {
+        this.setState({
+          endOfPhase: true
+        }); // validates if the click is on a territory
+
         if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
           console.log('this is not a territory');
           return;
@@ -46553,7 +46580,7 @@ var App = /*#__PURE__*/function (_Component) {
           _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this);
         }
       } // DEPLOY PHASE
-      else if (this.state.currentPhase === 'deploy') {
+      else if (this.state.phase === 'deploy') {
           //Is it a territory?
           if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
             console.log('not territory');
@@ -46569,24 +46596,49 @@ var App = /*#__PURE__*/function (_Component) {
                   territory.units += 1;
                 }
               });
-              this.setState({
-                territories: updatedTerritories
-              });
-              this.setState({
-                unitsToDeploy: this.state.unitsToDeploy - 1
-              });
-            } else {
-              console.log('sending data to server');
-              _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendDeployToServer(this);
+
+              if (this.state.unitsToDeploy === 1) {
+                this.setState({
+                  territories: updatedTerritories
+                });
+                this.setState({
+                  unitsToDeploy: this.state.unitsToDeploy - 1
+                });
+                this.setState({
+                  endOfPhase: true
+                });
+              } else {
+                this.setState({
+                  territories: updatedTerritories
+                });
+                this.setState({
+                  unitsToDeploy: this.state.unitsToDeploy - 1
+                });
+              }
             }
           }
-        } else if (this.state.currentPhase === 'fortify') {}
+        } else if (this.state.phase === 'fortify') {}
     }
   }, {
     key: "render",
     value: function render() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
+      console.log(this.state.phase);
+      var phaseValue = "0%";
+      var phaseDesc = '';
+
+      if (this.state.phase === 'deploy') {
+        phaseValue = "33%";
+        phaseDesc = 'Deploy';
+      } else if (this.state.phase === 'attack') {
+        phaseValue = "66%";
+        phaseDesc = 'Attack';
+      } else if (this.state.phase === 'fortify') {
+        phaseValue = "100%";
+        phaseDesc = 'Fortify';
+      }
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -46609,13 +46661,18 @@ var App = /*#__PURE__*/function (_Component) {
         type: "button",
         className: "btn btn-secondary"
       }, "Continent Values")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col d-flex flex-row justify-content-center align-items-baseline"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col d-flex flex-row justify-content-stretch"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        phase: this.state.phase,
+        phaseValue: phaseValue,
+        phaseDesc: phaseDesc
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        className: "btn btn-success btn-block"
-      }, "Next phase"))));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NextPhaseButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        handleNextPhaseClick: this.handleNextPhaseClick,
+        phaseDesc: phaseDesc,
+        endOfPhase: this.state.endOfPhase
+      }))));
     }
   }]);
 
@@ -46682,7 +46739,7 @@ var ButtonBlitz = /*#__PURE__*/function (_Component) {
           return _this.props.handleBlitzClick();
         },
         type: "button",
-        className: this.props.blitz ? "btn btn-danger mr-3" : "btn btn-success mr-3"
+        className: this.props.blitz ? "btn btn-danger mr-3" : "btn btn-warning mr-3"
       }, this.props.blitz ? "Blitz Attack" : "Normal Attack"));
     }
   }]);
@@ -51420,6 +51477,74 @@ var Map = /*#__PURE__*/function (_React$Component) {
 
 /***/ }),
 
+/***/ "./resources/js/Components/NextPhaseButton.jsx":
+/*!*****************************************************!*\
+  !*** ./resources/js/Components/NextPhaseButton.jsx ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var NextPhaseButton = /*#__PURE__*/function (_Component) {
+  _inherits(NextPhaseButton, _Component);
+
+  var _super = _createSuper(NextPhaseButton);
+
+  function NextPhaseButton(props) {
+    _classCallCheck(this, NextPhaseButton);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(NextPhaseButton, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-success btn-large ml-5 w-80",
+        onClick: function onClick() {
+          return _this.props.handleNextPhaseClick();
+        }
+      }, "End phase ", this.props.phaseDesc);
+    }
+  }]);
+
+  return NextPhaseButton;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (NextPhaseButton);
+
+/***/ }),
+
 /***/ "./resources/js/Components/PhaseBreadcrumb.jsx":
 /*!*****************************************************!*\
   !*** ./resources/js/Components/PhaseBreadcrumb.jsx ***!
@@ -51460,29 +51585,30 @@ var PhaseBreadcrumb = /*#__PURE__*/function (_Component) {
 
   var _super = _createSuper(PhaseBreadcrumb);
 
-  function PhaseBreadcrumb() {
+  function PhaseBreadcrumb(props) {
     _classCallCheck(this, PhaseBreadcrumb);
 
-    return _super.apply(this, arguments);
+    return _super.call(this, props);
   }
 
   _createClass(PhaseBreadcrumb, [{
     key: "render",
     value: function render() {
+      var _this$props = this.props,
+          phaseValue = _this$props.phaseValue,
+          phaseDesc = _this$props.phaseDesc;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "h-50"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-        "aria-label": "breadcrumb"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
-        className: "breadcrumb"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "breadcrumb-item"
-      }, "Deploy"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "breadcrumb-item"
-      }, "Combat"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "breadcrumb-item active",
-        "aria-current": "page"
-      }, "Enforce"))));
+        className: "progress h-100 w-100"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "progress-bar h-100",
+        role: "progressbar",
+        style: {
+          width: phaseValue
+        },
+        "aria-valuenow": phaseValue,
+        "aria-valuemin": "0",
+        "aria-valuemax": "100"
+      }, phaseDesc));
     }
   }]);
 
@@ -51595,8 +51721,8 @@ var update = {
       document.getElementById("".concat(territory.name, "-units-text")).textContent = "".concat(territory.units);
     });
   },
-  getInitialStateOfGame: function getInitialStateOfGame(object) {
-    fetch("../initialize/".concat(object.state.game_id)).then(function (promise) {
+  getStateOfGame: function getStateOfGame(object) {
+    fetch("../".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
       object.setState({

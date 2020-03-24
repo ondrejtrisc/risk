@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 
 class PhaseBreadcrumb extends Component {
+  constructor(props) {
+    super(props)
+  }
 
   render(){
+    const { phaseValue, phaseDesc } = this.props
     return (
-      <div className="h-50">
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">Deploy</li>
-            <li className="breadcrumb-item">Combat</li>
-            <li className="breadcrumb-item active" aria-current="page">Enforce</li>
-          </ol>
-        </nav>        
-      </div>
+        <div className="progress h-100 w-100">
+          <div  className="progress-bar h-100" 
+                role="progressbar" 
+                style={{width: phaseValue}}
+                aria-valuenow={phaseValue} 
+                aria-valuemin="0" 
+                aria-valuemax="100">
+                  {phaseDesc}
+          </div>
+        </div>       
     )
   }
 }
