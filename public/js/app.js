@@ -46469,9 +46469,9 @@ var App = /*#__PURE__*/function (_Component) {
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 10,
+      game_id: 12,
       currentPhase: 'deploy',
-      units_to_deploy: 10,
+      unitsToDeploy: 3,
       deployed_units: []
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
@@ -46483,6 +46483,7 @@ var App = /*#__PURE__*/function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getInitialStateOfGame(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
     }
   }, {
     key: "handleBlitzClick",
@@ -46496,7 +46497,8 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleMapClick",
     value: function handleMapClick(event) {
-      if (this.state.currentPhase === 'combat') {
+      // ATTACK PHASE
+      if (this.state.currentPhase === 'attack') {
         // validates if the click is on a territory
         if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
           console.log('this is not a territory');
@@ -46550,18 +46552,41 @@ var App = /*#__PURE__*/function (_Component) {
           //sends attack to server
           _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this);
         }
-      } else if (this.state.currentPhase === 'deploy') {
-        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
-          console.log('not territory');
-          return;
-        }
+      } // DEPLOY PHASE
+      else if (this.state.currentPhase === 'deploy') {
+          //Is it a territory?
+          if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
+            console.log('not territory');
+            return;
+          } //is it owned by player?
 
-        if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {}
-      } else if (this.state.currentPhase === 'fortify') {}
+
+          if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {
+            if (this.state.unitsToDeploy > 0) {
+              var updatedTerritories = JSON.parse(JSON.stringify(this.state.territories));
+              updatedTerritories.map(function (territory) {
+                if (event.target.id === territory.name) {
+                  territory.units += 1;
+                }
+              });
+              this.setState({
+                territories: updatedTerritories
+              });
+              this.setState({
+                unitsToDeploy: this.state.unitsToDeploy - 1
+              });
+            } else {
+              console.log('sending data to server');
+              _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendDeployToServer(this);
+            }
+          }
+        } else if (this.state.currentPhase === 'fortify') {}
     }
   }, {
     key: "render",
     value: function render() {
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -51605,6 +51630,27 @@ var update = {
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
     });
+  },
+  sendDeployToServer: function sendDeployToServer(object) {
+    var toSend = {
+      territories: object.state.territories
+    };
+    console.log(toSend);
+    fetch("../deploy/".concat(object.state.game_id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(toSend)
+    }).then(function (response) {
+      return response.json();
+    }) // parses response as JSON
+    .then(function (data) {
+      object.setState({
+        phase: data.phase
+      });
+    });
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (update);
@@ -51837,8 +51883,8 @@ if (document.getElementById('root') !== null) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\prog\bootcamp\projects\risk\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\prog\bootcamp\projects\risk\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

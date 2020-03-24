@@ -54,7 +54,31 @@ const update = {
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
       });
-  }
+  },
+
+  sendDeployToServer: function(object) {
+    let toSend = {
+      territories: object.state.territories
+    }
+    console.log(toSend)
+    fetch(`../deploy/${object.state.game_id}`, 
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(toSend)
+    }
+      )
+      .then(response => response.json())// parses response as JSON
+      .then(data => {
+        object.setState({phase: data.phase})
+      });
+  },
+
+
+
 }
 
 export default update
