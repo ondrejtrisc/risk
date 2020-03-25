@@ -122,7 +122,8 @@ class GameController extends Controller
         $game_id = $id;
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
-        return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
+        $user_name = \Auth::user()->name;
+        return view('map/map', compact('game_id', 'colour', 'user_name')); //     'game/'.$id
     }
 
     public function play($id) {
@@ -131,6 +132,7 @@ class GameController extends Controller
         $game_id = $id;
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
-        return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
+        $user_name = \Auth::user()->name;
+        return view('map/map', compact('game_id', 'colour', 'user_name')); //     'game/'.$id
     }
 }
