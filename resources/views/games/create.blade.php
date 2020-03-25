@@ -5,7 +5,7 @@
   <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-              <div class="card-header">Dashboard</div>
+              <div class="card-header">Create a new game</div>
 
               <div class="card-body">
                 <h3>Create a new game</h3>
@@ -18,6 +18,11 @@
                       <option value="4">4</option>    
                       <option value="5">5</option>    
                       <option value="6">6</option>    
+                  </select><br>
+                  <label>Initial troops deployment:</label>
+                  <select name="init_deployment"><br>
+                      <option value="random">random</option>    
+                      <option value="manual">manual</option>    
                   </select><br>
                   <button type="submit">Create game</button>
                 </form>

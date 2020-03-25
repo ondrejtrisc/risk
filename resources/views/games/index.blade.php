@@ -15,20 +15,6 @@
 
 </style>
 
-{{-- @if (Route::has('login'))
-<div class="top-right links">
-    @auth
-        <a href="{{ url('/home') }}">Home</a>
-    @else
-        <a href="{{ route('login') }}">Login</a>
-
-        @if (Route::has('register'))
-            <a href="{{ route('register') }}">Register</a>
-        @endif
-    @endauth
-</div>
-@endif --}}
-
 <div class="container">
   <div class="row justify-content-center">
       <div class="col-md-8">
@@ -73,19 +59,14 @@
                                 <div class="btn-div">
                                   <form action="{{ action('GameController@show', [$game->id]) }}" method="get">
                                     @csrf
-                                    {{-- <input type="hidden" name="user" value={{\Auth::id}}> --}}
                                     <button type="submit">Show</button>
                                   </form>
                                 </div>
                                 <div class="btn-div">
-                                  {{-- {{dd(array_search(\Auth::user(), $game_users))}} --}}
-                                  {{-- {{dd(\Auth::user())}} --}}
-                                  {{-- {{dd($game_users)}} --}}
                                   @if(Auth::user()->id != $game->founder_user_id && $num_users[$game->id]<$game->max_players 
                                   && array_search(\Auth::user(), $game_users[$game->id]) == false)
                                     <form action="{{ action('GameController@update', [$game->id]) }}" method="post">
                                       @csrf
-                                      {{-- <input type="hidden" name="user" value={{\Auth::id}}> --}}
                                       <button type="submit">Join</button>
                                     </form>
                                   @endif
@@ -101,7 +82,6 @@
                                 </div>
                                 <div>
                                   @if(Auth::user()->id == $game->founder_user_id)  
-                                    {{-- {{dd($num_users[$game->id])}} --}}
                                     @if($num_users[$game->id] == $game->max_players)
                                       <form action="{{ action('GameController@launch', [$game->id]) }}" method="get">  
                                         <button type="submit">Launch the game</button>
@@ -110,7 +90,6 @@
                                   @endif
                                 </div>
                               @else
-                                {{-- {{dd(array_search(\Auth::user(), $game_users[$game->id]))}} --}}
                                 <div class="btn-div">
                                   @if(array_search(\Auth::user(), $game_users[$game->id]) > -1)
                                     <form action="{{ action('GameController@play', [$game->id]) }}" method="get">

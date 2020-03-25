@@ -3,20 +3,6 @@
 @section('content')
 
 
-{{-- @if (Route::has('login'))
-<div class="top-right links">
-    @auth
-        <a href="{{ url('/home') }}">Home</a>
-    @else
-        <a href="{{ route('login') }}">Login</a>
-
-        @if (Route::has('register'))
-            <a href="{{ route('register') }}">Register</a>
-        @endif
-    @endauth
-</div>
-@endif --}}
-
 <div class="container">
   <div class="row justify-content-center">
       <div class="col-md-8">
@@ -60,7 +46,6 @@
                       </form>
                     @endif
 
-                    {{-- {{dd(array_search(\Auth::user(), $game_users))}} --}}
                     @if(\Auth::user()->id != $game->founder_user_id && $num_users < $game->max_players
                     && array_search(\Auth::user(), $game_users) == false)
                       <form action="{{ action('GameController@update', [$game->id]) }}" method="post">
@@ -78,7 +63,6 @@
                     @endif
 
                   @else
-                    {{-- {{dd($game_users)}}; --}}
                     @if(array_search(Auth::user(), $game_users)  > -1)
                       <form action="{{ action('GameController@play', [$game->id]) }}" method="get">
                         <button type="submit">Play</button>

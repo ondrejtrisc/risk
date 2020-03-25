@@ -6,18 +6,20 @@ class PlayerList extends Component {
   }
 
   render(){
+    const {userList, activePlayer, turns} = this.props
+  
     return (
       <div>
         <ul className="list-group mb-4 ml-5">
           {
-            this.props.turns.map((player, index) => {
-              if(player === this.props.activePlayer) {
+            userList.map((user, index) => {
+              if(turns[index] === activePlayer) {
                 return (
-                  <li key={index} className="list-group-item active">{player}</li>
+                  <li key={index} className="list-group-item active">{user} {turns[index]} </li>
                 )
               } else {
                 return (
-                  <li key={index} className="list-group-item">{player}</li>
+                <li key={index} className="list-group-item">{user} {turns[index]}</li>
                 )
               }
             })

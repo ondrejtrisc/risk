@@ -1,29 +1,51 @@
 import React, { Component } from 'react';
+import AttackCard from './AttackCard';
+import FortifyCard from './FortifyCard';
+import DeployCard from './DeployCard';
+import DifferentTurnCard from './DifferentTurnCard';
+
 
 class InfoCard extends Component {
+  constructor(props) {
+    super(props)
+  }
 
-  render(){
-    return (
-      <div className="card ml-5 mb-4">
-        <div className="card-body">
-          <h5 className="card-title">Game information</h5>
-          Player's turn:
-          <br/>
-          Сurrent phase:
-          <br />
-          How many troops left to deploy:
-          <br />
-          How many territories you own:
-          <br/>
-          How many continents you have:
-          <br/>
-          How many units you will deploy next turn calculation
-          <br/>
+  render() {
+    const {activePlayer, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice} = this.props
+    if(activePlayer === currentPlayer) {
+      if(phase === 'deploy') {
+        return (
+          <DeployCard 
+            unitsToDeploy={unitsToDeploy}
+            firstTerritory={firstTerritory}
+          />
+        )
+      } else if(phase === 'attack') {
+        return (
+          <AttackCard 
+            firstTerritory={firstTerritory}
+            attackerDice={attackerDice}
+            defenderDice={defenderDice}
+          />
+        )
 
+      } else if(phase === 'fortify') {
+        return (
+          <FortifyCard 
+            firstTerritory={firstTerritory}
+          />
+        )
 
-        </div>
-      </div>
-    )
+      }
+
+    } else {
+      return (
+        < DifferentTurnCard />
+
+      )
+
+    }
+
   }
 }
 

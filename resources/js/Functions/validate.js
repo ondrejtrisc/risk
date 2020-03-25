@@ -3,6 +3,15 @@ let neighbours =  {
 }
 
 const validate = {
+  isPlayersTurn: function(object) {
+    if(object.state.activePlayer === object.state.currentPlayer) {
+      return true
+    } else {
+      return false
+    }
+  },
+
+
   territoryClick: function(event, object) {
     let validClick = false
     object.state.territories.map(territory => {
