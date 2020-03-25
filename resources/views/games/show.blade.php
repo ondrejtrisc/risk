@@ -2,6 +2,16 @@
 
 @section('content')
 
+<style>
+  form{
+    padding: 0.2em;
+  }
+
+  button{
+    min-width: 150px;
+  }
+
+</style>
 
 <div class="container">
   <div class="row justify-content-center">

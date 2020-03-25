@@ -38,9 +38,9 @@ class GameController extends Controller
     }
 
     public function index(){
-        // $game_users = [];
-        // $num_users = [];
-        // $usernames_arr =[];
+        $game_users = [];
+        $num_users = [];
+        $usernames_arr =[];
 
         $games = Game::all();
         $users = User::all();
