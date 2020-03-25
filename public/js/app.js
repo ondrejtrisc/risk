@@ -46422,6 +46422,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ButtonBlitz */ "./resources/js/Components/ButtonBlitz.jsx");
 /* harmony import */ var _InfoCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./InfoCard */ "./resources/js/Components/InfoCard.jsx");
 /* harmony import */ var _NextPhaseButton__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./NextPhaseButton */ "./resources/js/Components/NextPhaseButton.jsx");
+/* harmony import */ var _ButtonFortify__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ButtonFortify */ "./resources/js/Components/ButtonFortify.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46454,6 +46455,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
@@ -46466,8 +46468,9 @@ var App = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
+      userList: document.querySelector('meta[name="users"]').getAttribute('content').split(','),
       territories: [],
-      activePlayer: 'red',
+      activePlayer: '',
       // need to change to be color
       turns: [],
       currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
@@ -46476,14 +46479,21 @@ var App = /*#__PURE__*/function (_Component) {
       blitz: false,
       game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
       phase: 'deploy',
-      unitsToDeploy: 3,
+      unitsToDeploy: 0,
       endOfPhase: false,
       deployed_units: [],
-      warningMessage: ''
+      warningMessage: '',
+      fortified: false,
+      fromFortify: '',
+      toFortify: '',
+      fortifyUnits: 0,
+      attackerDice: null,
+      defenderDice: null
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
     _this.handleNextPhaseClick = _this.handleNextPhaseClick.bind(_assertThisInitialized(_this));
+    _this.handleFortifyButtonClick = _this.handleFortifyButtonClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -46505,6 +46515,8 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleNextPhaseClick",
     value: function handleNextPhaseClick() {
+      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
+
       if (this.state.phase === 'attack') {
         this.setState({
           phase: 'fortify'
@@ -46521,15 +46533,14 @@ var App = /*#__PURE__*/function (_Component) {
           });
         }
       } else if (this.state.phase === 'fortify') {
-        this.setState({
-          phase: 'endTurn'
-        });
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this, false);
       }
     }
   }, {
     key: "handleMapClick",
     value: function handleMapClick(event) {
-      // ATTACK PHASE
+      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; // ATTACK PHASE
+
       if (this.state.phase === 'attack') {
         this.setState({
           endOfPhase: true
@@ -46626,15 +46637,53 @@ var App = /*#__PURE__*/function (_Component) {
             }
           }
         } // FORTIFY PHASE
-        else if (this.state.phase === 'fortify') {}
+        else if (this.state.phase === 'fortify') {
+            if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
+              console.log('this is not a territory');
+              return;
+            } // validates if a territory is selected or not
+
+
+            if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isTerritorySelected(this) === false) {
+              //validates if the player owns this territory
+              if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {
+                //selects the territory
+                _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
+                this.setState({
+                  firstTerritory: event.target.id
+                });
+                return;
+              } else {
+                console.log('player doesnt own this territory');
+                return;
+              }
+            } //validates if the click is not on the same territory
+            else if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].thisTerritoryAlreadySelected(event, this) === true) {
+                _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectSameTerritory(event);
+                this.setState({
+                  firstTerritory: ''
+                });
+                return;
+              }
+
+            if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].differentTerritoryAlreadySelected(event, this) === true) {
+              //do Magic
+              return;
+            }
+          }
+    }
+  }, {
+    key: "handleFortifyButtonClick",
+    value: function handleFortifyButtonClick() {
+      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this);
     }
   }, {
     key: "render",
     value: function render() {
-      console.log(this.state);
+      console.log(this.state.userList);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
-      console.log(this.state.phase);
       var phaseValue = "0%";
       var phaseDesc = '';
 
@@ -46657,9 +46706,17 @@ var App = /*#__PURE__*/function (_Component) {
         handleMapClick: this.handleMapClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        turns: this.state.turns,
-        activePlayer: this.state.activePlayer
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        activePlayer: this.state.activePlayer,
+        currentPlayer: this.state.currentPlayer,
+        territories: this.state.territories,
+        phase: this.state.phase,
+        unitsToDeploy: this.state.unitsToDeploy,
+        firstTerritory: this.state.firstTerritory
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        userList: this.state.userList,
+        activePlayer: this.state.activePlayer,
+        turns: this.state.turns
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -46670,10 +46727,10 @@ var App = /*#__PURE__*/function (_Component) {
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         className: "btn btn-secondary mr-3"
-      }, "Cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        className: "btn btn-secondary"
-      }, "Continent Values")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonFortify__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        phaseDesc: phaseDesc,
+        handleFortifyButtonClick: this.handleFortifyButtonClick
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col d-flex flex-row justify-content-stretch"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
         phase: this.state.phase,
@@ -46684,7 +46741,9 @@ var App = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NextPhaseButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
         handleNextPhaseClick: this.handleNextPhaseClick,
         phaseDesc: phaseDesc,
-        endOfPhase: this.state.endOfPhase
+        endOfPhase: this.state.endOfPhase,
+        activePlayer: this.state.activePlayer,
+        currentPlayer: this.state.currentPlayer
       }))));
     }
   }]);
@@ -46693,6 +46752,76 @@ var App = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
+
+/***/ }),
+
+/***/ "./resources/js/Components/AttackCard.jsx":
+/*!************************************************!*\
+  !*** ./resources/js/Components/AttackCard.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var AttackCard = /*#__PURE__*/function (_Component) {
+  _inherits(AttackCard, _Component);
+
+  var _super = _createSuper(AttackCard);
+
+  function AttackCard(props) {
+    _classCallCheck(this, AttackCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(AttackCard, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          firstTerritory = _this$props.firstTerritory,
+          attackerDice = _this$props.attackerDice,
+          defenderDice = _this$props.defenderDice;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card ml-5 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(firstTerritory.charAt(0).toUpperCase() + firstTerritory.slice(1))), attackerDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls: ", attackerDice, "Defender's rolls: ", defenderDice) : ''));
+    }
+  }]);
+
+  return AttackCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (AttackCard);
 
 /***/ }),
 
@@ -46764,10 +46893,10 @@ var ButtonBlitz = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
-/***/ "./resources/js/Components/InfoCard.jsx":
-/*!**********************************************!*\
-  !*** ./resources/js/Components/InfoCard.jsx ***!
-  \**********************************************/
+/***/ "./resources/js/Components/ButtonFortify.jsx":
+/*!***************************************************!*\
+  !*** ./resources/js/Components/ButtonFortify.jsx ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -46799,18 +46928,154 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var InfoCard = /*#__PURE__*/function (_Component) {
-  _inherits(InfoCard, _Component);
+var ButtonFortify = /*#__PURE__*/function (_Component) {
+  _inherits(ButtonFortify, _Component);
 
-  var _super = _createSuper(InfoCard);
+  var _super = _createSuper(ButtonFortify);
 
-  function InfoCard() {
-    _classCallCheck(this, InfoCard);
+  function ButtonFortify(props) {
+    _classCallCheck(this, ButtonFortify);
 
-    return _super.apply(this, arguments);
+    return _super.call(this, props);
   }
 
-  _createClass(InfoCard, [{
+  _createClass(ButtonFortify, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        hidden: this.props.phaseDesc === 'Fortify' ? false : true,
+        className: "btn btn-secondary mr-3",
+        onClick: function onClick() {
+          return _this.props.handleFortifyButtonClick();
+        }
+      }, "Fortify");
+    }
+  }]);
+
+  return ButtonFortify;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (ButtonFortify);
+
+/***/ }),
+
+/***/ "./resources/js/Components/DeployCard.jsx":
+/*!************************************************!*\
+  !*** ./resources/js/Components/DeployCard.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var DeployCard = /*#__PURE__*/function (_Component) {
+  _inherits(DeployCard, _Component);
+
+  var _super = _createSuper(DeployCard);
+
+  function DeployCard(props) {
+    _classCallCheck(this, DeployCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(DeployCard, [{
+    key: "render",
+    value: function render() {
+      var unitsToDeploy = this.props.unitsToDeploy;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card ml-5 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, "Deploy phase"), "Deploy reinforcements on your territories", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), unitsToDeploy > 0 ? "You still have ".concat(unitsToDeploy, " units to deploy") : 'Deployment complete', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null))));
+    }
+  }]);
+
+  return DeployCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (DeployCard);
+
+/***/ }),
+
+/***/ "./resources/js/Components/DifferentTurnCard.jsx":
+/*!*******************************************************!*\
+  !*** ./resources/js/Components/DifferentTurnCard.jsx ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var DifferentTurnCard = /*#__PURE__*/function (_Component) {
+  _inherits(DifferentTurnCard, _Component);
+
+  var _super = _createSuper(DifferentTurnCard);
+
+  function DifferentTurnCard(props) {
+    _classCallCheck(this, DifferentTurnCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(DifferentTurnCard, [{
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -46820,6 +47085,170 @@ var InfoCard = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
       }, "Game information"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+    }
+  }]);
+
+  return DifferentTurnCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (DifferentTurnCard);
+
+/***/ }),
+
+/***/ "./resources/js/Components/FortifyCard.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/Components/FortifyCard.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var FortifyCard = /*#__PURE__*/function (_Component) {
+  _inherits(FortifyCard, _Component);
+
+  var _super = _createSuper(FortifyCard);
+
+  function FortifyCard(props) {
+    _classCallCheck(this, FortifyCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(FortifyCard, [{
+    key: "render",
+    value: function render() {
+      var firstTerritory = this.props.firstTerritory;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card ml-5 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, "Attack phase"), firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(firstTerritory)));
+    }
+  }]);
+
+  return FortifyCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (FortifyCard);
+
+/***/ }),
+
+/***/ "./resources/js/Components/InfoCard.jsx":
+/*!**********************************************!*\
+  !*** ./resources/js/Components/InfoCard.jsx ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AttackCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AttackCard */ "./resources/js/Components/AttackCard.jsx");
+/* harmony import */ var _FortifyCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FortifyCard */ "./resources/js/Components/FortifyCard.jsx");
+/* harmony import */ var _DeployCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DeployCard */ "./resources/js/Components/DeployCard.jsx");
+/* harmony import */ var _DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DifferentTurnCard */ "./resources/js/Components/DifferentTurnCard.jsx");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+var InfoCard = /*#__PURE__*/function (_Component) {
+  _inherits(InfoCard, _Component);
+
+  var _super = _createSuper(InfoCard);
+
+  function InfoCard(props) {
+    _classCallCheck(this, InfoCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(InfoCard, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          activePlayer = _this$props.activePlayer,
+          currentPlayer = _this$props.currentPlayer,
+          territories = _this$props.territories,
+          phase = _this$props.phase,
+          unitsToDeploy = _this$props.unitsToDeploy,
+          firstTerritory = _this$props.firstTerritory,
+          attackerDice = _this$props.attackerDice,
+          defenderDice = _this$props.defenderDice;
+
+      if (activePlayer === currentPlayer) {
+        if (phase === 'deploy') {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeployCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            unitsToDeploy: unitsToDeploy,
+            firstTerritory: firstTerritory
+          });
+        } else if (phase === 'attack') {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AttackCard__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            firstTerritory: firstTerritory,
+            attackerDice: attackerDice,
+            defenderDice: defenderDice
+          });
+        } else if (phase === 'fortify') {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FortifyCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            firstTerritory: firstTerritory
+          });
+        }
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], null);
+      }
     }
   }]);
 
@@ -51549,7 +51978,8 @@ var NextPhaseButton = /*#__PURE__*/function (_Component) {
         onClick: function onClick() {
           return _this.props.handleNextPhaseClick();
         },
-        disabled: this.props.endOfPhase ? false : true
+        disabled: this.props.endOfPhase ? false : true,
+        hidden: this.props.activePlayer === this.props.currentPlayer ? false : true
       }, this.props.phaseDesc === 'Fortify' ? 'End turn' : "End phase ".concat(this.props.phaseDesc));
     }
   }]);
@@ -51684,21 +52114,23 @@ var PlayerList = /*#__PURE__*/function (_Component) {
   _createClass(PlayerList, [{
     key: "render",
     value: function render() {
-      var _this = this;
-
+      var _this$props = this.props,
+          userList = _this$props.userList,
+          activePlayer = _this$props.activePlayer,
+          turns = _this$props.turns;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mb-4 ml-5"
-      }, this.props.turns.map(function (player, index) {
-        if (player === _this.props.activePlayer) {
+      }, userList.map(function (user, index) {
+        if (turns[index] === activePlayer) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
             className: "list-group-item active"
-          }, player);
+          }, user, " ", turns[index], " ");
         } else {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
             className: "list-group-item"
-          }, player);
+          }, user, " ", turns[index]);
         }
       })));
     }
@@ -51752,6 +52184,12 @@ var update = {
       object.setState({
         unitsToDeploy: data.unitsToDeploy
       });
+      object.setState({
+        activePlayer: data.players[data.turn]
+      });
+      object.setState({
+        phase: data.phase
+      });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
     });
@@ -51774,6 +52212,12 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      object.setState({
+        attackerDice: data.attackerDice
+      });
+      object.setState({
+        defenderDice: data.defenderDice
+      });
       object.setState({
         territories: data.territories
       });
@@ -51799,6 +52243,47 @@ var update = {
     .then(function (data) {
       object.setState({
         phase: data.phase
+      });
+    });
+  },
+  sendFortifyToServer: function sendFortifyToServer(object) {
+    var fortified = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var toSend = {
+      fromTerritory: object.state.fromFortify,
+      toTerritory: object.state.toFortify,
+      unitsToFortify: object.state.unitsToFortify
+    };
+
+    if (fortified === false) {
+      toSend = {
+        fromTerritory: null,
+        toTerritory: null,
+        unitsToFortify: 0
+      };
+    }
+
+    console.log(toSend);
+    fetch("../fortify/".concat(object.state.game_id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(toSend)
+    }).then(function (response) {
+      return response.json();
+    }) // parses response as JSON
+    .then(function (data) {
+      console.log(data);
+      object.setState({
+        turn: data.turn,
+        phase: data.phase,
+        turns: data.players,
+        territories: data.territories,
+        attackerDice: data.attackerDice,
+        defenderDice: data.defenderDice,
+        unitsToDeploy: data.unitsToDeploy,
+        activePlayer: data.players[data.turn]
       });
     });
   }
@@ -51861,6 +52346,13 @@ var neighbours = {
   "eastern_australia": ["new_guinea", "western_australia"]
 };
 var validate = {
+  isPlayersTurn: function isPlayersTurn(object) {
+    if (object.state.activePlayer === object.state.currentPlayer) {
+      return true;
+    } else {
+      return false;
+    }
+  },
   territoryClick: function territoryClick(event, object) {
     var validClick = false;
     object.state.territories.map(function (territory) {
