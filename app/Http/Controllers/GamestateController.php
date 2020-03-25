@@ -18,8 +18,8 @@ class GamestateController extends Controller
         $state->players = $players;
         $state->territories = [];
         
-        $territoryNames = ['brazil', 'argentina', 'peru', 'venezuela'];
-
+        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'quebec', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakursk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
+        
         foreach ($territoryNames as $name)
         {
             $territory = new stdClass();
@@ -30,13 +30,34 @@ class GamestateController extends Controller
             $state->territories[] = $territory;
         }
 
+        //initial distribution of territories (one troop added to each territory)
+        switch (count($state->players))
+        {
+            case 2:
+                $initial_units = 50;
+                break;
+            case 3:
+                $initial_units = 35;
+                break;
+            case 4:
+                $initial_units = 30;
+                break;
+            case 5:
+                $initial_units = 25;
+                break;
+            case 6:
+                $initial_units = 20;
+                break;          
+        }
+
         $occupiedBy = [];
+        $unitsToDistribute = [];
         foreach ($state->players as $player)
         {
             $occupiedBy[$player] = [];
+            $unitsToDistribute[$player] = $initial_units;
         }
 
-        //initial distribution of territories (one troop added to each territory)
         $territories = $state->territories;
         shuffle($territories);
         $playerIndex = 0;
@@ -46,6 +67,7 @@ class GamestateController extends Controller
             $territory->player = $player;
             $territory->units = 1;
             $occupiedBy[$player][] = $territory;
+            $unitsToDistribute[$player]--;
 
             if ($playerIndex === count($state->players) - 1)
             {
@@ -57,8 +79,29 @@ class GamestateController extends Controller
             }
         }
 
+        while (true)
+        {
+            $player = $state->players[$playerIndex];
+            $territory = $occupiedBy[$player][rand(0, count($occupiedBy[$player]) - 1)];
+            $territory->units++;
+            $unitsToDistribute[$player]--;
+
+            if ($playerIndex === count($state->players) - 1)
+            {
+                $playerIndex = 0;
+            }
+            else
+            {
+                $playerIndex++;
+            }
+
+            if($unitsToDistribute[$players[$playerIndex]] === 0)
+            {
+                break;
+            }
+        }
+
         //distribution of remaining troops
-        $initial_units = 15;
         $limit = $initial_units - floor((count($state->territories) / count($state->players)));
         for ($i = 0; $i < $limit; $i++)
         {
@@ -250,33 +293,37 @@ class GamestateController extends Controller
         //gets the data about the move from the request
         $requestPayload = file_get_contents("php://input");
         $object = json_decode($requestPayload);
+
         $fromName = $object->fromTerritory;
-        $toName = $object->toTerritory;
-        $units = $object->units;
-
-        //locates the territory of units' departure
-        foreach ($state->territories as $territory)
+        if ($fromName != '')
         {
-            if ($territory->name === $fromName)
-            {
-                $fromTerritory = $territory;
-                break;
-            }
-        }
+            $toName = $object->toTerritory;
+            $units = $object->units;        
 
-        //locates the territory of units' destination
-        foreach ($state->territories as $territory)
-        {
-            if ($territory->name === $toName)
+            //locates the territory of units' departure
+            foreach ($state->territories as $territory)
             {
-                $toTerritory = $territory;
-                break;
+                if ($territory->name === $fromName)
+                {
+                    $fromTerritory = $territory;
+                    break;
+                }
             }
-        }
 
-        //moves the units
-        $fromTerritory->units -= $units;
-        $toTerritory->units += $units;
+            //locates the territory of units' destination
+            foreach ($state->territories as $territory)
+            {
+                if ($territory->name === $toName)
+                {
+                    $toTerritory = $territory;
+                    break;
+                }
+            }
+
+            //moves the units
+            $fromTerritory->units -= $units;
+            $toTerritory->units += $units;
+        }
 
         //makes it the next player's turn
         if ($state->turn === count($state->players) - 1)
