@@ -11,14 +11,14 @@ class GamestateController extends Controller
 {
     public function create_initial($game_id, $players)
     {
-        $game = Game::findOrFail($id);
+        $game = Game::findOrFail($game_id);
         if($game->init_deployment === 'random')
         {
             $this->create_initial_random($game_id, $players);
         }
         else
         {
-            $this->create_initial_manula($game_id, $players);
+            $this->create_initial_manual($game_id, $players);
         }
     }
 
@@ -482,7 +482,8 @@ class GamestateController extends Controller
         if ($fromName != '')
         {
             $toName = $object->toTerritory;
-            $units = $object->units;        
+            $fromUnits = $object->fromUnits;
+            $toUnits = $object->toUnits; 
 
             //locates the territory of units' departure
             foreach ($state->territories as $territory)
@@ -505,8 +506,8 @@ class GamestateController extends Controller
             }
 
             //moves the units
-            $fromTerritory->units -= $units;
-            $toTerritory->units += $units;
+            $fromTerritory->units = $fromUnits;
+            $toTerritory->units = $toUnits;
         }
 
         //makes it the next player's turn
