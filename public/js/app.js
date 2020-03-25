@@ -46467,15 +46467,19 @@ var App = /*#__PURE__*/function (_Component) {
     _this = _super.call(this, props);
     _this.state = {
       territories: [],
-      activePlayer: 1,
+      activePlayer: 'red',
+      // need to change to be color
+      turns: [],
+      currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
       blitz: false,
-      game_id: 13,
+      game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
       phase: 'deploy',
       unitsToDeploy: 3,
       endOfPhase: false,
-      deployed_units: []
+      deployed_units: [],
+      warningMessage: ''
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
@@ -46488,8 +46492,6 @@ var App = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
-      console.log(document.querySelector('meta[name="game_id"]').getAttribute('content'));
-      console.log(document.querySelector('meta[name="color"]').getAttribute('content'));
     }
   }, {
     key: "handleBlitzClick",
@@ -46507,14 +46509,20 @@ var App = /*#__PURE__*/function (_Component) {
         this.setState({
           phase: 'fortify'
         });
-      } else if (this.state.phase === 'deploy' && this.state.endOfPhase === true) {
-        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendDeployToServer(this);
-        this.setState({
-          phase: 'attack'
-        });
+      } else if (this.state.phase === 'deploy') {
+        if (this.state.endOfPhase === true) {
+          _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendDeployToServer(this);
+          this.setState({
+            phase: 'attack'
+          });
+        } else {
+          this.setState({
+            warningMessage: "You still haven't finished deploying troops"
+          });
+        }
       } else if (this.state.phase === 'fortify') {
         this.setState({
-          phase: 'deploy'
+          phase: 'endTurn'
         });
       }
     }
@@ -46617,11 +46625,13 @@ var App = /*#__PURE__*/function (_Component) {
               }
             }
           }
-        } else if (this.state.phase === 'fortify') {}
+        } // FORTIFY PHASE
+        else if (this.state.phase === 'fortify') {}
     }
   }, {
     key: "render",
     value: function render() {
+      console.log(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
       console.log(this.state.phase);
@@ -46647,7 +46657,10 @@ var App = /*#__PURE__*/function (_Component) {
         handleMapClick: this.handleMapClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        turns: this.state.turns,
+        activePlayer: this.state.activePlayer
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col flex-row justify-content-space-between"
@@ -46804,7 +46817,9 @@ var InfoCard = /*#__PURE__*/function (_Component) {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
-      }, "Information about the game Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis molestias reprehenderit quibusdam eos voluptate, quidem fugiat vero necessitatibus rerum eum soluta culpa laboriosam, pariatur at saepe excepturi. Id, accusamus modi?"));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, "Game information"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -51530,11 +51545,12 @@ var NextPhaseButton = /*#__PURE__*/function (_Component) {
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-success btn-large ml-5 w-80",
+        className: this.props.endOfPhase ? "btn btn-success btn-large ml-5 w-80" : "btn btn-secondary btn-large ml-5 w-80",
         onClick: function onClick() {
           return _this.props.handleNextPhaseClick();
-        }
-      }, "End phase ", this.props.phaseDesc);
+        },
+        disabled: this.props.endOfPhase ? false : true
+      }, this.props.phaseDesc === 'Fortify' ? 'End turn' : "End phase ".concat(this.props.phaseDesc));
     }
   }]);
 
@@ -51659,28 +51675,32 @@ var PlayerList = /*#__PURE__*/function (_Component) {
 
   var _super = _createSuper(PlayerList);
 
-  function PlayerList() {
+  function PlayerList(props) {
     _classCallCheck(this, PlayerList);
 
-    return _super.apply(this, arguments);
+    return _super.call(this, props);
   }
 
   _createClass(PlayerList, [{
     key: "render",
     value: function render() {
+      var _this = this;
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mb-4 ml-5"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "list-group-item active"
-      }, "Player 1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "list-group-item"
-      }, "Player 2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "list-group-item"
-      }, "Player 3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "list-group-item"
-      }, "Player 4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "list-group-item"
-      }, "Player 5")));
+      }, this.props.turns.map(function (player, index) {
+        if (player === _this.props.activePlayer) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+            key: index,
+            className: "list-group-item active"
+          }, player);
+        } else {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+            key: index,
+            className: "list-group-item"
+          }, player);
+        }
+      })));
     }
   }]);
 
@@ -51703,16 +51723,13 @@ __webpack_require__.r(__webpack_exports__);
 var update = {
   colorTerritories: function colorTerritories(state) {
     state.territories.map(function (territory) {
-      if (territory.player === 1) {
-        document.getElementById("".concat(territory.name)).classList.remove("ownedByPlayerBlue");
-        document.getElementById("".concat(territory.name)).classList.add("ownedByPlayerGreen");
-        return '';
-      } else if (territory.player === 2) {
-        document.getElementById("".concat(territory.name)).classList.remove("ownedByPlayerGreen");
-        document.getElementById("".concat(territory.name)).classList.add("ownedByPlayerBlue");
-        return '';
-      }
-
+      document.getElementById("".concat(territory.name)).classList.remove('blue');
+      document.getElementById("".concat(territory.name)).classList.remove('green');
+      document.getElementById("".concat(territory.name)).classList.remove('yellow');
+      document.getElementById("".concat(territory.name)).classList.remove('purple');
+      document.getElementById("".concat(territory.name)).classList.remove('brown');
+      document.getElementById("".concat(territory.name)).classList.remove('red');
+      document.getElementById("".concat(territory.name)).classList.add("".concat(territory.player));
       return '';
     });
   },
@@ -51725,8 +51742,15 @@ var update = {
     fetch("../".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
+      console.log(data);
       object.setState({
         territories: data.territories
+      });
+      object.setState({
+        turns: data.players
+      });
+      object.setState({
+        unitsToDeploy: data.unitsToDeploy
       });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
@@ -52009,8 +52033,8 @@ if (document.getElementById('root') !== null) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

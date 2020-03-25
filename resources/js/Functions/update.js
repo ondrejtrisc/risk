@@ -1,16 +1,14 @@
 const update = {
   colorTerritories: function (state) {
     state.territories.map(territory => {
-      if(territory.player === 1) {
-        document.getElementById(`${territory.name}`).classList.remove("ownedByPlayerBlue")
-        document.getElementById(`${territory.name}`).classList.add("ownedByPlayerGreen")
+        document.getElementById(`${territory.name}`).classList.remove('blue')
+        document.getElementById(`${territory.name}`).classList.remove('green')
+        document.getElementById(`${territory.name}`).classList.remove('yellow')
+        document.getElementById(`${territory.name}`).classList.remove('purple')
+        document.getElementById(`${territory.name}`).classList.remove('brown')
+        document.getElementById(`${territory.name}`).classList.remove('red')
+        document.getElementById(`${territory.name}`).classList.add(`${territory.player}`)
         return ''
-      } else if (territory.player === 2) {
-        document.getElementById(`${territory.name}`).classList.remove("ownedByPlayerGreen")
-        document.getElementById(`${territory.name}`).classList.add(`ownedByPlayerBlue`)
-        return ''
-      }
-      return ''
     })
   },
 
@@ -25,7 +23,10 @@ const update = {
     fetch(`../${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
+        console.log(data)
         object.setState({territories: data.territories})
+        object.setState({turns: data.players})
+        object.setState({unitsToDeploy: data.unitsToDeploy})
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
       })

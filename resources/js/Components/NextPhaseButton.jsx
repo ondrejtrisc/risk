@@ -9,10 +9,13 @@ class NextPhaseButton extends Component {
   render(){
     return (
           <button type="button" 
-                  className="btn btn-success btn-large ml-5 w-80"
+                  className={(this.props.endOfPhase) ? "btn btn-success btn-large ml-5 w-80" : "btn btn-secondary btn-large ml-5 w-80"}
                   onClick={() => this.props.handleNextPhaseClick()}
+                  disabled={(this.props.endOfPhase) ? false : true}
                   >
-                    End phase {this.props.phaseDesc}
+                    {
+                    (this.props.phaseDesc === 'Fortify') ? 'End turn' : `End phase ${this.props.phaseDesc}`
+                    }
           </button>
     )
   }
