@@ -26,6 +26,17 @@ class GameController extends Controller
         return $users_arr;
     }
 
+    private function usersIdStrToArrOfUserNames($game){
+      $str_users_ids = $game->users_ids;
+      $arr_users_ids = explode(';', $str_users_ids);
+      foreach($arr_users_ids as $user_id){
+          $user = User::findOrFail($user_id);
+          $user_names[] = $user->name;
+      }
+      // dd($user_names);
+      return $user_names;
+    }
+
     public function index(){
         // $game_users = [];
         // $num_users = [];
@@ -118,12 +129,13 @@ class GameController extends Controller
         $gamestate = new GamestateController;
         $gamestate->create_initial($id, $user_colours);
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
-        $game = Game::findOrFail($id);
+        // $game = Game::findOrFail($id);
         $game_id = $id;
-        $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
-        $colour = $colours[$index];
-        $user_name = \Auth::user()->name;
-        return view('map/map', compact('game_id', 'colour', 'user_name')); //     'game/'.$id
+        // $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
+        // $colour = $colours[$index];
+        // $user_name = \Auth::user()->name;
+        // return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
+        return redirect('/games/'. $game->id);
     }
 
     public function play($id) {
@@ -132,7 +144,7 @@ class GameController extends Controller
         $game_id = $id;
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
-        $user_name = \Auth::user()->name;
-        return view('map/map', compact('game_id', 'colour', 'user_name')); //     'game/'.$id
+        $users = $this->usersIdStrToArrOfUserNames($game);
+        return view('map/map', compact('game_id', 'colour', 'users')); //     'game/'.$id
     }
 }

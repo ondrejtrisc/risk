@@ -78,7 +78,11 @@
                                   </form>
                                 </div>
                                 <div class="btn-div">
-                                  @if(Auth::user()->id != $game->founder_user_id && $num_users[$game->id]<$game->max_players)
+                                  {{-- {{dd(array_search(\Auth::user(), $game_users))}} --}}
+                                  {{-- {{dd(\Auth::user())}} --}}
+                                  {{-- {{dd($game_users)}} --}}
+                                  @if(Auth::user()->id != $game->founder_user_id && $num_users[$game->id]<$game->max_players 
+                                  && array_search(\Auth::user(), $game_users[$game->id]) == false)
                                     <form action="{{ action('GameController@update', [$game->id]) }}" method="post">
                                       @csrf
                                       {{-- <input type="hidden" name="user" value={{\Auth::id}}> --}}
@@ -107,11 +111,13 @@
                                 </div>
                               @else
                                 {{-- {{dd(array_search(\Auth::user(), $game_users[$game->id]))}} --}}
-                                @if(array_search(\Auth::user(), $game_users[$game->id]) != false)
-                                  <form action="{{ action('GameController@play', [$game->id]) }}" method="get">
+                                <div class="btn-div">
+                                  @if(array_search(\Auth::user(), $game_users[$game->id]) > -1)
+                                    <form action="{{ action('GameController@play', [$game->id]) }}" method="get">
                                       <button type="submit">Play</button>
                                     </form>
                                   @endif  
+                                </div>
                               @endif
                             </div>
                           </td>

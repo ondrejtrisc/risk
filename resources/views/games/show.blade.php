@@ -45,31 +45,31 @@
 
                   @if($game->status != 'launched')
 
-                    @if(Auth::user()->id == $game->founder_user_id)  
+                    @if(\Auth::user()->id == $game->founder_user_id)  
                       @if($num_users == $game->max_players)
                         <form action="{{ action('GameController@launch', [$game->id]) }}" method="get">
                           <button type="submit">Launch the game</button>
                         </form>
-                      @else
-                        {{-- {{'wait other users to join'}} --}}
                       @endif
                     @endif
 
-                    @if($u == \Auth::user() && Auth::user()->id != $game->founder_user_id)
+                    @if($u == \Auth::user() && \Auth::user()->id != $game->founder_user_id)
                       <form action="{{ action('GameController@leave', [$game->id]) }}" method="post">
                         @csrf
                         <button type="submit">Leave this game</button>
                       </form>
                     @endif
 
-                    @if(Auth::user()->id != $game->founder_user_id && $num_users < $game->max_players)
+                    {{-- {{dd(array_search(\Auth::user(), $game_users))}} --}}
+                    @if(\Auth::user()->id != $game->founder_user_id && $num_users < $game->max_players
+                    && array_search(\Auth::user(), $game_users) == false)
                       <form action="{{ action('GameController@update', [$game->id]) }}" method="post">
                         @csrf
                         <button type="submit">Join</button>
                       </form>
                     @endif
 
-                    @if(Auth::user()->id == $game->founder_user_id)  
+                    @if(\Auth::user()->id == $game->founder_user_id)  
                       <form action="{{ action('GameController@delete', [$game->id]) }}" method="post">
                         @method("delete")
                         @csrf
@@ -78,8 +78,8 @@
                     @endif
 
                   @else
-
-                    @if(array_search(\Auth::user(), $game_users[$game->id]) > -1)
+                    {{-- {{dd($game_users)}}; --}}
+                    @if(array_search(Auth::user(), $game_users)  > -1)
                       <form action="{{ action('GameController@play', [$game->id]) }}" method="get">
                         <button type="submit">Play</button>
                       </form>
