@@ -20,6 +20,7 @@
                     @endforeach
                   </p>
                   <p><strong>Maximum number of players: </strong>{{$game->max_players}}</p>
+                  <p><strong>Initial troops deployment: </strong>{{$game->init_deployment}}</p>
 
                   {{-- <p><strong>Status: </strong>
                     @if(array_search(\Auth::user(), $game_users))

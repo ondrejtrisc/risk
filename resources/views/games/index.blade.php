@@ -33,6 +33,7 @@
                       <th>Founder</th>
                       <th>Players</th>
                       <th>Maximum players</th>
+                      <th>Initial troops deployment</th>
                       <th>Status</th>
                     </thead>
                     <tbody>
@@ -46,6 +47,7 @@
                             @endforeach
                           </td>
                           <td>{{$game->max_players}}</td>
+                          <td>{{$game->init_deployment}}</td>
                           <td>
                             {{-- @if(array_search(\Auth::user(), $game_users))
                               {{'you joined this game'}}
