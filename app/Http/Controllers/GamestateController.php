@@ -136,13 +136,6 @@ class GamestateController extends Controller
         $gamestate->save();
     }
 
-    /*a method for testing purposes - to create a new game make a GET request at /initialize/{game_id} with a fresh game_id*/
-    public function initialize($game_id)
-    {
-        $this->create_initial($game_id, [1, 2]);
-        return $this->get_current_state($game_id);
-    }
-
     public function get_current_state($game_id)
     {
         try
@@ -167,16 +160,6 @@ class GamestateController extends Controller
         $object = json_decode($requestPayload);
 
         $state->territories = $object->territories;
-
-        // //deploys the units
-        // foreach ($state->territories as $territory)
-        // {
-        //     if ($territory->player === $state->players[$state->turn])
-        //     {
-        //         $name = $territory->name;
-        //         $territory->units += $object->$name;
-        //     }
-        // }
 
         //changes the phase to attack
         $state->phase = 'attack';
