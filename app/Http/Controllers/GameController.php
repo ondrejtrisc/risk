@@ -75,7 +75,8 @@ class GameController extends Controller
         $game->founder_user_id = \Auth::user()->id;
         $game->users_ids = \Auth::user()->id;
         $game->max_players = $request->input('max_players');
-        $game->status = 'you can join this game';
+        $game->init_deployment = $request->input('init_deployment');
+        $game->status = 'join';
         $game->save();
         return redirect('/games/'. $game->id);
     }
