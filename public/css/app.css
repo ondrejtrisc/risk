@@ -9949,14 +9949,34 @@ h3 {
   position: relative;
 }
 
-.ownedByPlayerGreen {
+.red {
+  fill-opacity: 1 !important;
+  fill: red !important;
+}
+
+.green {
   fill-opacity: 1 !important;
   fill: green !important;
 }
 
-.ownedByPlayerBlue {
+.blue {
   fill-opacity: 1 !important;
   fill: blue !important;
+}
+
+.yellow {
+  fill-opacity: 1 !important;
+  fill: yellow !important;
+}
+
+.purple {
+  fill-opacity: 1 !important;
+  fill: magenta !important;
+}
+
+.brown {
+  fill-opacity: 1 !important;
+  fill: brown !important;
 }
 
 .selected {

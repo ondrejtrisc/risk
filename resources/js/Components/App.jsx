@@ -14,7 +14,8 @@ class App extends Component {
     super(props)
     this.state = {
       territories: [],
-      activePlayer: 1,
+      activePlayer: 'red', // need to change to be color
+      turns: [],
       currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
@@ -23,7 +24,8 @@ class App extends Component {
       phase: 'deploy',
       unitsToDeploy: 3,
       endOfPhase: false,
-      deployed_units: []
+      deployed_units: [],
+      warningMessage: ''
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -45,9 +47,15 @@ class App extends Component {
   handleNextPhaseClick() {
     if(this.state.phase === 'attack') {
       this.setState({phase: 'fortify'})
-    } else if(this.state.phase === 'deploy' && this.state.endOfPhase === true) {
-      update.sendDeployToServer(this)
-      this.setState({phase: 'attack'})
+    } else if(this.state.phase === 'deploy') {
+        if(this.state.endOfPhase === true) {
+          update.sendDeployToServer(this)
+          this.setState({phase: 'attack'})
+        }
+          else {
+            this.setState({warningMessage: "You still haven't finished deploying troops"})
+
+          } 
     } else if(this.state.phase === 'fortify') {
       this.setState({phase: 'endTurn'})
     }
@@ -144,7 +152,7 @@ class App extends Component {
         } 
       }
       
-      
+    // FORTIFY PHASE
     else if(this.state.phase === 'fortify') {
       
       }
@@ -182,7 +190,10 @@ class App extends Component {
           />
           <div className="col">
             <InfoCard />
-            <PlayerList />
+            <PlayerList   turns={this.state.turns}
+                          activePlayer={this.state.activePlayer}
+            
+            />
           </div>
         </div>
 
