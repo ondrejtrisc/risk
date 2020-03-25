@@ -46422,7 +46422,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ButtonBlitz */ "./resources/js/Components/ButtonBlitz.jsx");
 /* harmony import */ var _InfoCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./InfoCard */ "./resources/js/Components/InfoCard.jsx");
 /* harmony import */ var _NextPhaseButton__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./NextPhaseButton */ "./resources/js/Components/NextPhaseButton.jsx");
-/* harmony import */ var _ButtonFortify__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ButtonFortify */ "./resources/js/Components/ButtonFortify.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46444,7 +46443,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -46486,14 +46484,20 @@ var App = /*#__PURE__*/function (_Component) {
       fortified: false,
       fromFortify: '',
       toFortify: '',
-      fortifyUnits: 0,
+      fromFortifyUnits: 0,
+      toFortifyUnits: 0,
+      maxFortifyUnits: 0,
       attackerDice: null,
-      defenderDice: null
+      defenderDice: null,
+      validFortify: false
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
     _this.handleNextPhaseClick = _this.handleNextPhaseClick.bind(_assertThisInitialized(_this));
     _this.handleFortifyButtonClick = _this.handleFortifyButtonClick.bind(_assertThisInitialized(_this));
+    _this.handleFromInputChange = _this.handleFromInputChange.bind(_assertThisInitialized(_this));
+    _this.handleToInputChange = _this.handleToInputChange.bind(_assertThisInitialized(_this));
+    _this.handleCancelFortifyClick = _this.handleCancelFortifyClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -46518,8 +46522,10 @@ var App = /*#__PURE__*/function (_Component) {
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
 
       if (this.state.phase === 'attack') {
+        _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
         this.setState({
-          phase: 'fortify'
+          phase: 'fortify',
+          firstTerritory: ''
         });
       } else if (this.state.phase === 'deploy') {
         if (this.state.endOfPhase === true) {
@@ -46597,6 +46603,10 @@ var App = /*#__PURE__*/function (_Component) {
         } else {
           //sends attack to server
           _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this);
+          _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectOldTerritory(this);
+          this.setState({
+            firstTerritory: ''
+          });
         }
       } // DEPLOY PHASE
       else if (this.state.phase === 'deploy') {
@@ -46638,6 +46648,8 @@ var App = /*#__PURE__*/function (_Component) {
           }
         } // FORTIFY PHASE
         else if (this.state.phase === 'fortify') {
+            if (this.state.validFortify === true) return;
+
             if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
               console.log('this is not a territory');
               return;
@@ -46667,21 +46679,66 @@ var App = /*#__PURE__*/function (_Component) {
               }
 
             if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].differentTerritoryAlreadySelected(event, this) === true) {
-              //do Magic
+              var fromTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].findFirstSelectedObject(this.state.territories, this.state.firstTerritory);
+              var toTerritory = _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].findSecondSelectedObject(event, this.state.territories);
+              _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
+              this.setState({
+                secondTerritory: event.target.id,
+                fromFortifyUnits: fromTerritory.units,
+                toFortifyUnits: toTerritory.units,
+                maxFortifyUnits: toTerritory.units + fromTerritory.units,
+                validFortify: true
+              });
               return;
             }
           }
     }
   }, {
+    key: "handleFromInputChange",
+    value: function handleFromInputChange(event) {
+      if (event.target.value >= this.state.maxFortifyUnits || event.target.value < 1) {
+        return;
+      } else {
+        this.setState({
+          fromFortifyUnits: event.target.value,
+          toFortifyUnits: this.state.maxFortifyUnits - event.target.value
+        });
+      }
+    }
+  }, {
+    key: "handleToInputChange",
+    value: function handleToInputChange(event) {
+      if (event.target.value >= this.state.maxFortifyUnits || event.target.value < 1) {
+        return;
+      } else {
+        this.setState({
+          fromFortifyUnits: this.state.maxFortifyUnits - event.target.value,
+          toFortifyUnits: event.target.value
+        });
+      }
+    }
+  }, {
+    key: "handleCancelFortifyClick",
+    value: function handleCancelFortifyClick() {
+      this.setState({
+        firstTerritory: '',
+        secondTerritory: '',
+        fromFortifyUnits: 0,
+        toFortifyUnits: 0,
+        maxFortifyUnits: 0,
+        validFortify: false
+      });
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+    }
+  }, {
     key: "handleFortifyButtonClick",
-    value: function handleFortifyButtonClick() {
+    value: function handleFortifyButtonClick(event) {
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
-      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this);
+      console.log('send fortify to server', event);
     }
   }, {
     key: "render",
     value: function render() {
-      console.log(this.state.userList);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
       var phaseValue = "0%";
@@ -46712,7 +46769,14 @@ var App = /*#__PURE__*/function (_Component) {
         territories: this.state.territories,
         phase: this.state.phase,
         unitsToDeploy: this.state.unitsToDeploy,
-        firstTerritory: this.state.firstTerritory
+        firstTerritory: this.state.firstTerritory,
+        secondTerritory: this.state.secondTerritory,
+        fromFortifyUnits: this.state.fromFortifyUnits,
+        toFortifyUnits: this.state.toFortifyUnits,
+        handleFromInputChange: this.handleFromInputChange,
+        handleToInputChange: this.handleToInputChange,
+        handleCancelFortifyClick: this.handleCancelFortifyClick,
+        handleFortifyButtonClick: this.handleFortifyButtonClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
@@ -46720,17 +46784,14 @@ var App = /*#__PURE__*/function (_Component) {
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col flex-row justify-content-space-between"
+        className: "col-5 flex-row justify-content-space-between"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__["default"], {
         blitz: this.state.blitz,
         handleBlitzClick: this.handleBlitzClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         className: "btn btn-secondary mr-3"
-      }, "Cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonFortify__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        phaseDesc: phaseDesc,
-        handleFortifyButtonClick: this.handleFortifyButtonClick
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Cards")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col d-flex flex-row justify-content-stretch"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
         phase: this.state.phase,
@@ -46890,75 +46951,6 @@ var ButtonBlitz = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (ButtonBlitz);
-
-/***/ }),
-
-/***/ "./resources/js/Components/ButtonFortify.jsx":
-/*!***************************************************!*\
-  !*** ./resources/js/Components/ButtonFortify.jsx ***!
-  \***************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-var ButtonFortify = /*#__PURE__*/function (_Component) {
-  _inherits(ButtonFortify, _Component);
-
-  var _super = _createSuper(ButtonFortify);
-
-  function ButtonFortify(props) {
-    _classCallCheck(this, ButtonFortify);
-
-    return _super.call(this, props);
-  }
-
-  _createClass(ButtonFortify, [{
-    key: "render",
-    value: function render() {
-      var _this = this;
-
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        hidden: this.props.phaseDesc === 'Fortify' ? false : true,
-        className: "btn btn-secondary mr-3",
-        onClick: function onClick() {
-          return _this.props.handleFortifyButtonClick();
-        }
-      }, "Fortify");
-    }
-  }]);
-
-  return ButtonFortify;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (ButtonFortify);
 
 /***/ }),
 
@@ -47136,22 +47128,97 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
   var _super = _createSuper(FortifyCard);
 
   function FortifyCard(props) {
+    var _this;
+
     _classCallCheck(this, FortifyCard);
 
-    return _super.call(this, props);
+    _this = _super.call(this, props);
+    _this.state = {
+      fromInput: 0,
+      toInput: 0,
+      maximum: 0
+    };
+    _this.handleFromInputChange = _this.handleFromInputChange.bind(_assertThisInitialized(_this));
+    _this.handleToInputChange = _this.handleToInputChange.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(FortifyCard, [{
+    key: "handleFromInputChange",
+    value: function handleFromInputChange(event) {
+      this.setState({
+        fromInput: event.target.value
+      });
+    }
+  }, {
+    key: "handleToInputChange",
+    value: function handleToInputChange(event) {
+      this.setState({
+        toInput: event.target.value
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var firstTerritory = this.props.firstTerritory;
+      var _this2 = this;
+
+      var _this$props = this.props,
+          firstTerritory = _this$props.firstTerritory,
+          secondTerritory = _this$props.secondTerritory,
+          fromFortifyUnits = _this$props.fromFortifyUnits,
+          toFortifyUnits = _this$props.toFortifyUnits,
+          handleCancelFortifyClick = _this$props.handleCancelFortifyClick,
+          handleFortifyButtonClick = _this$props.handleFortifyButtonClick;
+      var maximumFortifyUnits = fromFortifyUnits + toFortifyUnits - 1;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Attack phase"), firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(firstTerritory)));
+      }, "Fortify"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "You may fortify one territory with units from another"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group input-group-sm mb-3"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group-prepend"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "input-group-text",
+        id: "inputGroup-sizing-sm"
+      }, "From ", firstTerritory)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "number",
+        onChange: function onChange(e) {
+          return _this2.props.handleFromInputChange(e);
+        },
+        value: fromFortifyUnits,
+        className: "form-control",
+        "aria-label": "Small",
+        "aria-describedby": "inputGroup-sizing-sm"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group input-group-sm mb-3"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "input-group-prepend"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "input-group-text",
+        id: "inputGroup-sizing-sm"
+      }, "To ", secondTerritory)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "number",
+        onChange: function onChange(e) {
+          return _this2.props.handleToInputChange(e);
+        },
+        value: toFortifyUnits,
+        className: "form-control",
+        "aria-label": "Small",
+        "aria-describedby": "inputGroup-sizing-sm"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: handleFortifyButtonClick,
+        hidden: firstTerritory !== '' && secondTerritory !== '' ? false : true,
+        type: "button",
+        className: "btn btn-success float-left btn-sm"
+      }, "Fortify"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: handleCancelFortifyClick,
+        hidden: firstTerritory !== '' && secondTerritory !== '' ? false : true,
+        type: "button",
+        className: "btn btn-danger float-right btn-sm"
+      }, "Cancel")));
     }
   }]);
 
@@ -47227,7 +47294,14 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           unitsToDeploy = _this$props.unitsToDeploy,
           firstTerritory = _this$props.firstTerritory,
           attackerDice = _this$props.attackerDice,
-          defenderDice = _this$props.defenderDice;
+          defenderDice = _this$props.defenderDice,
+          secondTerritory = _this$props.secondTerritory,
+          fromFortifyUnits = _this$props.fromFortifyUnits,
+          toFortifyUnits = _this$props.toFortifyUnits,
+          handleFromInputChange = _this$props.handleFromInputChange,
+          handleToInputChange = _this$props.handleToInputChange,
+          handleFortifyButtonClick = _this$props.handleFortifyButtonClick,
+          handleCancelFortifyClick = _this$props.handleCancelFortifyClick;
 
       if (activePlayer === currentPlayer) {
         if (phase === 'deploy') {
@@ -47243,7 +47317,15 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           });
         } else if (phase === 'fortify') {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FortifyCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
-            firstTerritory: firstTerritory
+            firstTerritory: firstTerritory,
+            secondTerritory: secondTerritory,
+            territories: territories,
+            fromFortifyUnits: fromFortifyUnits,
+            toFortifyUnits: toFortifyUnits,
+            handleFromInputChange: handleFromInputChange,
+            handleToInputChange: handleToInputChange,
+            handleCancelFortifyClick: handleCancelFortifyClick,
+            handleFortifyButtonClick: handleFortifyButtonClick
           });
         }
       } else {
@@ -52118,19 +52200,22 @@ var PlayerList = /*#__PURE__*/function (_Component) {
           userList = _this$props.userList,
           activePlayer = _this$props.activePlayer,
           turns = _this$props.turns;
+      var classList = ['danger', 'primary', 'success', 'warning', 'secondary', 'info'];
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mb-4 ml-5"
       }, userList.map(function (user, index) {
         if (turns[index] === activePlayer) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item active"
-          }, user, " ", turns[index], " ");
+            className: "list-group-item text-".concat(classList[index])
+          }, user, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            className: "badge badge-primary ml-3"
+          }, " Playing "), " ");
         } else {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item"
-          }, user, " ", turns[index]);
+            className: "list-group-item text-".concat(classList[index])
+          }, user);
         }
       })));
     }
@@ -52409,6 +52494,11 @@ var validate = {
   },
   selectTerritory: function selectTerritory(event) {
     event.target.classList.toggle("selected");
+  },
+  deselectAllTerritories: function deselectAllTerritories(object) {
+    object.state.territories.map(function (territory) {
+      document.getElementById("".concat(territory.name)).classList.remove('selected');
+    });
   },
   thisTerritoryAlreadySelected: function thisTerritoryAlreadySelected(event, object) {
     if (object.state.firstTerritory === event.target.id) {

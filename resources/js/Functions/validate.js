@@ -72,6 +72,13 @@ const validate = {
     event.target.classList.toggle("selected")
   },
 
+  deselectAllTerritories: function(object) {
+    object.state.territories.map(territory => {
+      document.getElementById(`${territory.name}`).classList.remove('selected')
+    })
+
+  },
+
 
   thisTerritoryAlreadySelected: function(event, object) {
     if (object.state.firstTerritory === event.target.id) {

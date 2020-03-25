@@ -5,39 +5,39 @@
 
 .red {
   fill-opacity: 1 !important;
-  fill: red !important;
+  fill: #dc3545 !important;
 }
 
 .green {
   fill-opacity: 1 !important;
-  fill: green !important;
+  fill: #28a745 !important;
 }
 
 .blue {
   fill-opacity: 1 !important;
-  fill: blue !important;
+  fill: #007bff !important;
 }
 
 .yellow {
   fill-opacity: 1 !important;
-  fill: yellow !important;
+  fill: #ffc107 !important;
 }
 
 .purple {
   fill-opacity: 1 !important;
-  fill: magenta !important;
+  fill: #17a2b8 !important;
 }
 
 .brown {
   fill-opacity: 1 !important;
-  fill: brown !important;
+  fill: #6c757d !important;
 }
 
 
 .selected {
   fill: none;
   fill-opacity: 1 !important;
-  fill: silver !important;
+  fill: rgb(254, 234, 255) !important;
   z-index: 99;
 }
 

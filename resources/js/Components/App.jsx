@@ -7,7 +7,6 @@ import PlayerList from './PlayerList';
 import ButtonBlitz from './ButtonBlitz';
 import InfoCard from './InfoCard';
 import NextPhaseButton from './NextPhaseButton';
-import ButtonFortify from './ButtonFortify';
 
 
 class App extends Component {
@@ -31,14 +30,20 @@ class App extends Component {
       fortified: false,
       fromFortify: '',
       toFortify: '',
-      fortifyUnits: 0,
+      fromFortifyUnits: 0,
+      toFortifyUnits: 0,
+      maxFortifyUnits: 0,
       attackerDice: null,
-      defenderDice: null
+      defenderDice: null,
+      validFortify: false
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
     this.handleNextPhaseClick = this.handleNextPhaseClick.bind(this)
     this.handleFortifyButtonClick = this.handleFortifyButtonClick.bind(this)
+    this.handleFromInputChange = this.handleFromInputChange.bind(this)
+    this.handleToInputChange = this.handleToInputChange.bind(this)
+    this.handleCancelFortifyClick = this.handleCancelFortifyClick.bind(this)
 
 
   }
@@ -54,9 +59,10 @@ class App extends Component {
   }
 
   handleNextPhaseClick() {
-    if(validate.isPlayersTurn(this) === false) return
+    if (validate.isPlayersTurn(this) === false) return
     if (this.state.phase === 'attack') {
-      this.setState({ phase: 'fortify' })
+      validate.deselectAllTerritories(this)
+      this.setState({ phase: 'fortify', firstTerritory: '' })
     } else if (this.state.phase === 'deploy') {
       if (this.state.endOfPhase === true) {
         update.sendDeployToServer(this)
@@ -72,7 +78,7 @@ class App extends Component {
   }
 
   handleMapClick(event) {
-    if(validate.isPlayersTurn(this) === false) return
+    if (validate.isPlayersTurn(this) === false) return
 
 
     // ATTACK PHASE
@@ -130,6 +136,8 @@ class App extends Component {
       } else {
         //sends attack to server
         update.sendAttackToServer(attackingTerritory.name, defendingTerritory.name, this)
+        validate.deselectOldTerritory(this)
+        this.setState({ firstTerritory: '' })
       }
     }
 
@@ -165,6 +173,7 @@ class App extends Component {
 
     // FORTIFY PHASE
     else if (this.state.phase === 'fortify') {
+      if (this.state.validFortify === true) return
       if (validate.territoryClick(event, this) === false) {
         console.log('this is not a territory')
         return;
@@ -192,7 +201,16 @@ class App extends Component {
         return;
       }
       if (validate.differentTerritoryAlreadySelected(event, this) === true) {
-        //do Magic
+        const fromTerritory = validate.findFirstSelectedObject(this.state.territories, this.state.firstTerritory)
+        const toTerritory = validate.findSecondSelectedObject(event, this.state.territories)
+        validate.selectTerritory(event)
+        this.setState({
+          secondTerritory: event.target.id,
+          fromFortifyUnits: fromTerritory.units,
+          toFortifyUnits: toTerritory.units,
+          maxFortifyUnits: toTerritory.units + fromTerritory.units,
+          validFortify: true
+        })
         return;
       }
 
@@ -202,16 +220,50 @@ class App extends Component {
 
   }
 
-  handleFortifyButtonClick() {
-    if(validate.isPlayersTurn(this) === false) return
-    update.sendFortifyToServer(this)
+
+
+  handleFromInputChange(event) {
+    if (event.target.value >= this.state.maxFortifyUnits || event.target.value < 1) {
+      return
+    } else {
+      this.setState({
+        fromFortifyUnits: event.target.value,
+        toFortifyUnits: this.state.maxFortifyUnits - event.target.value
+      })
+    }
+  }
+
+  handleToInputChange(event) {
+    if (event.target.value >= this.state.maxFortifyUnits || event.target.value < 1) {
+      return
+    } else {
+      this.setState({
+        fromFortifyUnits: this.state.maxFortifyUnits - event.target.value,
+        toFortifyUnits: event.target.value
+      })
+    }
+  }
+
+  handleCancelFortifyClick() {
+    this.setState({
+      firstTerritory: '',
+      secondTerritory: '',
+      fromFortifyUnits: 0,
+      toFortifyUnits: 0,
+      maxFortifyUnits: 0,
+      validFortify: false
+    })
+    validate.deselectAllTerritories(this)
+  }
+
+  handleFortifyButtonClick(event) {
+    if (validate.isPlayersTurn(this) === false) return
+    console.log('send fortify to server', event)
   }
 
 
 
   render() {
-    console.log(this.state.userList)
-
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
     let phaseValue = "0%"
@@ -242,8 +294,15 @@ class App extends Component {
               phase={this.state.phase}
               unitsToDeploy={this.state.unitsToDeploy}
               firstTerritory={this.state.firstTerritory}
+              secondTerritory={this.state.secondTerritory}
+              fromFortifyUnits={this.state.fromFortifyUnits}
+              toFortifyUnits={this.state.toFortifyUnits}
+              handleFromInputChange={this.handleFromInputChange}
+              handleToInputChange={this.handleToInputChange}
+              handleCancelFortifyClick={this.handleCancelFortifyClick}
+              handleFortifyButtonClick={this.handleFortifyButtonClick}
             />
-            <PlayerList 
+            <PlayerList
               userList={this.state.userList}
               activePlayer={this.state.activePlayer}
               turns={this.state.turns}
@@ -253,15 +312,11 @@ class App extends Component {
         </div>
 
         <div className="row">
-          <div className="col flex-row justify-content-space-between">
+          <div className="col-5 flex-row justify-content-space-between">
             <ButtonBlitz blitz={this.state.blitz}
               handleBlitzClick={this.handleBlitzClick}
             />
             <button type="button" className="btn btn-secondary mr-3">Cards</button>
-            <ButtonFortify
-              phaseDesc={phaseDesc}
-              handleFortifyButtonClick={this.handleFortifyButtonClick}
-            />
           </div>
           <div className="col d-flex flex-row justify-content-stretch">
             <PhaseBreadcrumb phase={this.state.phase}
