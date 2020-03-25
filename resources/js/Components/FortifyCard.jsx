@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import validate from '../Functions/validate'
+
 
 class FortifyCard extends Component {
   constructor(props) {
@@ -34,13 +36,13 @@ class FortifyCard extends Component {
           <p>You may fortify one territory with units from another</p>
           <div className="input-group input-group-sm mb-3">
             <div className="input-group-prepend">
-              <span className="input-group-text" id="inputGroup-sizing-sm">From {firstTerritory}</span>
+              <span className="input-group-text" id="inputGroup-sizing-sm">From {validate.humanize(firstTerritory)}</span>
             </div>
             <input type="number" onChange={(e) => this.props.handleFromInputChange(e)} value={fromFortifyUnits} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
           </div>
           <div className="input-group input-group-sm mb-3">
             <div className="input-group-prepend">
-              <span className="input-group-text" id="inputGroup-sizing-sm">To {secondTerritory}</span>
+              <span className="input-group-text" id="inputGroup-sizing-sm">To {validate.humanize(secondTerritory)}</span>
             </div>
             <input type="number" onChange={(e) => this.props.handleToInputChange(e)} value={toFortifyUnits} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
           </div>
@@ -53,7 +55,7 @@ class FortifyCard extends Component {
 
           <button 
             onClick={handleCancelFortifyClick} 
-            hidden={(firstTerritory !== '' && secondTerritory !== '') ? false : true} type="button" 
+            hidden={(firstTerritory !== '') ? false : true} type="button" 
             className="btn btn-danger float-right btn-sm">Cancel</button>
         </div>
       </div>

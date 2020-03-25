@@ -46734,7 +46734,16 @@ var App = /*#__PURE__*/function (_Component) {
     key: "handleFortifyButtonClick",
     value: function handleFortifyButtonClick(event) {
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
-      console.log('send fortify to server', event);
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this);
+      this.setState({
+        firstTerritory: '',
+        secondTerritory: '',
+        fromFortifyUnits: 0,
+        toFortifyUnits: 0,
+        maxFortifyUnits: 0,
+        validFortify: false
+      });
     }
   }, {
     key: "render",
@@ -46767,6 +46776,8 @@ var App = /*#__PURE__*/function (_Component) {
         activePlayer: this.state.activePlayer,
         currentPlayer: this.state.currentPlayer,
         territories: this.state.territories,
+        attackerDice: this.state.attackerDice,
+        defenderDice: this.state.defenderDice,
         phase: this.state.phase,
         unitsToDeploy: this.state.unitsToDeploy,
         firstTerritory: this.state.firstTerritory,
@@ -46827,6 +46838,19 @@ var App = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
+/* harmony import */ var _images_side1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../images/side1.png */ "./resources/js/images/side1.png");
+/* harmony import */ var _images_side1_png__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_images_side1_png__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _images_side2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../images/side2.png */ "./resources/js/images/side2.png");
+/* harmony import */ var _images_side2_png__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_images_side2_png__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _images_side3_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../images/side3.png */ "./resources/js/images/side3.png");
+/* harmony import */ var _images_side3_png__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_images_side3_png__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _images_side4_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../images/side4.png */ "./resources/js/images/side4.png");
+/* harmony import */ var _images_side4_png__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_images_side4_png__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _images_side5_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../images/side5.png */ "./resources/js/images/side5.png");
+/* harmony import */ var _images_side5_png__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_images_side5_png__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _images_side6_png__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../images/side6.png */ "./resources/js/images/side6.png");
+/* harmony import */ var _images_side6_png__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_images_side6_png__WEBPACK_IMPORTED_MODULE_7__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46851,6 +46875,13 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
+
+
+
+
+
 var AttackCard = /*#__PURE__*/function (_Component) {
   _inherits(AttackCard, _Component);
 
@@ -46869,13 +46900,162 @@ var AttackCard = /*#__PURE__*/function (_Component) {
           firstTerritory = _this$props.firstTerritory,
           attackerDice = _this$props.attackerDice,
           defenderDice = _this$props.defenderDice;
+
+      if (attackerDice !== null) {
+        attackerDice.sort(function (a, b) {
+          return b - a;
+        });
+      }
+
+      if (defenderDice !== null) {
+        defenderDice.sort(function (a, b) {
+          return b - a;
+        });
+      }
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(firstTerritory.charAt(0).toUpperCase() + firstTerritory.slice(1))), attackerDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls: ", attackerDice, "Defender's rolls: ", defenderDice) : ''));
+      }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), attackerDice.map(function (die, index) {
+        switch (die) {
+          case 1:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side1.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 2:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side2.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 3:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side3.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 4:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side4.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 5:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side5.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 6:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side6.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender's rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), defenderDice.map(function (die, index) {
+        switch (die) {
+          case 1:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side1.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 2:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side2.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 3:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side3.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 4:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side4.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 5:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side5.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+
+          case 6:
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: index,
+              src: "../images/side6.png",
+              className: "img-thumbnail",
+              style: {
+                height: "40px"
+              },
+              alt: ""
+            });
+        }
+      })) : ''));
     }
   }]);
 
@@ -47098,6 +47278,7 @@ var DifferentTurnCard = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47119,6 +47300,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -47183,7 +47365,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "input-group-text",
         id: "inputGroup-sizing-sm"
-      }, "From ", firstTerritory)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "From ", _Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "number",
         onChange: function onChange(e) {
           return _this2.props.handleFromInputChange(e);
@@ -47199,7 +47381,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "input-group-text",
         id: "inputGroup-sizing-sm"
-      }, "To ", secondTerritory)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "To ", _Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(secondTerritory))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "number",
         onChange: function onChange(e) {
           return _this2.props.handleToInputChange(e);
@@ -47215,7 +47397,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
         className: "btn btn-success float-left btn-sm"
       }, "Fortify"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: handleCancelFortifyClick,
-        hidden: firstTerritory !== '' && secondTerritory !== '' ? false : true,
+        hidden: firstTerritory !== '' ? false : true,
         type: "button",
         className: "btn btn-danger float-right btn-sm"
       }, "Cancel")));
@@ -52335,19 +52517,20 @@ var update = {
     var fortified = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     var toSend = {
       fromTerritory: object.state.fromFortify,
+      fromUnits: object.state.fromFortifyUnits,
       toTerritory: object.state.toFortify,
-      unitsToFortify: object.state.unitsToFortify
+      toUnits: object.state.toFortifyUnits
     };
 
     if (fortified === false) {
       toSend = {
         fromTerritory: null,
         toTerritory: null,
-        unitsToFortify: 0
+        fromUnits: 0,
+        toUnits: 0
       };
     }
 
-    console.log(toSend);
     fetch("../fortify/".concat(object.state.game_id), {
       method: "POST",
       headers: {
@@ -52507,6 +52690,16 @@ var validate = {
       return false;
     }
   },
+  humanize: function humanize(str) {
+    var i,
+        frags = str.split('_');
+
+    for (i = 0; i < frags.length; i++) {
+      frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
+    }
+
+    return frags.join(' ');
+  },
   differentTerritoryAlreadySelected: function differentTerritoryAlreadySelected(event, object) {
     var newTerritoryObject = event.target.id;
     var oldTerritoryObject = object.state.firstTerritory; //this.state.firstTerritory
@@ -52594,6 +52787,72 @@ __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap
 if (document.getElementById('root') !== null) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Components_App_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('root'));
 }
+
+/***/ }),
+
+/***/ "./resources/js/images/side1.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side1.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side1.png?749b100ceb361914d0b98131e3769c94";
+
+/***/ }),
+
+/***/ "./resources/js/images/side2.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side2.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side2.png?9181544f1250860f7f813d75a353ac42";
+
+/***/ }),
+
+/***/ "./resources/js/images/side3.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side3.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side3.png?8ceea1bb16ef018d320a6e08f33df6af";
+
+/***/ }),
+
+/***/ "./resources/js/images/side4.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side4.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side4.png?34d900be1b4226ffe3fffd735dfc4a54";
+
+/***/ }),
+
+/***/ "./resources/js/images/side5.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side5.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side5.png?2b2b512d778ea8364b4d4156869b0f03";
+
+/***/ }),
+
+/***/ "./resources/js/images/side6.png":
+/*!***************************************!*\
+  !*** ./resources/js/images/side6.png ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 
 /***/ }),
 
