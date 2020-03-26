@@ -4,6 +4,7 @@ import FortifyCard from './FortifyCard';
 import DeployCard from './DeployCard';
 import DifferentTurnCard from './DifferentTurnCard';
 import CardsCard from './CardsCard';
+import OccupyCard from './OccupyCard';
 
 
 class InfoCard extends Component {
@@ -50,10 +51,21 @@ class InfoCard extends Component {
             handleFortifyButtonClick={handleFortifyButtonClick}
           />
         )
+      } else if(phase === 'occupy') {
+        return (
+          < OccupyCard />
+        )
 
       }
 
-    } else {
+    } 
+    else if( phase === 'occupy') {
+      return (
+        < OccupyCard />
+      )
+    }
+
+    else {
       return (
         < DifferentTurnCard />
 

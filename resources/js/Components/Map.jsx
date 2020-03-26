@@ -3452,7 +3452,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="alaska-units-text" x="218.024" y="203.283">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3486,7 +3486,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="northwest_territory-units-text" x="277.068" y="202.575">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3520,7 +3520,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="alberta-units-text" x="281.31" y="243.234">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3554,7 +3554,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="quebec-units-text" x="378.184" y="251.719">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3588,7 +3588,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="ontario-units-text" x="328.333" y="254.548">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3626,7 +3626,7 @@ class Map extends React.Component {
               x="280.603"
               y="297.681"
             >
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3664,7 +3664,7 @@ class Map extends React.Component {
               x="334.697"
               y="313.945"
             >
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3698,7 +3698,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="central_america-units-text" x="280.25" y="346.825">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3732,7 +3732,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="greenland-units-text" x="423.439" y="177.12">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3766,7 +3766,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="iceland-units-text" x="484.25" y="229.445">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3800,7 +3800,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="great_britain-units-text" x="478.947" y="292.024">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3834,7 +3834,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="scandinavia-units-text" x="533.394" y="231.567">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3868,7 +3868,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="northern_europe-units-text" x="537.283" y="294.499">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3902,7 +3902,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="western_europe-units-text" x="479.3" y="361.321">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3936,7 +3936,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="southern_europe-units-text" x="553.547" y="337.986">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -3970,7 +3970,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="venezuela-units-text" x="336.818" y="406.576">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4004,7 +4004,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="brazil-units-text" x="396.922" y="450.063">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4038,7 +4038,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="peru-units-text" x="349.9" y="468.801">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4072,7 +4072,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="argentina-units-text" x="356.971" y="513.349">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4106,7 +4106,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="north_africa-units-text" x="510.059" y="428.85">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4140,7 +4140,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="egypt-units-text" x="565.249" y="411.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4174,7 +4174,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="east_africa-units-text" x="595.749" y="455.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4208,7 +4208,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="central_africa-units-text" x="567.749" y="492.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4242,7 +4242,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="south_africa-units-text" x="571.749" y="564.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4276,7 +4276,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="madagascar-units-text" x="635.749" y="563.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4310,7 +4310,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="western_australia-units-text" x="806.749" y="558.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4344,7 +4344,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="eastern_australia-units-text" x="872.749" y="563.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4378,7 +4378,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="new_guinea-units-text" x="841.249" y="473.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4412,7 +4412,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="indonesia-units-text" x="779.749" y="486.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4446,7 +4446,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="india-units-text" x="706.249" y="384.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4480,7 +4480,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="middle_east-units-text" x="621.749" y="390.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4514,7 +4514,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="afghanistan-units-text" x="663.249" y="314.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4548,7 +4548,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="southeast_asia-units-text" x="766.749" y="408.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4582,7 +4582,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="china-units-text" x="751.749" y="349.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4616,7 +4616,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="mongolia-units-text" x="769.749" y="299.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4650,7 +4650,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="japan-units-text" x="841.749" y="308.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4684,7 +4684,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="irkutsk-units-text" x="761.749" y="248.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4718,7 +4718,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="siberia-units-text" x="712.749" y="212.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4752,7 +4752,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="ural-units-text" x="680.749" y="250.189">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4786,7 +4786,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="russia-units-text" x="604.749" y="256.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4820,7 +4820,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="yakursk-units-text" x="767.249" y="191.689">
-              12
+              
             </tspan>
           </text>
           <ellipse
@@ -4854,7 +4854,7 @@ class Map extends React.Component {
             wordSpacing="0"
           >
             <tspan id="kamchatka-units-text" x="826.749" y="195.689">
-              12
+              
             </tspan>
           </text>
         </g>
