@@ -483,7 +483,7 @@ class GamestateController extends Controller
         {
             $toName = $object->toTerritory;
             $fromUnits = $object->fromUnits;
-            $toUnits = $object->toUnits; 
+            $toUnits = $object->toUnits;
 
             //locates the territory of units' departure
             foreach ($state->territories as $territory)
