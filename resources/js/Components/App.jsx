@@ -317,6 +317,7 @@ class App extends Component {
               userList={this.state.userList}
               activePlayer={this.state.activePlayer}
               turns={this.state.turns}
+              territories={this.state.territories}
 
             />
           </div>

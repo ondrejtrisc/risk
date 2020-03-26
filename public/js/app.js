@@ -46791,7 +46791,8 @@ var App = /*#__PURE__*/function (_Component) {
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
-        turns: this.state.turns
+        turns: this.state.turns,
+        territories: this.state.territories
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -52381,7 +52382,8 @@ var PlayerList = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           userList = _this$props.userList,
           activePlayer = _this$props.activePlayer,
-          turns = _this$props.turns;
+          turns = _this$props.turns,
+          territories = _this$props.territories;
       var classList = ['danger', 'primary', 'success', 'warning', 'secondary', 'info'];
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mb-4 ml-5"
@@ -52389,14 +52391,14 @@ var PlayerList = /*#__PURE__*/function (_Component) {
         if (turns[index] === activePlayer) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item text-".concat(classList[index])
-          }, user, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-            className: "badge badge-primary ml-3"
-          }, " Playing "), " ");
+            className: "list-group-item mb-1 border border-".concat(classList[index], " rounded")
+          }, user, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            className: "badge badge-primary text-uppercase ml-3"
+          }, " Playing "));
         } else {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item text-".concat(classList[index])
+            className: "list-group-item mb-1 border border-".concat(classList[index], " rounded")
           }, user);
         }
       })));
@@ -52516,9 +52518,9 @@ var update = {
   sendFortifyToServer: function sendFortifyToServer(object) {
     var fortified = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     var toSend = {
-      fromTerritory: object.state.fromFortify,
+      fromTerritory: object.state.firstTerritory,
       fromUnits: object.state.fromFortifyUnits,
-      toTerritory: object.state.toFortify,
+      toTerritory: object.state.secondTerritory,
       toUnits: object.state.toFortifyUnits
     };
 
@@ -52874,8 +52876,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

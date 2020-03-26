@@ -19,7 +19,7 @@
   }
 
   button{
-    min-width: 80px;
+    min-width: 50px;
   }
 
 
@@ -98,7 +98,7 @@
                                     @if(Auth::user()->id == $game->founder_user_id)  
                                       @if($num_users[$game->id] == $game->max_players)
                                         <form action="{{ action('GameController@launch', [$game->id]) }}" method="get">  
-                                          <button type="submit">Launch the game</button>
+                                          <button type="submit">Launch</button>
                                         </form>
                                       @endif
                                     @endif
