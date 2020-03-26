@@ -67,6 +67,15 @@ class GamestateController extends Controller
         shuffle($deck);
         $state->deck = $deck;
 
+        //creates the cards object
+        $cards = new stdClass();
+        foreach ($state->players as $player)
+        {
+            $cards->$player = [];
+        }
+        $state->cards = $cards;
+        $state->matches = 0;
+
         //creates the territories
         foreach ($territoryNames as $name)
         {
@@ -298,7 +307,17 @@ class GamestateController extends Controller
         $deck[] = $card;
         shuffle($deck);
         $state->deck = $deck;
+
+        //creates the cards object
+        $cards = new stdClass();
+        foreach ($state->players as $player)
+        {
+            $cards->$player = [];
+        }
+        $state->cards = $cards;
+        $state->matches = 0;
         
+        //creates the territories
         foreach ($territoryNames as $name)
         {
             $territory = new stdClass();
@@ -577,6 +596,64 @@ class GamestateController extends Controller
         }
     }
 
+    public function play_cards($game_id)
+    {
+        //gets the most recent gamestate from the database
+        $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
+        $state = json_decode($gamestate->state);
+        
+        //gets the data about the move from the request
+        $requestPayload = file_get_contents("php://input");
+        $object = json_decode($requestPayload);
+        $set = $object->set;
+
+        //adds extra units to deploy
+        $state->matches++;
+        if ($state->matches < 6)
+        {
+            $state->unitsToDeploy += $state->matches * 2 + 2;
+        }
+        else
+        {
+            $state->unitsToDeploy += $state->matches * 5 - 15;
+        }
+
+        $territoryBonus = false;
+        foreach ($set as $card)
+        {
+            foreach ($state->territories as $territory)
+            {
+                if ($territory->name === $card->territory)
+                {
+                    if ($territory->player === $state->players[$state->turn])
+                    {
+                        $territoryBonus = true;
+                    }
+                    break;
+                }
+            }
+        }
+        if ($territoryBonus)
+        {
+            $state->unitsToDeploy += 2;
+        }
+
+        //returns the cards to the back of the deck
+        $state->deck = array_merge($state->deck, $set);
+
+        //creates the new gamestate
+        $newGamestate = new Gamestate();
+        $newGamestate->game_id = $game_id;
+        $newGamestate->step = $gamestate->step + 1;
+        $newGamestate->state = json_encode($state);
+
+        //saves the new gamestate to the database
+        $newGamestate->save();
+
+        //returns the new state to the frontend
+        return json_encode($state);
+    }
+
     public function deploy($game_id)
     {
         //gets the most recent gamestate from the database
@@ -592,6 +669,7 @@ class GamestateController extends Controller
         //changes the phase to attack
         $state->phase = 'attack';
         $state->unitsToDeploy = null;
+        $state->hasGainedTerritory = false;
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -679,6 +757,7 @@ class GamestateController extends Controller
             if ($toTerritory->units === 0)
             {
                 $toTerritory->player = $fromTerritory->player;
+                $state->hasGainedTerritory = true;
                 $toTerritory->units = $fromTerritory->units - 1;
                 $fromTerritory->units = 1;
                 break;
@@ -745,6 +824,13 @@ class GamestateController extends Controller
             //moves the units
             $fromTerritory->units = $fromUnits;
             $toTerritory->units = $toUnits;
+        }
+
+        //awards the player a card
+        if ($state->hasGainedTerritory)
+        {
+            $player = $state->players[$state->turn];
+            $state->cards->$player[] = array_shift($state->deck);
         }
 
         //makes it the next player's turn
@@ -863,11 +949,5 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         return json_encode($state);
-    }
-
-    public function test()
-    {
-        $this->create_initial_manual(13, ['red', 'blue']);
-        return $this->get_current_state(13);
     }
 }
