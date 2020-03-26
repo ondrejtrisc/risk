@@ -33,6 +33,7 @@ Route::delete('/games/{id}/delete', 'GameController@delete');
 Route::get('/test', 'GamestateController@test');
 Route::post('/occupy/{game_id}', 'GamestateController@occupy');
 Route::post('/strengthen/{game_id}', 'GamestateController@strengthen');
+Route::post('/playcards/{game_id}', 'GamestateController@play_cards');
 Route::post('/deploy/{game_id}', 'GamestateController@deploy');
 Route::post('/attack/{game_id}', 'GamestateController@attack');
 Route::post('/fortify/{game_id}', 'GamestateController@fortify');

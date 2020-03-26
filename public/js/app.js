@@ -46492,7 +46492,8 @@ var App = /*#__PURE__*/function (_Component) {
       attackerDice: null,
       defenderDice: null,
       validFortify: false,
-      cardsCard: false
+      cardsCard: false,
+      interval: ''
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
@@ -46508,8 +46509,26 @@ var App = /*#__PURE__*/function (_Component) {
   _createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this2 = this;
+
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
+      this.intervalId = setInterval(function () {
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this2);
+      }, 2000);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      if (this.state.activePlayer === this.state.currentPlayer) {
+        clearInterval(this.intervalId);
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.intervalId);
     }
   }, {
     key: "handleBlitzClick",
@@ -46523,6 +46542,8 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleNextPhaseClick",
     value: function handleNextPhaseClick() {
+      var _this3 = this;
+
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
 
       if (this.state.phase === 'attack') {
@@ -46544,12 +46565,40 @@ var App = /*#__PURE__*/function (_Component) {
         }
       } else if (this.state.phase === 'fortify') {
         _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this, false);
+        this.intervalId = setInterval(function () {
+          return _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this3);
+        }, 2000);
       }
     }
   }, {
     key: "handleMapClick",
     value: function handleMapClick(event) {
-      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; // ATTACK PHASE
+      var _this4 = this;
+
+      if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; //OCCUPY PHASE
+
+      if (this.state.phase === 'occupy') {
+        this.state.territories.map(function (territory) {
+          if (territory.name === event.target.id && territory.player === null) {
+            _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendOccupyToServer(_this4, territory.name);
+            return '';
+          } else {
+            return '';
+          }
+        });
+      } //STRENGTHEN PHASE
+
+
+      if (this.state.phase === 'strengthen') {
+        this.state.territories.map(function (territory) {
+          if (territory.name === event.target.id && territory.player === _this4.state.activePlayer) {
+            console.log('You can choose this territory');
+          } else {
+            console.log('You cannot choose this territory');
+          }
+        });
+      } // ATTACK PHASE
+
 
       if (this.state.phase === 'attack') {
         this.setState({
@@ -46737,6 +46786,8 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleFortifyButtonClick",
     value: function handleFortifyButtonClick(event) {
+      var _this5 = this;
+
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return;
       _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this);
@@ -46748,6 +46799,9 @@ var App = /*#__PURE__*/function (_Component) {
         maxFortifyUnits: 0,
         validFortify: false
       });
+      this.intervalId = setInterval(function () {
+        return _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this5);
+      }, 2000);
     }
   }, {
     key: "handleCardsClick",
@@ -46808,14 +46862,14 @@ var App = /*#__PURE__*/function (_Component) {
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-5 flex-row justify-content-space-between"
+        className: "col-3 flex-row justify-content-space-between"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__["default"], {
         blitz: this.state.blitz,
         handleBlitzClick: this.handleBlitzClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
         handleCardsClick: this.handleCardsClick
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col d-flex flex-row justify-content-stretch"
+        className: "col-5 d-flex flex-row justify-content-stretch"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
         phase: this.state.phase,
         phaseValue: phaseValue,
@@ -47769,6 +47823,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DeployCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DeployCard */ "./resources/js/Components/DeployCard.jsx");
 /* harmony import */ var _DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DifferentTurnCard */ "./resources/js/Components/DifferentTurnCard.jsx");
 /* harmony import */ var _CardsCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CardsCard */ "./resources/js/Components/CardsCard.jsx");
+/* harmony import */ var _OccupyCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OccupyCard */ "./resources/js/Components/OccupyCard.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47790,6 +47845,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -47858,7 +47914,11 @@ var InfoCard = /*#__PURE__*/function (_Component) {
             handleCancelFortifyClick: handleCancelFortifyClick,
             handleFortifyButtonClick: handleFortifyButtonClick
           });
+        } else if (phase === 'occupy') {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], null);
         }
+      } else if (phase === 'occupy') {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], null);
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], null);
       }
@@ -51072,7 +51132,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "alaska-units-text",
         x: "218.024",
         y: "203.283"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-1",
         cx: "284.316",
         cy: "198.51",
@@ -51106,7 +51166,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "northwest_territory-units-text",
         x: "277.068",
         y: "202.575"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-2",
         cx: "288.558",
         cy: "239.168",
@@ -51140,7 +51200,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "alberta-units-text",
         x: "281.31",
         y: "243.234"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-9",
         cx: "385.432",
         cy: "247.653",
@@ -51174,7 +51234,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "quebec-units-text",
         x: "378.184",
         y: "251.719"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-93",
         cx: "335.581",
         cy: "250.482",
@@ -51208,7 +51268,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "ontario-units-text",
         x: "328.333",
         y: "254.548"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-0",
         cx: "287.851",
         cy: "293.615",
@@ -51242,7 +51302,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "western_united_states-units-text",
         x: "280.603",
         y: "297.681"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-5",
         cx: "341.945",
         cy: "309.879",
@@ -51276,7 +51336,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "eastern_united_states-units-text",
         x: "334.697",
         y: "313.945"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-8",
         cx: "287.498",
         cy: "342.759",
@@ -51310,7 +51370,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "central_america-units-text",
         x: "280.25",
         y: "346.825"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6",
         cx: "430.687",
         cy: "173.054",
@@ -51344,7 +51404,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "greenland-units-text",
         x: "423.439",
         y: "177.12"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-9",
         cx: "491.498",
         cy: "225.38",
@@ -51378,7 +51438,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "iceland-units-text",
         x: "484.25",
         y: "229.445"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-5",
         cx: "486.195",
         cy: "287.959",
@@ -51412,7 +51472,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "great_britain-units-text",
         x: "478.947",
         y: "292.024"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-1",
         cx: "540.642",
         cy: "227.501",
@@ -51446,7 +51506,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "scandinavia-units-text",
         x: "533.394",
         y: "231.567"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-6",
         cx: "544.531",
         cy: "290.433",
@@ -51480,7 +51540,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "northern_europe-units-text",
         x: "537.283",
         y: "294.499"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0",
         cx: "486.548",
         cy: "357.255",
@@ -51514,7 +51574,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "western_europe-units-text",
         x: "479.3",
         y: "361.321"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-4",
         cx: "560.794",
         cy: "333.921",
@@ -51548,7 +51608,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "southern_europe-units-text",
         x: "553.547",
         y: "337.986"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-4",
         cx: "344.066",
         cy: "402.51",
@@ -51582,7 +51642,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "venezuela-units-text",
         x: "336.818",
         y: "406.576"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-7",
         cx: "404.17",
         cy: "445.997",
@@ -51616,7 +51676,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "brazil-units-text",
         x: "396.922",
         y: "450.063"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-5",
         cx: "357.148",
         cy: "464.735",
@@ -51650,7 +51710,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "peru-units-text",
         x: "349.9",
         y: "468.801"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-54",
         cx: "364.219",
         cy: "509.283",
@@ -51684,7 +51744,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "argentina-units-text",
         x: "356.971",
         y: "513.349"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6",
         cx: "517.307",
         cy: "424.784",
@@ -51718,7 +51778,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "north_africa-units-text",
         x: "510.059",
         y: "428.85"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-6",
         cx: "572.497",
         cy: "407.123",
@@ -51752,7 +51812,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "egypt-units-text",
         x: "565.249",
         y: "411.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-0",
         cx: "602.997",
         cy: "451.623",
@@ -51786,7 +51846,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "east_africa-units-text",
         x: "595.749",
         y: "455.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-9",
         cx: "574.997",
         cy: "488.123",
@@ -51820,7 +51880,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "central_africa-units-text",
         x: "567.749",
         y: "492.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-99",
         cx: "578.997",
         cy: "560.623",
@@ -51854,7 +51914,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "south_africa-units-text",
         x: "571.749",
         y: "564.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-7",
         cx: "642.997",
         cy: "559.123",
@@ -51888,7 +51948,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "madagascar-units-text",
         x: "635.749",
         y: "563.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-73",
         cx: "813.997",
         cy: "554.123",
@@ -51922,7 +51982,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "western_australia-units-text",
         x: "806.749",
         y: "558.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-1",
         cx: "879.997",
         cy: "559.623",
@@ -51956,7 +52016,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "eastern_australia-units-text",
         x: "872.749",
         y: "563.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-2",
         cx: "848.497",
         cy: "469.123",
@@ -51990,7 +52050,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "new_guinea-units-text",
         x: "841.249",
         y: "473.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-08",
         cx: "786.997",
         cy: "482.623",
@@ -52024,7 +52084,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "indonesia-units-text",
         x: "779.749",
         y: "486.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-3",
         cx: "713.497",
         cy: "380.623",
@@ -52058,7 +52118,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "india-units-text",
         x: "706.249",
         y: "384.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-98",
         cx: "628.997",
         cy: "386.123",
@@ -52092,7 +52152,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "middle_east-units-text",
         x: "621.749",
         y: "390.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-71",
         cx: "670.497",
         cy: "310.623",
@@ -52126,7 +52186,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "afghanistan-units-text",
         x: "663.249",
         y: "314.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-90",
         cx: "773.997",
         cy: "404.623",
@@ -52160,7 +52220,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "southeast_asia-units-text",
         x: "766.749",
         y: "408.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-62",
         cx: "758.997",
         cy: "345.623",
@@ -52194,7 +52254,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "china-units-text",
         x: "751.749",
         y: "349.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-33",
         cx: "776.997",
         cy: "295.123",
@@ -52228,7 +52288,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "mongolia-units-text",
         x: "769.749",
         y: "299.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-23",
         cx: "848.997",
         cy: "304.623",
@@ -52262,7 +52322,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "japan-units-text",
         x: "841.749",
         y: "308.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-5",
         cx: "768.997",
         cy: "244.623",
@@ -52296,7 +52356,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "irkutsk-units-text",
         x: "761.749",
         y: "248.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-4",
         cx: "719.997",
         cy: "208.623",
@@ -52330,7 +52390,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "siberia-units-text",
         x: "712.749",
         y: "212.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-59",
         cx: "687.997",
         cy: "246.123",
@@ -52364,7 +52424,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "ural-units-text",
         x: "680.749",
         y: "250.189"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-58",
         cx: "611.997",
         cy: "252.623",
@@ -52398,7 +52458,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "russia-units-text",
         x: "604.749",
         y: "256.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-22",
         cx: "774.497",
         cy: "187.623",
@@ -52432,7 +52492,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "yakursk-units-text",
         x: "767.249",
         y: "191.689"
-      }, "12")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
         id: "path4584-7-7-1-5-1-3-9-5-0-0-6-0-6-8",
         cx: "833.997",
         cy: "191.623",
@@ -52466,7 +52526,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         id: "kamchatka-units-text",
         x: "826.749",
         y: "195.689"
-      }, "12"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "layer5",
         transform: "translate(-167.997 -118.555)"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
@@ -52587,13 +52647,13 @@ var NextPhaseButton = /*#__PURE__*/function (_Component) {
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: this.props.endOfPhase ? "btn btn-success btn-large ml-5 w-80" : "btn btn-secondary btn-large ml-5 w-80",
+        className: this.props.endOfPhase ? "btn btn-success text-uppercase btn-large ml-5 w-80" : "btn text-uppercase btn-secondary btn-large ml-5 w-80",
         onClick: function onClick() {
           return _this.props.handleNextPhaseClick();
         },
         disabled: this.props.endOfPhase ? false : true,
         hidden: this.props.activePlayer === this.props.currentPlayer ? false : true
-      }, this.props.phaseDesc === 'Fortify' ? 'End turn' : "End phase ".concat(this.props.phaseDesc));
+      }, this.props.phaseDesc === 'Fortify' ? 'End turn' : "End ".concat(this.props.phaseDesc, " phase "));
     }
   }]);
 
@@ -52601,6 +52661,72 @@ var NextPhaseButton = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (NextPhaseButton);
+
+/***/ }),
+
+/***/ "./resources/js/Components/OccupyCard.jsx":
+/*!************************************************!*\
+  !*** ./resources/js/Components/OccupyCard.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var OccupyCard = /*#__PURE__*/function (_Component) {
+  _inherits(OccupyCard, _Component);
+
+  var _super = _createSuper(OccupyCard);
+
+  function OccupyCard(props) {
+    _classCallCheck(this, OccupyCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(OccupyCard, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card ml-5 mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, "OCCUPY PHASE"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+    }
+  }]);
+
+  return OccupyCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (OccupyCard);
 
 /***/ }),
 
@@ -52809,6 +52935,25 @@ var update = {
       });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
+    });
+  },
+  sendOccupyToServer: function sendOccupyToServer(object, territory) {
+    var toSend = {
+      territory: territory
+    };
+    console.log(toSend);
+    fetch("../occupy/".concat(object.state.game_id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(toSend)
+    }).then(function (response) {
+      return response.json();
+    }) // parses response as JSON
+    .then(function (data) {
+      console.log(data);
     });
   },
   sendAttackToServer: function sendAttackToServer(attacking, defending, object) {
@@ -53224,8 +53369,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -37,7 +37,8 @@ class App extends Component {
       attackerDice: null,
       defenderDice: null,
       validFortify: false,
-      cardsCard: false
+      cardsCard: false,
+      interval: ''
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -47,14 +48,26 @@ class App extends Component {
     this.handleToInputChange = this.handleToInputChange.bind(this)
     this.handleCancelFortifyClick = this.handleCancelFortifyClick.bind(this)
     this.handleCardsClick = this.handleCardsClick.bind(this)
-
-
   }
+
+
+
 
   componentDidMount() {
     update.getStateOfGame(this)
     update.addNumberOfUnits(this.state)
+    update.colorTerritories(this.state)
+    this.intervalId = setInterval(() => { update.getStateOfGame(this) }, 2000)
+  }
 
+  componentDidUpdate() {
+    if (this.state.activePlayer === this.state.currentPlayer) {
+      clearInterval(this.intervalId)
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId)
   }
 
   handleBlitzClick() {
@@ -77,11 +90,35 @@ class App extends Component {
       }
     } else if (this.state.phase === 'fortify') {
       update.sendFortifyToServer(this, false)
+      this.intervalId = setInterval(() => update.getStateOfGame(this), 2000)
     }
   }
 
   handleMapClick(event) {
     if (validate.isPlayersTurn(this) === false) return
+
+    //OCCUPY PHASE
+    if(this.state.phase === 'occupy') {
+      this.state.territories.map(territory => {
+        if(territory.name === event.target.id && territory.player === null) {
+          update.sendOccupyToServer(this, territory.name)
+          return ''
+        } else {
+          return ''
+        }
+      })
+    } 
+
+    //STRENGTHEN PHASE
+    if(this.state.phase === 'strengthen') {
+      this.state.territories.map(territory => {
+        if(territory.name === event.target.id && territory.player === this.state.activePlayer) {
+          console.log('You can choose this territory')
+        } else {
+          console.log('You cannot choose this territory')
+        }
+      })
+    }
 
 
     // ATTACK PHASE
@@ -271,10 +308,11 @@ class App extends Component {
       maxFortifyUnits: 0,
       validFortify: false
     })
+    this.intervalId = setInterval(() => update.getStateOfGame(this), 2000)
   }
 
   handleCardsClick(event) {
-    this.setState({cardsCard: !this.state.cardsCard})
+    this.setState({ cardsCard: !this.state.cardsCard })
   }
 
 
@@ -282,8 +320,10 @@ class App extends Component {
   render() {
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
+
     let phaseValue = "0%"
     let phaseDesc = ''
+
     if (this.state.phase === 'deploy') {
       phaseValue = "33%"
       phaseDesc = 'Deploy'
@@ -295,6 +335,7 @@ class App extends Component {
       phaseDesc = 'Fortify'
 
     }
+
     return (
       <div className="container">
 
@@ -332,15 +373,15 @@ class App extends Component {
         </div>
 
         <div className="row">
-          <div className="col-5 flex-row justify-content-space-between">
+          <div className="col-3 flex-row justify-content-space-between">
             <ButtonBlitz blitz={this.state.blitz}
               handleBlitzClick={this.handleBlitzClick}
             />
             <CardsButton
-              handleCardsClick={this.handleCardsClick} 
-              />
+              handleCardsClick={this.handleCardsClick}
+            />
           </div>
-          <div className="col d-flex flex-row justify-content-stretch">
+          <div className="col-5 d-flex flex-row justify-content-stretch">
             <PhaseBreadcrumb phase={this.state.phase}
               phaseValue={phaseValue}
               phaseDesc={phaseDesc}
