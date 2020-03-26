@@ -6,7 +6,7 @@ class PlayerList extends Component {
   }
 
   render(){
-    const {userList, activePlayer, turns} = this.props
+    const {userList, activePlayer, turns, territories} = this.props
     const classList = ['danger', 'primary', 'success', 'warning', 'secondary', 'info']
   
     return (
@@ -16,11 +16,21 @@ class PlayerList extends Component {
             userList.map((user, index) => {
               if(turns[index] === activePlayer) {
                 return (
-                  <li key={index} className={`list-group-item text-${classList[index]}`}>{user} <span className="badge badge-primary ml-3"> Playing </span> </li>
+                  <li 
+                    key={index} 
+                    className={`list-group-item mb-1 border border-${classList[index]} rounded`}>{user} 
+                      <span className="badge badge-primary text-uppercase ml-3"> Playing </span>
+                      {
+
+                      } 
+                  </li>
                 )
               } else {
                 return (
-                <li key={index} className={`list-group-item text-${classList[index]}`}>{user}</li>
+                <li 
+                  key={index} 
+                  className={`list-group-item mb-1 border border-${classList[index]} rounded`}>{user}
+                  </li>
                 )
               }
             })
