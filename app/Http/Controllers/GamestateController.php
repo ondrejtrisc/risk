@@ -34,6 +34,40 @@ class GamestateController extends Controller
         
         $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'quebec', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakursk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
         
+        //creates the deck of cards
+        $deck = [];
+        $cardType = 'infantry';
+        foreach ($territoryNames as $territoryName)
+        {
+            $card = new stdClass();
+            $card->territory = $territoryName;
+            $card->type = $cardType;
+            $deck[] = $card;
+            switch ($cardType)
+            {
+                case 'infantry':
+                    $cardType = 'cavalry';
+                    break;
+                case 'cavalry':
+                    $cardType = 'artillery';
+                    break;
+                case 'artillery':
+                    $cardType = 'infantry';
+                    break;
+            }
+        }
+        $card = new stdClass();
+        $card->territory = 'wild';
+        $card->type = 'wild';
+        $deck[] = $card;
+        $card = new stdClass();
+        $card->territory = 'wild';
+        $card->type = 'wild';
+        $deck[] = $card;
+        shuffle($deck);
+        $state->deck = $deck;
+
+        //creates the territories
         foreach ($territoryNames as $name)
         {
             $territory = new stdClass();
@@ -232,6 +266,39 @@ class GamestateController extends Controller
         
         $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'quebec', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakursk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
         
+        //creates the deck of cards
+        $deck = [];
+        $cardType = 'infantry';
+        foreach ($territoryNames as $territoryName)
+        {
+            $card = new stdClass();
+            $card->territory = $territoryName;
+            $card->type = $cardType;
+            $deck[] = $card;
+            switch ($cardType)
+            {
+                case 'infantry':
+                    $cardType = 'cavalry';
+                    break;
+                case 'cavalry':
+                    $cardType = 'artillery';
+                    break;
+                case 'artillery':
+                    $cardType = 'infantry';
+                    break;
+            }
+        }
+        $card = new stdClass();
+        $card->territory = 'wild';
+        $card->type = 'wild';
+        $deck[] = $card;
+        $card = new stdClass();
+        $card->territory = 'wild';
+        $card->type = 'wild';
+        $deck[] = $card;
+        shuffle($deck);
+        $state->deck = $deck;
+        
         foreach ($territoryNames as $name)
         {
             $territory = new stdClass();
@@ -307,7 +374,7 @@ class GamestateController extends Controller
         $player = $state->players[$state->turn];
         $occupiedTerritory->player = $player;
         $occupiedTerritory->units = 1;
-        $state->unitsToDistribute[$player]--;
+        $state->unitsToDistribute->$player--;
 
         //makes it the next player's turn
         if ($state->turn === count($state->players) - 1)
@@ -373,7 +440,7 @@ class GamestateController extends Controller
         //strengthens the territory
         $strengthenedTerritory->units++;
         $player = $state->players[$state->turn];
-        $state->unitsToDistribute[$player]--;
+        $state->unitsToDistribute->$player--;
 
         //makes it the next player's turn
         if ($state->turn === count($state->players) - 1)
@@ -386,7 +453,8 @@ class GamestateController extends Controller
         }
 
         //checks if all the initial troops are distributed
-        if($state->unitsToDistribute[$state->players[$state->turn]] === 0)
+        $player = $state->players[$state->turn];
+        if($state->unitsToDistribute->$player === 0)
         {
             //sets the phase to deploy
             $state->phase = 'deploy';
@@ -795,5 +863,11 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         return json_encode($state);
+    }
+
+    public function test()
+    {
+        $this->create_initial_manual(13, ['red', 'blue']);
+        return $this->get_current_state(13);
     }
 }
