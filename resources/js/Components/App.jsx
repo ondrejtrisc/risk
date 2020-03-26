@@ -258,7 +258,16 @@ class App extends Component {
 
   handleFortifyButtonClick(event) {
     if (validate.isPlayersTurn(this) === false) return
-    console.log('send fortify to server', event)
+    validate.deselectAllTerritories(this)
+    update.sendFortifyToServer(this)
+    this.setState({
+      firstTerritory: '',
+      secondTerritory: '',
+      fromFortifyUnits: 0,
+      toFortifyUnits: 0,
+      maxFortifyUnits: 0,
+      validFortify: false
+    })
   }
 
 
@@ -291,6 +300,8 @@ class App extends Component {
               activePlayer={this.state.activePlayer}
               currentPlayer={this.state.currentPlayer}
               territories={this.state.territories}
+              attackerDice={this.state.attackerDice}
+              defenderDice={this.state.defenderDice}
               phase={this.state.phase}
               unitsToDeploy={this.state.unitsToDeploy}
               firstTerritory={this.state.firstTerritory}

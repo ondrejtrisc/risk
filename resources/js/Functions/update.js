@@ -85,19 +85,19 @@ const update = {
   sendFortifyToServer: function (object, fortified=true) {
     let toSend = {
       fromTerritory: object.state.fromFortify,
+      fromUnits: object.state.fromFortifyUnits,
       toTerritory: object.state.toFortify,
-      unitsToFortify: object.state.unitsToFortify
-
+      toUnits: object.state.toFortifyUnits
     }
 
     if(fortified === false) {
       toSend = {
         fromTerritory: null,
         toTerritory: null,
-        unitsToFortify: 0
+        fromUnits: 0,
+        toUnits: 0
       }
     }
-    console.log(toSend)
     fetch(`../fortify/${object.state.game_id}`,
       {
         method: "POST",
