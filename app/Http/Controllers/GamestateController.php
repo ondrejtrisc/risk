@@ -134,6 +134,85 @@ class GamestateController extends Controller
             }
         }
         $state->unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+        
+        $holdsNorthAmerica = true;
+        for ($i = 0; $i < 9; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsNorthAmerica = false;
+                break;
+            }
+        }
+        if ($holdsNorthAmerica)
+        {
+            $state->unitsToDeploy += 5;
+        }
+        $holdsSouthAmerica = true;
+        for ($i = 9; $i < 13; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsSouthAmerica = false;
+                break;
+            }
+        }
+        if ($holdsSouthAmerica)
+        {
+            $state->unitsToDeploy += 2;
+        }
+        $holdsEurope = true;
+        for ($i = 13; $i < 20; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsEurope = false;
+                break;
+            }
+        }
+        if ($holdsEurope)
+        {
+            $state->unitsToDeploy += 5;
+        }
+        $holdsAfrica = true;
+        for ($i = 20; $i < 26; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAfrica = false;
+                break;
+            }
+        }
+        if ($holdsAfrica)
+        {
+            $state->unitsToDeploy += 3;
+        }
+        $holdsAsia = true;
+        for ($i = 26; $i < 38; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAsia = false;
+                break;
+            }
+        }
+        if ($holdsAsia)
+        {
+            $state->unitsToDeploy += 7;
+        }
+        $holdsAustralia = true;
+        for ($i = 38; $i < 42; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAustralia = false;
+                break;
+            }
+        }
+        if ($holdsAustralia)
+        {
+            $state->unitsToDeploy += 2;
+        }
 
         $gamestate->state = json_encode($state);
 
@@ -308,7 +387,7 @@ class GamestateController extends Controller
         //checks if all the initial troops are distributed
         if($state->unitsToDistribute[$state->players[$state->turn]] === 0)
         {
-            ////sets the phase to deploy
+            //sets the phase to deploy
             $state->phase = 'deploy';
             $state->unitsToDistribute = null;
 
@@ -322,6 +401,85 @@ class GamestateController extends Controller
                 }
             }
             $state->unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+
+            $holdsNorthAmerica = true;
+            for ($i = 0; $i < 9; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsNorthAmerica = false;
+                    break;
+                }
+            }
+            if ($holdsNorthAmerica)
+            {
+                $state->unitsToDeploy += 5;
+            }
+            $holdsSouthAmerica = true;
+            for ($i = 9; $i < 13; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsSouthAmerica = false;
+                    break;
+                }
+            }
+            if ($holdsSouthAmerica)
+            {
+                $state->unitsToDeploy += 2;
+            }
+            $holdsEurope = true;
+            for ($i = 13; $i < 20; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsEurope = false;
+                    break;
+                }
+            }
+            if ($holdsEurope)
+            {
+                $state->unitsToDeploy += 5;
+            }
+            $holdsAfrica = true;
+            for ($i = 20; $i < 26; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsAfrica = false;
+                    break;
+                }
+            }
+            if ($holdsAfrica)
+            {
+                $state->unitsToDeploy += 3;
+            }
+            $holdsAsia = true;
+            for ($i = 26; $i < 38; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsAsia = false;
+                    break;
+                }
+            }
+            if ($holdsAsia)
+            {
+                $state->unitsToDeploy += 7;
+            }
+            $holdsAustralia = true;
+            for ($i = 38; $i < 42; $i++)
+            {
+                if ($state->territories[$i]->player !== $state->players[$state->turn])
+                {
+                    $holdsAustralia = false;
+                    break;
+                }
+            }
+            if ($holdsAustralia)
+            {
+                $state->unitsToDeploy += 2;
+            }
         }
 
         //creates the new gamestate
@@ -413,6 +571,8 @@ class GamestateController extends Controller
         }
 
         //battle
+        $attackerLost = 0;
+        $defenderLost = 0;
         do
         {
             $fromDiceNumber = min($fromTerritory->units - 1, 3);
@@ -438,10 +598,12 @@ class GamestateController extends Controller
                 if ($fromDice[$i] > $toDice[$i])
                 {
                     $toTerritory->units -= 1;
+                    $defenderLost++;
                 }
                 else
                 {
                     $fromTerritory->units -= 1;
+                    $attackerLost++;
                 }
             }
 
@@ -454,6 +616,12 @@ class GamestateController extends Controller
             }
         }
         while ($blitz == 'true' && $fromTerritory->units > 1);
+
+        if ($blitz == 'true')
+        {
+            $state->attackerDice = ['blitz'];
+            $state->defenderDice = [$attackerLost, $defenderLost];
+        }
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -479,11 +647,11 @@ class GamestateController extends Controller
         $object = json_decode($requestPayload);
 
         $fromName = $object->fromTerritory;
-        if ($fromName != '')
+        if ($fromName != null)
         {
             $toName = $object->toTerritory;
             $fromUnits = $object->fromUnits;
-            $toUnits = $object->toUnits; 
+            $toUnits = $object->toUnits;
 
             //locates the territory of units' departure
             foreach ($state->territories as $territory)
@@ -535,6 +703,85 @@ class GamestateController extends Controller
             }
         }
         $state->unitsToDeploy = max(3, floor($playerHeldTerritories / 3));
+
+        $holdsNorthAmerica = true;
+        for ($i = 0; $i < 9; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsNorthAmerica = false;
+                break;
+            }
+        }
+        if ($holdsNorthAmerica)
+        {
+            $state->unitsToDeploy += 5;
+        }
+        $holdsSouthAmerica = true;
+        for ($i = 9; $i < 13; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsSouthAmerica = false;
+                break;
+            }
+        }
+        if ($holdsSouthAmerica)
+        {
+            $state->unitsToDeploy += 2;
+        }
+        $holdsEurope = true;
+        for ($i = 13; $i < 20; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsEurope = false;
+                break;
+            }
+        }
+        if ($holdsEurope)
+        {
+            $state->unitsToDeploy += 5;
+        }
+        $holdsAfrica = true;
+        for ($i = 20; $i < 26; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAfrica = false;
+                break;
+            }
+        }
+        if ($holdsAfrica)
+        {
+            $state->unitsToDeploy += 3;
+        }
+        $holdsAsia = true;
+        for ($i = 26; $i < 38; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAsia = false;
+                break;
+            }
+        }
+        if ($holdsAsia)
+        {
+            $state->unitsToDeploy += 7;
+        }
+        $holdsAustralia = true;
+        for ($i = 38; $i < 42; $i++)
+        {
+            if ($state->territories[$i]->player !== $state->players[$state->turn])
+            {
+                $holdsAustralia = false;
+                break;
+            }
+        }
+        if ($holdsAustralia)
+        {
+            $state->unitsToDeploy += 2;
+        }
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
