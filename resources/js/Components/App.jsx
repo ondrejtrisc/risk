@@ -6,6 +6,7 @@ import update from '../Functions/update'
 import PlayerList from './PlayerList';
 import ButtonBlitz from './ButtonBlitz';
 import InfoCard from './InfoCard';
+import CardsButton from './CardsButton'
 import NextPhaseButton from './NextPhaseButton';
 
 
@@ -35,7 +36,8 @@ class App extends Component {
       maxFortifyUnits: 0,
       attackerDice: null,
       defenderDice: null,
-      validFortify: false
+      validFortify: false,
+      cardsCard: false
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -44,6 +46,7 @@ class App extends Component {
     this.handleFromInputChange = this.handleFromInputChange.bind(this)
     this.handleToInputChange = this.handleToInputChange.bind(this)
     this.handleCancelFortifyClick = this.handleCancelFortifyClick.bind(this)
+    this.handleCardsClick = this.handleCardsClick.bind(this)
 
 
   }
@@ -270,6 +273,10 @@ class App extends Component {
     })
   }
 
+  handleCardsClick(event) {
+    this.setState({cardsCard: !this.state.cardsCard})
+  }
+
 
 
   render() {
@@ -312,6 +319,7 @@ class App extends Component {
               handleToInputChange={this.handleToInputChange}
               handleCancelFortifyClick={this.handleCancelFortifyClick}
               handleFortifyButtonClick={this.handleFortifyButtonClick}
+              cardsCard={this.state.cardsCard}
             />
             <PlayerList
               userList={this.state.userList}
@@ -328,7 +336,9 @@ class App extends Component {
             <ButtonBlitz blitz={this.state.blitz}
               handleBlitzClick={this.handleBlitzClick}
             />
-            <button type="button" className="btn btn-secondary mr-3">Cards</button>
+            <CardsButton
+              handleCardsClick={this.handleCardsClick} 
+              />
           </div>
           <div className="col d-flex flex-row justify-content-stretch">
             <PhaseBreadcrumb phase={this.state.phase}

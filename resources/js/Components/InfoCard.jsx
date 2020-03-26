@@ -3,6 +3,7 @@ import AttackCard from './AttackCard';
 import FortifyCard from './FortifyCard';
 import DeployCard from './DeployCard';
 import DifferentTurnCard from './DifferentTurnCard';
+import CardsCard from './CardsCard';
 
 
 class InfoCard extends Component {
@@ -11,15 +12,21 @@ class InfoCard extends Component {
   }
 
   render() {
-    const {activePlayer, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick} = this.props
+    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick} = this.props
     if(activePlayer === currentPlayer) {
       if(phase === 'deploy') {
-        return (
-          <DeployCard 
-            unitsToDeploy={unitsToDeploy}
-            firstTerritory={firstTerritory}
-          />
+        if(cardsCard === true) {
+          return (
+            <CardsCard />
+          )
+        } else {
+          return (
+            <DeployCard 
+              unitsToDeploy={unitsToDeploy}
+              firstTerritory={firstTerritory}
+            />
         )
+      }          
       } else if(phase === 'attack') {
         return (
           <AttackCard 
