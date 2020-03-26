@@ -65,11 +65,11 @@ class GamestateController extends Controller
         }
 
         $occupiedBy = [];
-        $unitsToDistribute = [];
+        $unitsToDistribute = new stdClass();
         foreach ($state->players as $player)
         {
             $occupiedBy[$player] = [];
-            $unitsToDistribute[$player] = $initial_units;
+            $unitsToDistribute->$player = $initial_units;
         }
 
         $territories = $state->territories;
@@ -81,7 +81,7 @@ class GamestateController extends Controller
             $territory->player = $player;
             $territory->units = 1;
             $occupiedBy[$player][] = $territory;
-            $unitsToDistribute[$player]--;
+            $unitsToDistribute->$player--;
 
             if ($playerIndex === count($state->players) - 1)
             {
@@ -99,7 +99,7 @@ class GamestateController extends Controller
             $player = $state->players[$playerIndex];
             $territory = $occupiedBy[$player][rand(0, count($occupiedBy[$player]) - 1)];
             $territory->units++;
-            $unitsToDistribute[$player]--;
+            $unitsToDistribute->$player--;
 
             if ($playerIndex === count($state->players) - 1)
             {
@@ -110,7 +110,8 @@ class GamestateController extends Controller
                 $playerIndex++;
             }
 
-            if($unitsToDistribute[$players[$playerIndex]] === 0)
+            $player = $players[$playerIndex];
+            if($unitsToDistribute->$player === 0)
             {
                 break;
             }
@@ -260,10 +261,10 @@ class GamestateController extends Controller
                 break;          
         }
 
-        $unitsToDistribute = [];
+        $unitsToDistribute = new stdClass();
         foreach ($state->players as $player)
         {
-            $unitsToDistribute[$player] = $initial_units;
+            $unitsToDistribute->$player = $initial_units;
         }
 
         //sets the first player's turn
