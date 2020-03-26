@@ -413,6 +413,8 @@ class GamestateController extends Controller
         }
 
         //battle
+        $attackerLost = 0;
+        $defenderLost = 0;
         do
         {
             $fromDiceNumber = min($fromTerritory->units - 1, 3);
@@ -438,10 +440,12 @@ class GamestateController extends Controller
                 if ($fromDice[$i] > $toDice[$i])
                 {
                     $toTerritory->units -= 1;
+                    $defenderLost++;
                 }
                 else
                 {
                     $fromTerritory->units -= 1;
+                    $attackerLost++;
                 }
             }
 
@@ -454,6 +458,12 @@ class GamestateController extends Controller
             }
         }
         while ($blitz == 'true' && $fromTerritory->units > 1);
+
+        if ($blitz == 'true')
+        {
+            $state->attackerDice = ['blitz'];
+            $state->defenderDice = [$attackerLost, $defenderLost];
+        }
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -479,7 +489,7 @@ class GamestateController extends Controller
         $object = json_decode($requestPayload);
 
         $fromName = $object->fromTerritory;
-        if ($fromName != '')
+        if ($fromName != null)
         {
             $toName = $object->toTerritory;
             $fromUnits = $object->fromUnits;
