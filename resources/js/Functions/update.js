@@ -34,6 +34,28 @@ const update = {
       })
   },
 
+  sendOccupyToServer: function (object, territory) {
+    let toSend = {
+      territory: territory
+    }
+    console.log(toSend)
+    fetch(`../occupy/${object.state.game_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(toSend)
+      }
+    )
+      .then(response => response.json())// parses response as JSON
+      .then(data => {
+        console.log(data)
+      });
+  },
+
+
   sendAttackToServer: function (attacking, defending, object) {
     let toSend = {
       attackingTerritory: attacking,
@@ -98,7 +120,7 @@ const update = {
         toUnits: 0
       }
     }
-    
+
     fetch(`../fortify/${object.state.game_id}`,
       {
         method: "POST",
