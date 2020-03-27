@@ -47412,19 +47412,13 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var cardsOwned = [{
-  'territory': 'China',
-  'troops': 'artillery'
-}, {
-  'territory': 'India',
-  'troops': 'infantry'
-}, {
-  'territory': 'Iceland',
-  'troops': 'infantry'
-}, {
-  'territory': 'Brazil',
-  'troops': 'cavalry'
-}];
+var cardsOwned = []; // let cardsOwned = [
+//   {'territory': 'China', 'troops': 'artillery'},
+//   {'territory': 'India', 'troops': 'infantry'},
+//   {'territory': 'Iceland', 'troops': 'infantry'},
+//   {'territory': 'Brazil', 'troops': 'cavalry'}
+// ];
+
 var cardsPlayed = [];
 
 var CardsCard = /*#__PURE__*/function (_Component) {
@@ -47451,12 +47445,41 @@ var CardsCard = /*#__PURE__*/function (_Component) {
   _createClass(CardsCard, [{
     key: "handleSubmitClick",
     value: function handleSubmitClick(event) {
-      console.log(event.target);
+      // console.log(event.target)
+      if (cardsPlayed.length == 3) {
+        if (cardsPlayed[0].type == cardsPlayed[1].type && cardsPlayed[0].type == cardsPlayed[2].type || cardsPlayed[0].type != cardsPlayed[1].type && cardsPlayed[0].type != cardsPlayed[2].type && cardsPlayed[1].type != cardsPlayed[2].type) {
+          event.preventDefault();
+          fetch('../playcards/14', {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+              'set': cardsPlayed
+            })
+          }).then(function (response) {
+            return response.json();
+          }).then(function (data) {});
+          cardsPlayed = [];
+        } else {
+          console.log('not allowed');
+        }
+      }
     }
   }, {
     key: "handleCancelClick",
-    value: function handleCancelClick(event) {
-      console.log(event.target);
+    value: function handleCancelClick(event) {// console.log("cardsOwned before", cardsOwned)
+      // console.log("cardsPlayed before", cardsPlayed)
+      // console.log("props before", this.props.cards)
+      // if(cardsPlayed.length > 0){
+      //   cardsOwned = cardsOwned.concat(cardsPlayed)
+      //   cardsPlayed = []
+      // }
+      // console.log("cardsOwned after", cardsOwned)
+      // console.log("cardsPlayed after", cardsPlayed)
+      // console.log("props after", this.props.cards)
+      // this.setState({})
     }
   }, {
     key: "handleSelectCardClick",
@@ -47503,7 +47526,35 @@ var CardsCard = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      console.log(this.props.cards);
+      console.log(this.props);
+      var currentPlayer = this.props.currentPlayer;
+
+      switch (currentPlayer) {
+        case "red":
+          cardsOwned = this.props.cards["red"];
+          break;
+
+        case "blue":
+          cardsOwned = this.props.cards["blue"];
+          break;
+
+        case "green":
+          cardsOwned = this.props.cards["green"];
+          break;
+
+        case "yellow":
+          cardsOwned = this.props.cards["yellow"];
+          break;
+
+        case "brown":
+          cardsOwned = this.props.cards["brown"];
+          break;
+
+        case "purple":
+          cardsOwned = this.props.cards["purple"];
+          break;
+      }
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -47516,7 +47567,7 @@ var CardsCard = /*#__PURE__*/function (_Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: card.territory,
           territory: card.territory,
-          troops: card.troops,
+          troops: card.type,
           handleOnCardClick: function handleOnCardClick(e) {
             return _this2.handleOnCardClick(e, 'select');
           }
@@ -47527,7 +47578,7 @@ var CardsCard = /*#__PURE__*/function (_Component) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: card.territory,
           territory: card.territory,
-          troops: card.troops,
+          troops: card.type,
           handleOnCardClick: function handleOnCardClick(e) {
             return _this2.handleOnCardClick(e, 'deselect');
           }
