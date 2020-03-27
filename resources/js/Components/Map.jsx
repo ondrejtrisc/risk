@@ -2624,8 +2624,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="iceland"
-            fill="none"
-            fillOpacity="1"
+            fill="#fff"
+            fillOpacity="0"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"

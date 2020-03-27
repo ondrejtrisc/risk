@@ -23,7 +23,8 @@ class DifferentTurnCard extends Component {
         How many units you will deploy next turn calculation
         <br/>
       </div>
-    </div>    )
+    </div>    
+    )
   }
 }
 

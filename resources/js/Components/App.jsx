@@ -18,6 +18,7 @@ class App extends Component {
       territories: [],
       activePlayer: '', // need to change to be color
       turns: [],
+      turnIndex: 0,
       currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
@@ -38,7 +39,10 @@ class App extends Component {
       defenderDice: null,
       validFortify: false,
       cardsCard: false,
-      interval: ''
+      interval: '',
+      unitsToDistribute: 0,
+      clicked: false,
+      cards: []
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -61,9 +65,11 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+        
     if (this.state.activePlayer === this.state.currentPlayer) {
       clearInterval(this.intervalId)
-    }
+      console.log('if', this.intervalId)
+    } 
   }
 
   componentWillUnmount() {
@@ -95,19 +101,30 @@ class App extends Component {
   }
 
   handleMapClick(event) {
+    console.log('active player', this.state.activePlayer)
+    console.log('current player', this.state.currentPlayer)
+    console.log(this.intervalId)
+    if(this.state.currentPlayer !== this.state.activePlayer) return
     if (validate.isPlayersTurn(this) === false) return
 
+
     //OCCUPY PHASE
-    if(this.state.phase === 'occupy') {
+    if(this.state.phase === 'occupy' && this.state.currentPlayer === this.state.activePlayer) {
+      if(this.state.clicked === true) return
       this.state.territories.map(territory => {
         if(territory.name === event.target.id && territory.player === null) {
+          this.setState({clicked: true})
           update.sendOccupyToServer(this, territory.name)
+          this.intervalId = setInterval(() => { update.getStateOfGame(this) }, 2000)
+          setTimeout(console.log('wait'), 2000)
+          this.setState({clicked: false})
           return ''
         } else {
           return ''
         }
       })
-    } 
+    }
+
 
     //STRENGTHEN PHASE
     if(this.state.phase === 'strengthen') {
@@ -192,6 +209,7 @@ class App extends Component {
 
       //is it owned by player?
       if (validate.canPlayerSelectTerritory(event, this) === true) {
+        console.log(this.state.unitsToDeploy)
         if (this.state.unitsToDeploy > 0) {
           let updatedTerritories = JSON.parse(JSON.stringify(this.state.territories))
           updatedTerritories.map(territory => {
@@ -199,6 +217,7 @@ class App extends Component {
               territory.units += 1
             }
           })
+
           if (this.state.unitsToDeploy === 1) {
             this.setState({ territories: updatedTerritories })
             this.setState({ unitsToDeploy: this.state.unitsToDeploy - 1 })
@@ -361,6 +380,7 @@ class App extends Component {
               handleCancelFortifyClick={this.handleCancelFortifyClick}
               handleFortifyButtonClick={this.handleFortifyButtonClick}
               cardsCard={this.state.cardsCard}
+              cards={this.state.cards}
             />
             <PlayerList
               userList={this.state.userList}
