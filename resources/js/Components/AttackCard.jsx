@@ -22,7 +22,11 @@ class AttackCard extends Component {
       defenderDice.sort(function(a, b){return b-a})
     }
 
-    return (
+    console.log('attacker', attackerDice)
+    console.log('defender', defenderDice)
+
+    if(attackerDice === null || attackerDice[0] !== 'blitz') {
+      return (
         <div className="card ml-5 mb-4">
           <div className="card-body">
             <h5 className="card-title">Attack phase</h5>
@@ -67,7 +71,27 @@ class AttackCard extends Component {
               }
           </div>
         </div>
-    )
+      )
+    } else {
+      return (
+        <div className="card ml-5 mb-4">
+          <div className="card-body">
+            <h5 className="card-title">Attack phase</h5>
+            <p>
+              {(firstTerritory === '') ? "Choose territory from where to attack" : `Choose territory to attack from ${validate.humanize(firstTerritory)}`}
+            </p>
+              {(attackerDice !== null && defenderDice !== null) ? 
+                  <div>
+                    You lost {defenderDice[0]} units
+                    <hr />
+                    Defender lost {defenderDice[1]} units 
+                    <br/>
+                 </div> : ''
+              }
+          </div>
+        </div>
+      )
+    }
   }
 }
 

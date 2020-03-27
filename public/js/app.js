@@ -47061,149 +47061,162 @@ var AttackCard = /*#__PURE__*/function (_Component) {
         });
       }
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card ml-5 mb-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-        className: "card-title"
-      }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), attackerDice.map(function (die, index) {
-        switch (die) {
-          case 1:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side1.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+      console.log('attacker', attackerDice);
+      console.log('defender', defenderDice);
 
-          case 2:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side2.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+      if (attackerDice === null || attackerDice[0] !== 'blitz') {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), attackerDice.map(function (die, index) {
+          switch (die) {
+            case 1:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side1.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 3:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side3.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 2:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side2.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 4:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side4.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 3:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side3.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 5:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side5.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 4:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side4.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 6:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side6.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
-        }
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender's rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), defenderDice.map(function (die, index) {
-        switch (die) {
-          case 1:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side1.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 5:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side5.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 2:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side2.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 6:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side6.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender's rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), defenderDice.map(function (die, index) {
+          switch (die) {
+            case 1:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side1.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 3:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side3.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 2:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side2.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 4:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side4.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 3:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side3.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 5:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side5.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 4:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side4.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 6:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side6.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
-        }
-      })) : ''));
+            case 5:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side5.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+
+            case 6:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side6.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+          }
+        })) : ''));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "You lost ", defenderDice[0], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender lost ", defenderDice[1], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)) : ''));
+      }
     }
   }]);
 
@@ -47690,6 +47703,7 @@ var DeployCard = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47714,6 +47728,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var DifferentTurnCard = /*#__PURE__*/function (_Component) {
   _inherits(DifferentTurnCard, _Component);
 
@@ -47734,7 +47749,7 @@ var DifferentTurnCard = /*#__PURE__*/function (_Component) {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Game information"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -48044,7 +48059,9 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           unitsToDistribute: unitsToDistribute
         });
       } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], null);
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          activePlayer: activePlayer
+        });
       }
     }
   }]);
