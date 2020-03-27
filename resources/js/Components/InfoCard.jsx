@@ -18,7 +18,12 @@ class InfoCard extends Component {
       if(phase === 'deploy') {
         if(cardsCard === true) {
           return (
-            <CardsCard />
+            <CardsCard
+              currentPlayer={currentPlayer}
+              cards={cards}
+               
+            
+            />
           )
         } else {
           return (
