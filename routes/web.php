@@ -39,5 +39,3 @@ Route::post('/attack/{game_id}', 'GamestateController@attack');
 Route::post('/fortify/{game_id}', 'GamestateController@fortify');
 Route::get('/game/{game_id}', 'GameController@play');
 Route::get('/{game_id}', 'GamestateController@get_current_state');
-
-Route::get('/test', 'GamestateController@test');
