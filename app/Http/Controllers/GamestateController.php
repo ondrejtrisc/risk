@@ -868,7 +868,7 @@ class GamestateController extends Controller
 
         if ($blitz == 'true')
         {
-            $state->attackerDice = null;
+            $state->attackerDice = ['blitz'];
             $state->defenderDice = null;
             $state->attackerLost = $attackerLost;
             $state->defenderLost = $defenderLost;
