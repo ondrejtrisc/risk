@@ -47224,6 +47224,88 @@ var ButtonBlitz = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/js/Components/Card.jsx":
+/*!******************************************!*\
+  !*** ./resources/js/Components/Card.jsx ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Card = /*#__PURE__*/function (_Component) {
+  _inherits(Card, _Component);
+
+  var _super = _createSuper(Card);
+
+  function Card(props) {
+    _classCallCheck(this, Card);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(Card, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
+        id: "".concat(this.props.territory),
+        className: "card",
+        width: "50",
+        height: "70",
+        viewBox: "0 0 100 100",
+        onClick: function onClick(e, action) {
+          return _this.props.handleOnCardClick(e, action);
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
+        id: this.props.territory
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        className: "card-territory",
+        x: "15",
+        y: "30"
+      }, this.props.territory), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        className: "card-troops",
+        x: "15",
+        y: "70"
+      }, this.props.troops));
+    }
+  }]);
+
+  return Card;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+;
+/* harmony default export */ __webpack_exports__["default"] = (Card);
+
+/***/ }),
+
 /***/ "./resources/js/Components/CardsButton.jsx":
 /*!*************************************************!*\
   !*** ./resources/js/Components/CardsButton.jsx ***!
@@ -47303,6 +47385,7 @@ var CardsButton = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Card */ "./resources/js/Components/Card.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47327,6 +47410,21 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+var cardsOwned = [{
+  'territory': 'China',
+  'troops': 'artillery'
+}, {
+  'territory': 'India',
+  'troops': 'infantry'
+}, {
+  'territory': 'Iceland',
+  'troops': 'infantry'
+}, {
+  'territory': 'Brazil',
+  'troops': 'cavalry'
+}];
+var cardsPlayed = [];
+
 var CardsCard = /*#__PURE__*/function (_Component) {
   _inherits(CardsCard, _Component);
 
@@ -47340,6 +47438,11 @@ var CardsCard = /*#__PURE__*/function (_Component) {
     _this = _super.call(this, props);
     _this.handleSubmitClick = _this.handleSubmitClick.bind(_assertThisInitialized(_this));
     _this.handleCancelClick = _this.handleCancelClick.bind(_assertThisInitialized(_this));
+    _this.handleOnCardClick = _this.handleOnCardClick.bind(_assertThisInitialized(_this));
+    _this.state = {
+      cardsOwned: cardsOwned,
+      cardsPlayed: cardsPlayed
+    };
     return _this;
   }
 
@@ -47354,6 +47457,46 @@ var CardsCard = /*#__PURE__*/function (_Component) {
       console.log(event.target);
     }
   }, {
+    key: "handleSelectCardClick",
+    value: function handleSelectCardClick(event) {
+      if (cardsPlayed.length < 3) {
+        cardsOwned.forEach(function (card, index) {
+          if (card.territory === event.target.id) {
+            cardsOwned.splice(index, 1);
+            cardsPlayed.push(card);
+          }
+        });
+      }
+
+      this.setState({
+        cardsOwned: cardsOwned,
+        cardsPlayed: cardsPlayed
+      });
+    }
+  }, {
+    key: "handleDeselectCardClick",
+    value: function handleDeselectCardClick(event) {
+      cardsPlayed.forEach(function (card, index) {
+        if (card.territory === event.target.id) {
+          cardsPlayed.splice(index, 1);
+          cardsOwned.push(card);
+        }
+      });
+      this.setState({
+        cardsOwned: cardsOwned,
+        cardsPlayed: cardsPlayed
+      });
+    }
+  }, {
+    key: "handleOnCardClick",
+    value: function handleOnCardClick(event, action) {
+      if (action == 'select') {
+        this.handleSelectCardClick(event);
+      } else if (action == 'deselect') {
+        this.handleDeselectCardClick(event);
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -47364,7 +47507,29 @@ var CardsCard = /*#__PURE__*/function (_Component) {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Play Cards"), "Section for cards owned", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Section for cards to be played", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Play Cards"), "Section for cards owned ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row d-flex justify-content-around"
+      }, cardsOwned !== null && cardsOwned.length > 0 ? cardsOwned.map(function (card, i) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          key: card.territory,
+          territory: card.territory,
+          troops: card.troops,
+          handleOnCardClick: function handleOnCardClick(e) {
+            return _this2.handleOnCardClick(e, 'select');
+          }
+        });
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Section for cards to be played", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row d-flex justify-content-around"
+      }, cardsPlayed !== null && cardsPlayed.length > 0 ? cardsPlayed.map(function (card, i) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          key: card.territory,
+          territory: card.territory,
+          troops: card.troops,
+          handleOnCardClick: function handleOnCardClick(e) {
+            return _this2.handleOnCardClick(e, 'deselect');
+          }
+        });
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick(e) {
           return _this2.handleSubmitClick(e);
         },
