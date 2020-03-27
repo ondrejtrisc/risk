@@ -23,11 +23,10 @@ const update = {
     fetch(`../${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
-        console.log(data)
         object.setState({ 
           territories: data.territories,
           turns: data.players,
-          activePlayer: data.players[data.turn],
+          activePlayer: data.turn,
           phase: data.phase,
           unitsToDeploy: data.unitsToDeploy,
           cards: data.cards
@@ -56,12 +55,39 @@ const update = {
       .then(data => {
         object.setState({
           turns: data.players,
-          turnIndex: data.turn,
-          activePlayer: data.players[data.turn],
+          activePlayer: data.turn,
           territories: data.territories,
           phase: data.phase,
           unitsToDistribute: data.unitsToDistribute,
-          occupyMove: true
+        })
+        update.addNumberOfUnits(object.state)
+        update.colorTerritories(object.state)
+      });
+  },
+
+  sendStrengthenToServer: function (object, territory) {
+    let toSend = {
+      territory: territory
+    }
+
+    fetch(`../strengthen/${object.state.game_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(toSend)
+      }
+    )
+      .then(response => response.json())// parses response as JSON
+      .then(data => {
+        object.setState({
+          turns: data.players,
+          activePlayer: data.turn,
+          territories: data.territories,
+          phase: data.phase,
+          unitsToDistribute: data.unitsToDistribute,
         })
         update.addNumberOfUnits(object.state)
         update.colorTerritories(object.state)
