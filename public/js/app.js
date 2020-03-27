@@ -46580,9 +46580,6 @@ var App = /*#__PURE__*/function (_Component) {
     value: function handleMapClick(event) {
       var _this4 = this;
 
-      console.log('active player', this.state.activePlayer);
-      console.log('current player', this.state.currentPlayer);
-      console.log(this.intervalId);
       if (this.state.currentPlayer !== this.state.activePlayer) return;
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; //OCCUPY PHASE
 
@@ -46598,7 +46595,6 @@ var App = /*#__PURE__*/function (_Component) {
             _this4.intervalId = setInterval(function () {
               _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this4);
             }, 2000);
-            setTimeout(console.log('wait'), 2000);
 
             _this4.setState({
               clicked: false
@@ -50418,7 +50414,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         filter: "url(#filter12911)",
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
-        id: "yakursk",
+        id: "yakutsk",
         style: {
           marker: "none"
         },
@@ -50944,7 +50940,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         filter: "url(#filter13003)",
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
-        id: "quebec",
+        id: "eastern_canada",
         fill: "#fff",
         fillOpacity: "0",
         fillRule: "evenodd",
@@ -51261,7 +51257,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "0.893",
         wordSpacing: "0"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tspan", {
-        id: "quebec-units-text",
+        id: "eastern_canada-units-text",
         x: "378.184",
         y: "251.719"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
@@ -52519,7 +52515,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "0.893",
         wordSpacing: "0"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tspan", {
-        id: "yakursk-units-text",
+        id: "yakutsk-units-text",
         x: "767.249",
         y: "191.689"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
@@ -53099,12 +53095,12 @@ __webpack_require__.r(__webpack_exports__);
 var neighbours = {
   "alaska": ["northwest_territory", "alberta", "kamchatka"],
   "northwest_territory": ["alaska", "alberta", "ontario", "greenland"],
-  "greenland": ["northwest_territory", "ontario", "quebec", "iceland"],
+  "greenland": ["northwest_territory", "ontario", "eastern_canada", "iceland"],
   "alberta": ["alaska", "northwest_territory", "ontario", "western_united_states"],
-  "ontario": ["northwest_territory", "greenland", "alberta", "quebec", "western_united_states", "eastern_united_states"],
-  "quebec": ["greenland", "ontario", "eastern_united_states"],
+  "ontario": ["northwest_territory", "greenland", "alberta", "eastern_canada", "western_united_states", "eastern_united_states"],
+  "eastern_canada": ["greenland", "ontario", "eastern_united_states"],
   "western_united_states": ["alberta", "ontario", "eastern_united_states", "central_america"],
-  "eastern_united_states": ["ontario", "quebec", "western_united_states", "central_america"],
+  "eastern_united_states": ["ontario", "eastern_canada", "western_united_states", "central_america"],
   "central_america": ["western_united_states", "eastern_united_states", "venezuela"],
   "venezuela": ["brazil", "peru", "central_america"],
   "peru": ["brazil", "argentina", "venezuela"],
@@ -53124,10 +53120,10 @@ var neighbours = {
   "south_africa": ["central_africa", "east_africa", "madagascar"],
   "madagascar": ["east_africa", "south_africa"],
   "ural": ["russia", "siberia", "afghanistan", "china"],
-  "siberia": ["ural", "yakursk", "irkutsk", "china", "mongolia"],
-  "yakursk": ["siberia", "irkutsk", "kamchatka"],
-  "irkutsk": ["siberia", "yakursk", "kamchatka", "mongolia"],
-  "kamchatka": ["alaska", "yakursk", "irkutsk", "mongolia", "japan"],
+  "siberia": ["ural", "yakutsk", "irkutsk", "china", "mongolia"],
+  "yakutsk": ["siberia", "irkutsk", "kamchatka"],
+  "irkutsk": ["siberia", "yakutsk", "kamchatka", "mongolia"],
+  "kamchatka": ["alaska", "yakutsk", "irkutsk", "mongolia", "japan"],
   "afghanistan": ["russia", "ural", "china", "middle_east", "india"],
   "china": ["ural", "siberia", "afghanistan", "mongolia", "india", "southeast_asia"],
   "mongolia": ["siberia", "irkutsk", "kamchatka", "china", "japan"],
