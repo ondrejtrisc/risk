@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import validate from '../Functions/validate';
 
 class DifferentTurnCard extends Component {
   constructor(props) {
@@ -10,17 +11,7 @@ class DifferentTurnCard extends Component {
       <div className="card ml-5 mb-4">
       <div className="card-body">
         <h5 className="card-title">Game information</h5>
-        Player's turn:
-        <br/>
-        Сurrent phase:
-        <br />
-        How many troops left to deploy:
-        <br />
-        How many territories you own:
-        <br/>
-        How many continents you have:
-        <br/>
-        How many units you will deploy next turn calculation
+        { (this.props.activePlayer) ? `${validate.humanize(this.props.activePlayer)} player's turn` : '' }
         <br/>
       </div>
     </div>    

@@ -5,6 +5,7 @@ import DeployCard from './DeployCard';
 import DifferentTurnCard from './DifferentTurnCard';
 import CardsCard from './CardsCard';
 import OccupyCard from './OccupyCard';
+import StrengthenCard from './StrengthenCard'
 
 
 class InfoCard extends Component {
@@ -13,7 +14,7 @@ class InfoCard extends Component {
   }
 
   render() {
-    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards} = this.props
+    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards, handleOccupyClick, handleCancelOccupyClick, handleStrengthenClick, handleCancelStrengthenClick, unitsToDistribute} = this.props
     if(activePlayer === currentPlayer) {
       if(phase === 'deploy') {
         if(cardsCard === true) {
@@ -58,21 +59,66 @@ class InfoCard extends Component {
         )
       } else if(phase === 'occupy') {
         return (
-          < OccupyCard />
+          < OccupyCard
+            activePlayer={activePlayer}
+            currentPlayer={currentPlayer}
+            firstTerritory={firstTerritory}
+            handleOccupyClick={handleOccupyClick}
+            handleCancelOccupyClick={handleCancelOccupyClick}
+            unitsToDistribute={unitsToDistribute}
+
+          />
         )
 
+      } else if(phase === 'strengthen') {
+        return (
+        < StrengthenCard
+        activePlayer={activePlayer}
+        currentPlayer={currentPlayer}
+        firstTerritory={firstTerritory}
+        handleStrengthenClick={handleStrengthenClick}
+        handleCancelStrengthenClick={handleCancelStrengthenClick}
+        unitsToDistribute={unitsToDistribute}
+
+      />        
+      )
       }
 
     } 
     else if( phase === 'occupy') {
       return (
-        < OccupyCard />
+        < OccupyCard
+        activePlayer={activePlayer}
+        currentPlayer={currentPlayer}
+        firstTerritory={firstTerritory}
+        handleOccupyClick={handleOccupyClick}
+        handleCancelOccupyClick={handleCancelOccupyClick}
+
+      />
+      )
+    }
+
+    else if(phase === 'strengthen') {
+      return (
+        < StrengthenCard
+        activePlayer={activePlayer}
+        currentPlayer={currentPlayer}
+        firstTerritory={firstTerritory}
+        handleStrengthenClick={handleStrengthenClick}
+        handleCancelStrengthenClick={handleCancelStrengthenClick}
+        unitsToDistribute={unitsToDistribute}
+
+      />        
       )
     }
 
     else {
       return (
-        < DifferentTurnCard />
+        < DifferentTurnCard 
+        activePlayer={activePlayer}
+
+
+        />
 
       )
 

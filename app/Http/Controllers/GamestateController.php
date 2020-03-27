@@ -32,29 +32,66 @@ class GamestateController extends Controller
         $state->players = $players;
         $state->territories = [];
         
-        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'quebec', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakursk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
+        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'eastern_canada', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakutsk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
         
         //creates the deck of cards
         $deck = [];
-        $cardType = 'infantry';
         foreach ($territoryNames as $territoryName)
         {
             $card = new stdClass();
             $card->territory = $territoryName;
-            $card->type = $cardType;
-            $deck[] = $card;
-            switch ($cardType)
-            {
-                case 'infantry':
-                    $cardType = 'cavalry';
+            switch ($territoryName)
+            {                  
+                case 'alaska':
+                case 'argentina':
+                case 'central_africa':
+                case 'china':
+                case 'east_africa':
+                case 'egypt':
+                case 'iceland':
+                case 'kamchatka':
+                case 'middle_east':
+                case 'mongolia':
+                case 'new_guinea':
+                case 'peru':
+                case 'southeast_asia':
+                case 'venezuela':
+                    $card->type = 'infantry';
                     break;
-                case 'cavalry':
-                    $cardType = 'artillery';
+                case 'afghanistan':
+                case 'alberta':
+                case 'eastern_canada':
+                case 'greenland':
+                case 'india':
+                case 'irkutsk':
+                case 'madagascar':
+                case 'north_africa':
+                case 'ontario':
+                case 'russia':
+                case 'scandinavia':
+                case 'siberia':
+                case 'ural':
+                case 'yakutsk':
+                    $card->type = 'cavalry';
                     break;
-                case 'artillery':
-                    $cardType = 'infantry';
+                case 'brazil':
+                case 'central_america':
+                case 'eastern_australia':
+                case 'eastern_united_states':
+                case 'great_britain':
+                case 'indonesia':
+                case 'japan':
+                case 'northern_europe':
+                case 'northwest_territory':
+                case 'south_africa':
+                case 'southern_europe':
+                case 'western_australia':
+                case 'western_europe':
+                case 'western_united_states':
+                    $card->type = 'artillery';
                     break;
             }
+            $deck[] = $card;
         }
         $card = new stdClass();
         $card->territory = 'wild';
@@ -273,29 +310,66 @@ class GamestateController extends Controller
         $state->players = $players;
         $state->territories = [];
         
-        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'quebec', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakursk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
+        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'eastern_canada', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakutsk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
         
         //creates the deck of cards
         $deck = [];
-        $cardType = 'infantry';
         foreach ($territoryNames as $territoryName)
         {
             $card = new stdClass();
             $card->territory = $territoryName;
-            $card->type = $cardType;
-            $deck[] = $card;
-            switch ($cardType)
-            {
-                case 'infantry':
-                    $cardType = 'cavalry';
+            switch ($territoryName)
+            {                  
+                case 'alaska':
+                case 'argentina':
+                case 'central_africa':
+                case 'china':
+                case 'east_africa':
+                case 'egypt':
+                case 'iceland':
+                case 'kamchatka':
+                case 'middle_east':
+                case 'mongolia':
+                case 'new_guinea':
+                case 'peru':
+                case 'southeast_asia':
+                case 'venezuela':
+                    $card->type = 'infantry';
                     break;
-                case 'cavalry':
-                    $cardType = 'artillery';
+                case 'afghanistan':
+                case 'alberta':
+                case 'eastern_canada':
+                case 'greenland':
+                case 'india':
+                case 'irkutsk':
+                case 'madagascar':
+                case 'north_africa':
+                case 'ontario':
+                case 'russia':
+                case 'scandinavia':
+                case 'siberia':
+                case 'ural':
+                case 'yakutsk':
+                    $card->type = 'cavalry';
                     break;
-                case 'artillery':
-                    $cardType = 'infantry';
+                case 'brazil':
+                case 'central_america':
+                case 'eastern_australia':
+                case 'eastern_united_states':
+                case 'great_britain':
+                case 'indonesia':
+                case 'japan':
+                case 'northern_europe':
+                case 'northwest_territory':
+                case 'south_africa':
+                case 'southern_europe':
+                case 'western_australia':
+                case 'western_europe':
+                case 'western_united_states':
+                    $card->type = 'artillery';
                     break;
             }
+            $deck[] = $card;
         }
         $card = new stdClass();
         $card->territory = 'wild';
@@ -432,6 +506,8 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -580,6 +656,8 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -588,7 +666,10 @@ class GamestateController extends Controller
         try
         {
             $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
-            return $gamestate->state;
+            $state = json_decode($gamestate->state);
+            unset($state->deck);
+            $state->turn = $state->players[$state->turn];
+            return json_encode($state);
         }
         catch (Exception $err)
         {
@@ -651,6 +732,8 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -681,6 +764,8 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -720,6 +805,8 @@ class GamestateController extends Controller
         //battle
         $attackerLost = 0;
         $defenderLost = 0;
+        $defender = $toTerritory->player;
+        $defenderEliminated = false;
         do
         {
             $fromDiceNumber = min($fromTerritory->units - 1, 3);
@@ -760,6 +847,16 @@ class GamestateController extends Controller
                 $state->hasGainedTerritory = true;
                 $toTerritory->units = $fromTerritory->units - 1;
                 $fromTerritory->units = 1;
+
+                $defenderEliminated = true;
+                foreach($state->territories as $territory)
+                {
+                    if ($territory->player === $defender)
+                    {
+                        $defenderEliminated = false;
+                    }
+                }
+
                 break;
             }
         }
@@ -769,6 +866,19 @@ class GamestateController extends Controller
         {
             $state->attackerDice = ['blitz'];
             $state->defenderDice = [$attackerLost, $defenderLost];
+        }
+
+        if ($defenderEliminated)
+        {
+            $player = $state->players[$state->turn];
+            $cards->$player = array_merge($cards->$player, $cards->$defender);
+            unset($cards->$defender);
+
+            $defenderIndex = array_search($defender, $state->players);
+            array_splice($state->players, $defenderIndex, 1);
+
+            $state->phase = 'deploy';
+            $state->unitsToDeploy = 0;
         }
 
         //creates the new gamestate
@@ -781,6 +891,8 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -948,6 +1060,14 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
+    }
+
+    public function test()
+    {
+        $this->create_initial_manual(25, ['red', 'blue']);
+        return $this->get_current_state(25);
     }
 }

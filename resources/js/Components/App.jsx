@@ -52,6 +52,10 @@ class App extends Component {
     this.handleToInputChange = this.handleToInputChange.bind(this)
     this.handleCancelFortifyClick = this.handleCancelFortifyClick.bind(this)
     this.handleCardsClick = this.handleCardsClick.bind(this)
+    this.handleOccupyClick = this.handleOccupyClick.bind(this)
+    this.handleCancelOccupyClick = this.handleCancelOccupyClick.bind(this)
+    this.handleStrengthenClick = this.handleStrengthenClick.bind(this)
+    this.handleCancelStrengthenClick = this.handleCancelStrengthenClick.bind(this)
   }
 
 
@@ -65,10 +69,9 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-        
+
     if (this.state.activePlayer === this.state.currentPlayer) {
       clearInterval(this.intervalId)
-      console.log('if', this.intervalId)
     } 
   }
 
@@ -101,38 +104,38 @@ class App extends Component {
   }
 
   handleMapClick(event) {
-    console.log('active player', this.state.activePlayer)
-    console.log('current player', this.state.currentPlayer)
-    console.log(this.intervalId)
     if(this.state.currentPlayer !== this.state.activePlayer) return
     if (validate.isPlayersTurn(this) === false) return
 
 
     //OCCUPY PHASE
-    if(this.state.phase === 'occupy' && this.state.currentPlayer === this.state.activePlayer) {
-      if(this.state.clicked === true) return
-      this.state.territories.map(territory => {
-        if(territory.name === event.target.id && territory.player === null) {
-          this.setState({clicked: true})
-          update.sendOccupyToServer(this, territory.name)
-          this.intervalId = setInterval(() => { update.getStateOfGame(this) }, 2000)
-          setTimeout(console.log('wait'), 2000)
-          this.setState({clicked: false})
-          return ''
-        } else {
-          return ''
-        }
-      })
+    if(this.state.phase === 'occupy') {
+      validate.deselectAllTerritories(this)
+      this.setState({firstTerritory: ''})
+      if(this.state.currentPlayer === this.state.activePlayer) {
+        this.state.territories.map(territory => {
+          if(territory.name === event.target.id && territory.player === null) {
+            this.setState({firstTerritory: event.target.id})
+            validate.selectTerritory(event)
+            return ''
+          } else {
+            return ''
+          }
+        })
+      }
     }
 
 
     //STRENGTHEN PHASE
     if(this.state.phase === 'strengthen') {
+      validate.deselectAllTerritories(this)
+      this.setState({firstTerritory: ''})
       this.state.territories.map(territory => {
         if(territory.name === event.target.id && territory.player === this.state.activePlayer) {
-          console.log('You can choose this territory')
+          this.setState({firstTerritory: event.target.id})
+          validate.selectTerritory(event)
         } else {
-          console.log('You cannot choose this territory')
+          return ''
         }
       })
     }
@@ -280,7 +283,6 @@ class App extends Component {
   }
 
 
-
   handleFromInputChange(event) {
     if (event.target.value >= this.state.maxFortifyUnits || event.target.value < 1) {
       return
@@ -327,11 +329,49 @@ class App extends Component {
       maxFortifyUnits: 0,
       validFortify: false
     })
-    this.intervalId = setInterval(() => update.getStateOfGame(this), 2000)
+    this.intervalId = setInterval(() => {update.getStateOfGame(this)}, 2000)
   }
 
   handleCardsClick(event) {
     this.setState({ cardsCard: !this.state.cardsCard })
+  }
+
+  handleOccupyClick(event) {
+    this.setState({
+      firstTerritory: '',
+      activePlayer: 'no one',
+
+    })
+    validate.deselectAllTerritories(this)
+    update.sendOccupyToServer(this, this.state.firstTerritory)
+
+    this.intervalId = setInterval(() => {update.getStateOfGame(this)}, 2000)
+  }
+
+  handleCancelOccupyClick(event) {
+    this.setState({
+      firstTerritory: ''
+    })
+    validate.deselectAllTerritories(this)
+  }
+
+  handleStrengthenClick(event) {
+    this.setState({
+      firstTerritory: '',
+      activePlayer: 'no one',
+
+    })
+    validate.deselectAllTerritories(this)
+    update.sendStrengthenToServer(this, this.state.firstTerritory)
+
+    this.intervalId = setInterval(() => {update.getStateOfGame(this)}, 2000)  
+  }
+
+  handleCancelStrengthenClick(event) {
+    this.setState({
+      firstTerritory: ''
+    })
+    validate.deselectAllTerritories(this)
   }
 
 
@@ -379,8 +419,13 @@ class App extends Component {
               handleToInputChange={this.handleToInputChange}
               handleCancelFortifyClick={this.handleCancelFortifyClick}
               handleFortifyButtonClick={this.handleFortifyButtonClick}
+              handleCancelOccupyClick={this.handleCancelOccupyClick}
+              handleOccupyClick={this.handleOccupyClick}
+              handleCancelStrengthenClick={this.handleCancelStrengthenClick}
+              handleStrengthenClick={this.handleStrengthenClick}
               cardsCard={this.state.cardsCard}
               cards={this.state.cards}
+              unitsToDistribute={this.state.unitsToDistribute}
             />
             <PlayerList
               userList={this.state.userList}

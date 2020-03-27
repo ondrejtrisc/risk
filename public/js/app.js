@@ -46507,6 +46507,10 @@ var App = /*#__PURE__*/function (_Component) {
     _this.handleToInputChange = _this.handleToInputChange.bind(_assertThisInitialized(_this));
     _this.handleCancelFortifyClick = _this.handleCancelFortifyClick.bind(_assertThisInitialized(_this));
     _this.handleCardsClick = _this.handleCardsClick.bind(_assertThisInitialized(_this));
+    _this.handleOccupyClick = _this.handleOccupyClick.bind(_assertThisInitialized(_this));
+    _this.handleCancelOccupyClick = _this.handleCancelOccupyClick.bind(_assertThisInitialized(_this));
+    _this.handleStrengthenClick = _this.handleStrengthenClick.bind(_assertThisInitialized(_this));
+    _this.handleCancelStrengthenClick = _this.handleCancelStrengthenClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -46527,7 +46531,6 @@ var App = /*#__PURE__*/function (_Component) {
     value: function componentDidUpdate() {
       if (this.state.activePlayer === this.state.currentPlayer) {
         clearInterval(this.intervalId);
-        console.log('if', this.intervalId);
       }
     }
   }, {
@@ -46580,44 +46583,46 @@ var App = /*#__PURE__*/function (_Component) {
     value: function handleMapClick(event) {
       var _this4 = this;
 
-      console.log('active player', this.state.activePlayer);
-      console.log('current player', this.state.currentPlayer);
-      console.log(this.intervalId);
       if (this.state.currentPlayer !== this.state.activePlayer) return;
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; //OCCUPY PHASE
 
-      if (this.state.phase === 'occupy' && this.state.currentPlayer === this.state.activePlayer) {
-        if (this.state.clicked === true) return;
-        this.state.territories.map(function (territory) {
-          if (territory.name === event.target.id && territory.player === null) {
-            _this4.setState({
-              clicked: true
-            });
-
-            _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendOccupyToServer(_this4, territory.name);
-            _this4.intervalId = setInterval(function () {
-              _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this4);
-            }, 2000);
-            setTimeout(console.log('wait'), 2000);
-
-            _this4.setState({
-              clicked: false
-            });
-
-            return '';
-          } else {
-            return '';
-          }
+      if (this.state.phase === 'occupy') {
+        _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+        this.setState({
+          firstTerritory: ''
         });
+
+        if (this.state.currentPlayer === this.state.activePlayer) {
+          this.state.territories.map(function (territory) {
+            if (territory.name === event.target.id && territory.player === null) {
+              _this4.setState({
+                firstTerritory: event.target.id
+              });
+
+              _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
+              return '';
+            } else {
+              return '';
+            }
+          });
+        }
       } //STRENGTHEN PHASE
 
 
       if (this.state.phase === 'strengthen') {
+        _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+        this.setState({
+          firstTerritory: ''
+        });
         this.state.territories.map(function (territory) {
           if (territory.name === event.target.id && territory.player === _this4.state.activePlayer) {
-            console.log('You can choose this territory');
+            _this4.setState({
+              firstTerritory: event.target.id
+            });
+
+            _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
           } else {
-            console.log('You cannot choose this territory');
+            return '';
           }
         });
       } // ATTACK PHASE
@@ -46825,7 +46830,7 @@ var App = /*#__PURE__*/function (_Component) {
         validFortify: false
       });
       this.intervalId = setInterval(function () {
-        return _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this5);
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this5);
       }, 2000);
     }
   }, {
@@ -46834,6 +46839,52 @@ var App = /*#__PURE__*/function (_Component) {
       this.setState({
         cardsCard: !this.state.cardsCard
       });
+    }
+  }, {
+    key: "handleOccupyClick",
+    value: function handleOccupyClick(event) {
+      var _this6 = this;
+
+      this.setState({
+        firstTerritory: '',
+        activePlayer: 'no one'
+      });
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendOccupyToServer(this, this.state.firstTerritory);
+      this.intervalId = setInterval(function () {
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this6);
+      }, 2000);
+    }
+  }, {
+    key: "handleCancelOccupyClick",
+    value: function handleCancelOccupyClick(event) {
+      this.setState({
+        firstTerritory: ''
+      });
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+    }
+  }, {
+    key: "handleStrengthenClick",
+    value: function handleStrengthenClick(event) {
+      var _this7 = this;
+
+      this.setState({
+        firstTerritory: '',
+        activePlayer: 'no one'
+      });
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+      _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendStrengthenToServer(this, this.state.firstTerritory);
+      this.intervalId = setInterval(function () {
+        _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this7);
+      }, 2000);
+    }
+  }, {
+    key: "handleCancelStrengthenClick",
+    value: function handleCancelStrengthenClick(event) {
+      this.setState({
+        firstTerritory: ''
+      });
+      _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
     }
   }, {
     key: "render",
@@ -46878,8 +46929,13 @@ var App = /*#__PURE__*/function (_Component) {
         handleToInputChange: this.handleToInputChange,
         handleCancelFortifyClick: this.handleCancelFortifyClick,
         handleFortifyButtonClick: this.handleFortifyButtonClick,
+        handleCancelOccupyClick: this.handleCancelOccupyClick,
+        handleOccupyClick: this.handleOccupyClick,
+        handleCancelStrengthenClick: this.handleCancelStrengthenClick,
+        handleStrengthenClick: this.handleStrengthenClick,
         cardsCard: this.state.cardsCard,
-        cards: this.state.cards
+        cards: this.state.cards,
+        unitsToDistribute: this.state.unitsToDistribute
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
@@ -47005,149 +47061,162 @@ var AttackCard = /*#__PURE__*/function (_Component) {
         });
       }
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card ml-5 mb-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-        className: "card-title"
-      }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), attackerDice.map(function (die, index) {
-        switch (die) {
-          case 1:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side1.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+      console.log('attacker', attackerDice);
+      console.log('defender', defenderDice);
 
-          case 2:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side2.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+      if (attackerDice === null || attackerDice[0] !== 'blitz') {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Your rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), attackerDice.map(function (die, index) {
+          switch (die) {
+            case 1:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side1.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 3:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side3.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 2:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side2.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 4:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side4.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 3:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side3.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 5:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side5.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 4:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side4.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 6:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side6.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
-        }
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender's rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), defenderDice.map(function (die, index) {
-        switch (die) {
-          case 1:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side1.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 5:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side5.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 2:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side2.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 6:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side6.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender's rolls:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), defenderDice.map(function (die, index) {
+          switch (die) {
+            case 1:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side1.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 3:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side3.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 2:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side2.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 4:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side4.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 3:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side3.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 5:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side5.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
+            case 4:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side4.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
 
-          case 6:
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-              key: index,
-              src: "../images/side6.png",
-              className: "img-thumbnail",
-              style: {
-                height: "40px"
-              },
-              alt: ""
-            });
-        }
-      })) : ''));
+            case 5:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side5.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+
+            case 6:
+              return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+                key: index,
+                src: "../images/side6.png",
+                className: "img-thumbnail",
+                style: {
+                  height: "40px"
+                },
+                alt: ""
+              });
+          }
+        })) : ''));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "You lost ", defenderDice[0], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender lost ", defenderDice[1], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)) : ''));
+      }
     }
   }]);
 
@@ -47686,6 +47755,7 @@ var DeployCard = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47710,6 +47780,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var DifferentTurnCard = /*#__PURE__*/function (_Component) {
   _inherits(DifferentTurnCard, _Component);
 
@@ -47730,7 +47801,7 @@ var DifferentTurnCard = /*#__PURE__*/function (_Component) {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Game information"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -47902,6 +47973,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DifferentTurnCard */ "./resources/js/Components/DifferentTurnCard.jsx");
 /* harmony import */ var _CardsCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CardsCard */ "./resources/js/Components/CardsCard.jsx");
 /* harmony import */ var _OccupyCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OccupyCard */ "./resources/js/Components/OccupyCard.jsx");
+/* harmony import */ var _StrengthenCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./StrengthenCard */ "./resources/js/Components/StrengthenCard.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47923,6 +47995,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -47963,7 +48036,12 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           handleToInputChange = _this$props.handleToInputChange,
           handleFortifyButtonClick = _this$props.handleFortifyButtonClick,
           handleCancelFortifyClick = _this$props.handleCancelFortifyClick,
-          cards = _this$props.cards;
+          cards = _this$props.cards,
+          handleOccupyClick = _this$props.handleOccupyClick,
+          handleCancelOccupyClick = _this$props.handleCancelOccupyClick,
+          handleStrengthenClick = _this$props.handleStrengthenClick,
+          handleCancelStrengthenClick = _this$props.handleCancelStrengthenClick,
+          unitsToDistribute = _this$props.unitsToDistribute;
 
       if (activePlayer === currentPlayer) {
         if (phase === 'deploy') {
@@ -47997,12 +48075,45 @@ var InfoCard = /*#__PURE__*/function (_Component) {
             handleFortifyButtonClick: handleFortifyButtonClick
           });
         } else if (phase === 'occupy') {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], null);
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            activePlayer: activePlayer,
+            currentPlayer: currentPlayer,
+            firstTerritory: firstTerritory,
+            handleOccupyClick: handleOccupyClick,
+            handleCancelOccupyClick: handleCancelOccupyClick,
+            unitsToDistribute: unitsToDistribute
+          });
+        } else if (phase === 'strengthen') {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_StrengthenCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            activePlayer: activePlayer,
+            currentPlayer: currentPlayer,
+            firstTerritory: firstTerritory,
+            handleStrengthenClick: handleStrengthenClick,
+            handleCancelStrengthenClick: handleCancelStrengthenClick,
+            unitsToDistribute: unitsToDistribute
+          });
         }
       } else if (phase === 'occupy') {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], null);
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OccupyCard__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          activePlayer: activePlayer,
+          currentPlayer: currentPlayer,
+          firstTerritory: firstTerritory,
+          handleOccupyClick: handleOccupyClick,
+          handleCancelOccupyClick: handleCancelOccupyClick
+        });
+      } else if (phase === 'strengthen') {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_StrengthenCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          activePlayer: activePlayer,
+          currentPlayer: currentPlayer,
+          firstTerritory: firstTerritory,
+          handleStrengthenClick: handleStrengthenClick,
+          handleCancelStrengthenClick: handleCancelStrengthenClick,
+          unitsToDistribute: unitsToDistribute
+        });
       } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], null);
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DifferentTurnCard__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          activePlayer: activePlayer
+        });
       }
     }
   }]);
@@ -50470,7 +50581,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         filter: "url(#filter12911)",
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
-        id: "yakursk",
+        id: "yakutsk",
         style: {
           marker: "none"
         },
@@ -50996,7 +51107,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         filter: "url(#filter13003)",
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
-        id: "quebec",
+        id: "eastern_canada",
         fill: "#fff",
         fillOpacity: "0",
         fillRule: "evenodd",
@@ -51313,7 +51424,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "0.893",
         wordSpacing: "0"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tspan", {
-        id: "quebec-units-text",
+        id: "eastern_canada-units-text",
         x: "378.184",
         y: "251.719"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
@@ -52571,7 +52682,7 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "0.893",
         wordSpacing: "0"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tspan", {
-        id: "yakursk-units-text",
+        id: "yakutsk-units-text",
         x: "767.249",
         y: "191.689"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ellipse", {
@@ -52757,6 +52868,7 @@ var NextPhaseButton = /*#__PURE__*/function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52781,6 +52893,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var OccupyCard = /*#__PURE__*/function (_Component) {
   _inherits(OccupyCard, _Component);
 
@@ -52795,13 +52908,40 @@ var OccupyCard = /*#__PURE__*/function (_Component) {
   _createClass(OccupyCard, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card ml-5 mb-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-        className: "card-title"
-      }, "OCCUPY PHASE"), "Player's turn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "\u0421urrent phase:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many troops left to deploy:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many territories you own:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many continents you have:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "How many units you will deploy next turn calculation", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      var _this$props = this.props,
+          activePlayer = _this$props.activePlayer,
+          currentPlayer = _this$props.currentPlayer,
+          firstTerritory = _this$props.firstTerritory,
+          handleOccupyClick = _this$props.handleOccupyClick,
+          handleCancelOccupyClick = _this$props.handleCancelOccupyClick;
+
+      if (activePlayer === currentPlayer) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "OCCUPY PHASE: YOUR TURN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), firstTerritory ? "Do you wish to occupy ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory)) : 'You can choose one territory to occupy', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: handleOccupyClick,
+          hidden: firstTerritory ? false : true,
+          type: "button",
+          className: "btn btn-success float-left btn-sm"
+        }, "Occupy"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: handleCancelOccupyClick,
+          hidden: firstTerritory !== '' ? false : true,
+          type: "button",
+          className: "btn btn-danger float-right btn-sm"
+        }, "Cancel")));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "OCCUPY PHASE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", null, _Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(activePlayer), " player is currently selecting a territory"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }
     }
   }]);
 
@@ -52968,6 +53108,101 @@ var PlayerList = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/js/Components/StrengthenCard.jsx":
+/*!****************************************************!*\
+  !*** ./resources/js/Components/StrengthenCard.jsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Functions_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Functions/validate */ "./resources/js/Functions/validate.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var StrengthenCard = /*#__PURE__*/function (_Component) {
+  _inherits(StrengthenCard, _Component);
+
+  var _super = _createSuper(StrengthenCard);
+
+  function StrengthenCard(props) {
+    _classCallCheck(this, StrengthenCard);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(StrengthenCard, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          activePlayer = _this$props.activePlayer,
+          currentPlayer = _this$props.currentPlayer,
+          firstTerritory = _this$props.firstTerritory,
+          handleStrengthenClick = _this$props.handleStrengthenClick,
+          handleCancelStrengthenClick = _this$props.handleCancelStrengthenClick;
+
+      if (activePlayer === currentPlayer) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "STRENGTHEN PHASE: YOUR TURN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), firstTerritory ? "Do you wish to strengthen ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory), "?") : 'You can choose one territory to strengthen', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: handleStrengthenClick,
+          hidden: firstTerritory ? false : true,
+          type: "button",
+          className: "btn btn-success float-left btn-sm"
+        }, "Confirm"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: handleCancelStrengthenClick,
+          hidden: firstTerritory !== '' ? false : true,
+          type: "button",
+          className: "btn btn-danger float-right btn-sm"
+        }, "Cancel")));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "STRENGTHEN PHASE"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", null, _Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(activePlayer), " player is currently selecting a territory to enforce"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }
+    }
+  }]);
+
+  return StrengthenCard;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (StrengthenCard);
+
+/***/ }),
+
 /***/ "./resources/js/Functions/update.js":
 /*!******************************************!*\
   !*** ./resources/js/Functions/update.js ***!
@@ -52999,11 +53234,10 @@ var update = {
     fetch("../".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
-      console.log(data);
       object.setState({
         territories: data.territories,
         turns: data.players,
-        activePlayer: data.players[data.turn],
+        activePlayer: data.turn,
         phase: data.phase,
         unitsToDeploy: data.unitsToDeploy,
         cards: data.cards
@@ -53029,12 +53263,36 @@ var update = {
     .then(function (data) {
       object.setState({
         turns: data.players,
-        turnIndex: data.turn,
-        activePlayer: data.players[data.turn],
+        activePlayer: data.turn,
         territories: data.territories,
         phase: data.phase,
-        unitsToDistribute: data.unitsToDistribute,
-        occupyMove: true
+        unitsToDistribute: data.unitsToDistribute
+      });
+      update.addNumberOfUnits(object.state);
+      update.colorTerritories(object.state);
+    });
+  },
+  sendStrengthenToServer: function sendStrengthenToServer(object, territory) {
+    var toSend = {
+      territory: territory
+    };
+    fetch("../strengthen/".concat(object.state.game_id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(toSend)
+    }).then(function (response) {
+      return response.json();
+    }) // parses response as JSON
+    .then(function (data) {
+      object.setState({
+        turns: data.players,
+        activePlayer: data.turn,
+        territories: data.territories,
+        phase: data.phase,
+        unitsToDistribute: data.unitsToDistribute
       });
       update.addNumberOfUnits(object.state);
       update.colorTerritories(object.state);
@@ -53151,12 +53409,12 @@ __webpack_require__.r(__webpack_exports__);
 var neighbours = {
   "alaska": ["northwest_territory", "alberta", "kamchatka"],
   "northwest_territory": ["alaska", "alberta", "ontario", "greenland"],
-  "greenland": ["northwest_territory", "ontario", "quebec", "iceland"],
+  "greenland": ["northwest_territory", "ontario", "eastern_canada", "iceland"],
   "alberta": ["alaska", "northwest_territory", "ontario", "western_united_states"],
-  "ontario": ["northwest_territory", "greenland", "alberta", "quebec", "western_united_states", "eastern_united_states"],
-  "quebec": ["greenland", "ontario", "eastern_united_states"],
+  "ontario": ["northwest_territory", "greenland", "alberta", "eastern_canada", "western_united_states", "eastern_united_states"],
+  "eastern_canada": ["greenland", "ontario", "eastern_united_states"],
   "western_united_states": ["alberta", "ontario", "eastern_united_states", "central_america"],
-  "eastern_united_states": ["ontario", "quebec", "western_united_states", "central_america"],
+  "eastern_united_states": ["ontario", "eastern_canada", "western_united_states", "central_america"],
   "central_america": ["western_united_states", "eastern_united_states", "venezuela"],
   "venezuela": ["brazil", "peru", "central_america"],
   "peru": ["brazil", "argentina", "venezuela"],
@@ -53176,10 +53434,10 @@ var neighbours = {
   "south_africa": ["central_africa", "east_africa", "madagascar"],
   "madagascar": ["east_africa", "south_africa"],
   "ural": ["russia", "siberia", "afghanistan", "china"],
-  "siberia": ["ural", "yakursk", "irkutsk", "china", "mongolia"],
-  "yakursk": ["siberia", "irkutsk", "kamchatka"],
-  "irkutsk": ["siberia", "yakursk", "kamchatka", "mongolia"],
-  "kamchatka": ["alaska", "yakursk", "irkutsk", "mongolia", "japan"],
+  "siberia": ["ural", "yakutsk", "irkutsk", "china", "mongolia"],
+  "yakutsk": ["siberia", "irkutsk", "kamchatka"],
+  "irkutsk": ["siberia", "yakutsk", "kamchatka", "mongolia"],
+  "kamchatka": ["alaska", "yakutsk", "irkutsk", "mongolia", "japan"],
   "afghanistan": ["russia", "ural", "china", "middle_east", "india"],
   "china": ["ural", "siberia", "afghanistan", "mongolia", "india", "southeast_asia"],
   "mongolia": ["siberia", "irkutsk", "kamchatka", "china", "japan"],
