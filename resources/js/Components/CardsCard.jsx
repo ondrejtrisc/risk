@@ -65,7 +65,7 @@ class CardsCard extends Component {
 
   render(){
     
-
+    console.log(this.props)
     return (
       <div className="card ml-5 mb-4">
         <div className="card-body">
