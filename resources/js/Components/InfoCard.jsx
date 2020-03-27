@@ -114,7 +114,11 @@ class InfoCard extends Component {
 
     else {
       return (
-        < DifferentTurnCard />
+        < DifferentTurnCard 
+        activePlayer={activePlayer}
+
+
+        />
 
       )
 

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Card from './Card';
 
-let cardsOwned = [
-  {'territory': 'China', 'troops': 'artillery'},
-  {'territory': 'India', 'troops': 'infantry'},
-  {'territory': 'Iceland', 'troops': 'infantry'},
-  {'territory': 'Brazil', 'troops': 'cavalry'}
-];
+let cardsOwned = [];
+
+// let cardsOwned = [
+//   {'territory': 'China', 'troops': 'artillery'},
+//   {'territory': 'India', 'troops': 'infantry'},
+//   {'territory': 'Iceland', 'troops': 'infantry'},
+//   {'territory': 'Brazil', 'troops': 'cavalry'}
+// ];
 let cardsPlayed = [];
 
 
@@ -24,11 +26,48 @@ class CardsCard extends Component {
   }
 
   handleSubmitClick(event) {
-    console.log(event.target)
+    // console.log(event.target)
+    if(cardsPlayed.length==3){
+      if((cardsPlayed[0].type == cardsPlayed[1].type 
+        && cardsPlayed[0].type == cardsPlayed[2].type)
+      || (cardsPlayed[0].type != cardsPlayed[1].type 
+        && cardsPlayed[0].type != cardsPlayed[2].type 
+        && cardsPlayed[1].type != cardsPlayed[2].type)){
+          event.preventDefault();
+          fetch('../playcards/14', {
+              method: 'POST',
+              headers: {
+                  'Content-type': 'application/json',
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              },
+              body: JSON.stringify({
+                  'set': cardsPlayed
+              })
+          })
+              .then(response => response.json())
+              .then(data => {})
+          
+          cardsPlayed = [];
+      }else{
+        console.log('not allowed')
+      }
+    }
+
+
   }
 
   handleCancelClick(event) {
-    console.log(event.target)
+    // console.log("cardsOwned before", cardsOwned)
+    // console.log("cardsPlayed before", cardsPlayed)
+    // console.log("props before", this.props.cards)
+    // if(cardsPlayed.length > 0){
+    //   cardsOwned = cardsOwned.concat(cardsPlayed)
+    //   cardsPlayed = []
+    // }
+    // console.log("cardsOwned after", cardsOwned)
+    // console.log("cardsPlayed after", cardsPlayed)
+    // console.log("props after", this.props.cards)
+    // this.setState({})
   }
 
   handleSelectCardClick(event){
@@ -64,8 +103,29 @@ class CardsCard extends Component {
   }
 
   render(){
-    
-
+    console.log(this.props)
+    const currentPlayer = this.props.currentPlayer;
+    switch (currentPlayer){
+      case "red":
+        cardsOwned = this.props.cards["red"];
+        break;
+      case "blue":
+        cardsOwned = this.props.cards["blue"];
+        break;
+      case "green":
+        cardsOwned = this.props.cards["green"];
+        break;
+      case "yellow":
+        cardsOwned = this.props.cards["yellow"];
+        break;
+      case "brown":
+        cardsOwned = this.props.cards["brown"];
+        break;
+      case "purple":
+        cardsOwned = this.props.cards["purple"];
+        break;
+    }
+  
     return (
       <div className="card ml-5 mb-4">
         <div className="card-body">
@@ -77,7 +137,7 @@ class CardsCard extends Component {
               <Card 
                 key = {card.territory}
                 territory = {card.territory}
-                troops={card.troops}
+                troops={card.type}
                 handleOnCardClick={(e) => this.handleOnCardClick(e, 'select')}
               />
               )) : (
@@ -96,7 +156,7 @@ class CardsCard extends Component {
               <Card 
                 key = {card.territory}
                 territory = {card.territory}
-                troops={card.troops}
+                troops={card.type}
                 handleOnCardClick={(e) => this.handleOnCardClick(e, 'deselect')}
               />
               )) : (
