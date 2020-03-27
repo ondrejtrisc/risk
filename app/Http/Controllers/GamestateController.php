@@ -507,6 +507,7 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -656,6 +657,7 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -666,6 +668,7 @@ class GamestateController extends Controller
             $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
             $state = json_decode($gamestate->state);
             unset($state->deck);
+            $state->turn = $state->players[$state->turn];
             return json_encode($state);
         }
         catch (Exception $err)
@@ -730,6 +733,7 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -761,6 +765,7 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -887,6 +892,7 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
@@ -1055,12 +1061,13 @@ class GamestateController extends Controller
 
         //returns the new state to the frontend
         unset($state->deck);
+        $state->turn = $state->players[$state->turn];
         return json_encode($state);
     }
 
     public function test()
     {
-        $this->create_initial_manual(24, ['red', 'blue']);
-        return $this->get_current_state(24);
+        $this->create_initial_manual(25, ['red', 'blue']);
+        return $this->get_current_state(25);
     }
 }
