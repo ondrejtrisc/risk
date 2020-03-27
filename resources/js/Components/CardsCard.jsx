@@ -64,6 +64,7 @@ class CardsCard extends Component {
   }
 
   render(){
+    console.log(this.props.cards)
     
 
     return (

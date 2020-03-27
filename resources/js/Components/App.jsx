@@ -103,6 +103,7 @@ class App extends Component {
   handleMapClick(event) {
     console.log('active player', this.state.activePlayer)
     console.log('current player', this.state.currentPlayer)
+    console.log(this.intervalId)
     if(this.state.currentPlayer !== this.state.activePlayer) return
     if (validate.isPlayersTurn(this) === false) return
 
@@ -115,6 +116,7 @@ class App extends Component {
           this.setState({clicked: true})
           update.sendOccupyToServer(this, territory.name)
           this.intervalId = setInterval(() => { update.getStateOfGame(this) }, 2000)
+          setTimeout(console.log('wait'), 2000)
           this.setState({clicked: false})
           return ''
         } else {

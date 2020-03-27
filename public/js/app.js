@@ -46582,6 +46582,7 @@ var App = /*#__PURE__*/function (_Component) {
 
       console.log('active player', this.state.activePlayer);
       console.log('current player', this.state.currentPlayer);
+      console.log(this.intervalId);
       if (this.state.currentPlayer !== this.state.activePlayer) return;
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; //OCCUPY PHASE
 
@@ -46597,6 +46598,7 @@ var App = /*#__PURE__*/function (_Component) {
             _this4.intervalId = setInterval(function () {
               _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this4);
             }, 2000);
+            setTimeout(console.log('wait'), 2000);
 
             _this4.setState({
               clicked: false
@@ -47501,6 +47503,7 @@ var CardsCard = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      console.log(this.props.cards);
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
