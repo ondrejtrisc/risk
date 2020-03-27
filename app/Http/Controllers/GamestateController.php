@@ -36,25 +36,62 @@ class GamestateController extends Controller
         
         //creates the deck of cards
         $deck = [];
-        $cardType = 'infantry';
         foreach ($territoryNames as $territoryName)
         {
             $card = new stdClass();
             $card->territory = $territoryName;
-            $card->type = $cardType;
-            $deck[] = $card;
-            switch ($cardType)
-            {
-                case 'infantry':
-                    $cardType = 'cavalry';
+            switch ($territoryName)
+            {                  
+                case 'alaska':
+                case 'argentina':
+                case 'central_africa':
+                case 'china':
+                case 'east_africa':
+                case 'egypt':
+                case 'iceland':
+                case 'kamchatka':
+                case 'middle_east':
+                case 'mongolia':
+                case 'new_guinea':
+                case 'peru':
+                case 'southeast_asia':
+                case 'venezuela':
+                    $card->type = 'infantry';
                     break;
-                case 'cavalry':
-                    $cardType = 'artillery';
+                case 'afghanistan':
+                case 'alberta':
+                case 'eastern_canada':
+                case 'greenland':
+                case 'india':
+                case 'irkutsk':
+                case 'madagascar':
+                case 'north_africa':
+                case 'ontario':
+                case 'russia':
+                case 'scandinavia':
+                case 'siberia':
+                case 'ural':
+                case 'yakutsk':
+                    $card->type = 'cavalry';
                     break;
-                case 'artillery':
-                    $cardType = 'infantry';
+                case 'brazil':
+                case 'central_america':
+                case 'eastern_australia':
+                case 'eastern_united_states':
+                case 'great_britain':
+                case 'indonesia':
+                case 'japan':
+                case 'northern_europe':
+                case 'northwest_territory':
+                case 'south_africa':
+                case 'southern_europe':
+                case 'western_australia':
+                case 'western_europe':
+                case 'western_united_states':
+                    $card->type = 'artillery';
                     break;
             }
+            $deck[] = $card;
         }
         $card = new stdClass();
         $card->territory = 'wild';
@@ -277,25 +314,62 @@ class GamestateController extends Controller
         
         //creates the deck of cards
         $deck = [];
-        $cardType = 'infantry';
         foreach ($territoryNames as $territoryName)
         {
             $card = new stdClass();
             $card->territory = $territoryName;
-            $card->type = $cardType;
-            $deck[] = $card;
-            switch ($cardType)
-            {
-                case 'infantry':
-                    $cardType = 'cavalry';
+            switch ($territoryName)
+            {                  
+                case 'alaska':
+                case 'argentina':
+                case 'central_africa':
+                case 'china':
+                case 'east_africa':
+                case 'egypt':
+                case 'iceland':
+                case 'kamchatka':
+                case 'middle_east':
+                case 'mongolia':
+                case 'new_guinea':
+                case 'peru':
+                case 'southeast_asia':
+                case 'venezuela':
+                    $card->type = 'infantry';
                     break;
-                case 'cavalry':
-                    $cardType = 'artillery';
+                case 'afghanistan':
+                case 'alberta':
+                case 'eastern_canada':
+                case 'greenland':
+                case 'india':
+                case 'irkutsk':
+                case 'madagascar':
+                case 'north_africa':
+                case 'ontario':
+                case 'russia':
+                case 'scandinavia':
+                case 'siberia':
+                case 'ural':
+                case 'yakutsk':
+                    $card->type = 'cavalry';
                     break;
-                case 'artillery':
-                    $cardType = 'infantry';
+                case 'brazil':
+                case 'central_america':
+                case 'eastern_australia':
+                case 'eastern_united_states':
+                case 'great_britain':
+                case 'indonesia':
+                case 'japan':
+                case 'northern_europe':
+                case 'northwest_territory':
+                case 'south_africa':
+                case 'southern_europe':
+                case 'western_australia':
+                case 'western_europe':
+                case 'western_united_states':
+                    $card->type = 'artillery';
                     break;
             }
+            $deck[] = $card;
         }
         $card = new stdClass();
         $card->territory = 'wild';
