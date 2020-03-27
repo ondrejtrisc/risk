@@ -47909,7 +47909,8 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           handleFromInputChange = _this$props.handleFromInputChange,
           handleToInputChange = _this$props.handleToInputChange,
           handleFortifyButtonClick = _this$props.handleFortifyButtonClick,
-          handleCancelFortifyClick = _this$props.handleCancelFortifyClick;
+          handleCancelFortifyClick = _this$props.handleCancelFortifyClick,
+          cards = _this$props.cards;
 
       if (activePlayer === currentPlayer) {
         if (phase === 'deploy') {

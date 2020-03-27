@@ -13,7 +13,7 @@ class InfoCard extends Component {
   }
 
   render() {
-    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick} = this.props
+    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards} = this.props
     if(activePlayer === currentPlayer) {
       if(phase === 'deploy') {
         if(cardsCard === true) {
@@ -21,7 +21,7 @@ class InfoCard extends Component {
             <CardsCard
               currentPlayer={currentPlayer}
               cards={cards}
-               
+
             
             />
           )
