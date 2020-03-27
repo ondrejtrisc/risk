@@ -664,7 +664,7 @@ class GamestateController extends Controller
         try
         {
             $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
-            $state = $gamestate->state;
+            $state = json_decode($gamestate->state);
             unset($state->deck);
             return json_encode($state);
         }
@@ -800,6 +800,8 @@ class GamestateController extends Controller
         //battle
         $attackerLost = 0;
         $defenderLost = 0;
+        $defender = $toTerritory->player;
+        $defenderEliminated = false;
         do
         {
             $fromDiceNumber = min($fromTerritory->units - 1, 3);
@@ -840,6 +842,16 @@ class GamestateController extends Controller
                 $state->hasGainedTerritory = true;
                 $toTerritory->units = $fromTerritory->units - 1;
                 $fromTerritory->units = 1;
+
+                $defenderEliminated = true;
+                foreach($state->territories as $territory)
+                {
+                    if ($territory->player === $defender)
+                    {
+                        $defenderEliminated = false;
+                    }
+                }
+
                 break;
             }
         }
@@ -849,6 +861,19 @@ class GamestateController extends Controller
         {
             $state->attackerDice = ['blitz'];
             $state->defenderDice = [$attackerLost, $defenderLost];
+        }
+
+        if ($defenderEliminated)
+        {
+            $player = $state->players[$state->turn];
+            $cards->$player = array_merge($cards->$player, $cards->$defender);
+            unset($cards->$defender);
+
+            $defenderIndex = array_search($defender, $state->players);
+            array_splice($state->players, $defenderIndex, 1);
+
+            $state->phase = 'deploy';
+            $state->unitsToDeploy = 0;
         }
 
         //creates the new gamestate
@@ -1031,5 +1056,11 @@ class GamestateController extends Controller
         //returns the new state to the frontend
         unset($state->deck);
         return json_encode($state);
+    }
+
+    public function test()
+    {
+        $this->create_initial_manual(24, ['red', 'blue']);
+        return $this->get_current_state(24);
     }
 }
