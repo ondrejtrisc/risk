@@ -506,6 +506,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 
@@ -654,6 +655,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 
@@ -662,7 +664,9 @@ class GamestateController extends Controller
         try
         {
             $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
-            return $gamestate->state;
+            $state = $gamestate->state;
+            unset($state->deck);
+            return json_encode($state);
         }
         catch (Exception $err)
         {
@@ -725,6 +729,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 
@@ -755,6 +760,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 
@@ -855,6 +861,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 
@@ -1022,6 +1029,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //returns the new state to the frontend
+        unset($state->deck);
         return json_encode($state);
     }
 }
