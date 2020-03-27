@@ -204,6 +204,8 @@ class GamestateController extends Controller
         $state->phase = 'deploy';
         $state->attackerDice = null;
         $state->defenderDice = null;
+        $state->attackerLost = null;
+        $state->defenderLost = null;
 
         //calculates how many units the first player can deploy
         $playerHeldTerritories = 0;
@@ -435,7 +437,9 @@ class GamestateController extends Controller
         $state->unitsToDistribute = $unitsToDistribute;
         $state->unitsToDeploy = null;
         $state->attackerDice = null;
-        $state->defenderDice = null;        
+        $state->defenderDice = null;
+        $state->attackerLost = null;
+        $state->defenderLost = null;
 
         $gamestate->state = json_encode($state);
 
@@ -864,8 +868,10 @@ class GamestateController extends Controller
 
         if ($blitz == 'true')
         {
-            $state->attackerDice = ['blitz'];
-            $state->defenderDice = [$attackerLost, $defenderLost];
+            $state->attackerDice = null;
+            $state->defenderDice = null;
+            $state->attackerLost = $attackerLost;
+            $state->defenderLost = $defenderLost;
         }
 
         if ($defenderEliminated)
@@ -959,6 +965,8 @@ class GamestateController extends Controller
         $state->phase = 'deploy';
         $state->attackerDice = null;
         $state->defenderDice = null;
+        $state->attackerLost = null;
+        $state->defenderLost = null;
 
         //calculates how many units the next player can deploy
         $playerHeldTerritories = 0;
