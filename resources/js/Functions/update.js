@@ -24,11 +24,14 @@ const update = {
       .then(promise => promise.json())
       .then(data => {
         console.log(data)
-        object.setState({ territories: data.territories })
-        object.setState({ turns: data.players })
-        object.setState({ unitsToDeploy: data.unitsToDeploy })
-        object.setState({ activePlayer: data.players[data.turn] })
-        object.setState({ phase: data.phase })
+        object.setState({ 
+          territories: data.territories,
+          turns: data.players,
+          activePlayer: data.players[data.turn],
+          phase: data.phase,
+          unitsToDeploy: data.unitsToDeploy,
+          cards: data.cards
+        })
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
       })
@@ -38,7 +41,7 @@ const update = {
     let toSend = {
       territory: territory
     }
-    console.log(toSend)
+
     fetch(`../occupy/${object.state.game_id}`,
       {
         method: "POST",
@@ -51,7 +54,17 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
-        console.log(data)
+        object.setState({
+          turns: data.players,
+          turnIndex: data.turn,
+          activePlayer: data.players[data.turn],
+          territories: data.territories,
+          phase: data.phase,
+          unitsToDistribute: data.unitsToDistribute,
+          occupyMove: true
+        })
+        update.addNumberOfUnits(object.state)
+        update.colorTerritories(object.state)
       });
   },
 

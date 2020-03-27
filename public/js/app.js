@@ -46473,6 +46473,7 @@ var App = /*#__PURE__*/function (_Component) {
       activePlayer: '',
       // need to change to be color
       turns: [],
+      turnIndex: 0,
       currentPlayer: document.querySelector('meta[name="color"]').getAttribute('content'),
       firstTerritory: '',
       secondTerritory: '',
@@ -46493,7 +46494,10 @@ var App = /*#__PURE__*/function (_Component) {
       defenderDice: null,
       validFortify: false,
       cardsCard: false,
-      interval: ''
+      interval: '',
+      unitsToDistribute: 0,
+      clicked: false,
+      cards: []
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
@@ -46523,6 +46527,7 @@ var App = /*#__PURE__*/function (_Component) {
     value: function componentDidUpdate() {
       if (this.state.activePlayer === this.state.currentPlayer) {
         clearInterval(this.intervalId);
+        console.log('if', this.intervalId);
       }
     }
   }, {
@@ -46575,12 +46580,28 @@ var App = /*#__PURE__*/function (_Component) {
     value: function handleMapClick(event) {
       var _this4 = this;
 
+      console.log('active player', this.state.activePlayer);
+      console.log('current player', this.state.currentPlayer);
+      if (this.state.currentPlayer !== this.state.activePlayer) return;
       if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].isPlayersTurn(this) === false) return; //OCCUPY PHASE
 
-      if (this.state.phase === 'occupy') {
+      if (this.state.phase === 'occupy' && this.state.currentPlayer === this.state.activePlayer) {
+        if (this.state.clicked === true) return;
         this.state.territories.map(function (territory) {
           if (territory.name === event.target.id && territory.player === null) {
+            _this4.setState({
+              clicked: true
+            });
+
             _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendOccupyToServer(_this4, territory.name);
+            _this4.intervalId = setInterval(function () {
+              _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this4);
+            }, 2000);
+
+            _this4.setState({
+              clicked: false
+            });
+
             return '';
           } else {
             return '';
@@ -46671,6 +46692,8 @@ var App = /*#__PURE__*/function (_Component) {
 
 
           if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].canPlayerSelectTerritory(event, this) === true) {
+            console.log(this.state.unitsToDeploy);
+
             if (this.state.unitsToDeploy > 0) {
               var updatedTerritories = JSON.parse(JSON.stringify(this.state.territories));
               updatedTerritories.map(function (territory) {
@@ -46853,7 +46876,8 @@ var App = /*#__PURE__*/function (_Component) {
         handleToInputChange: this.handleToInputChange,
         handleCancelFortifyClick: this.handleCancelFortifyClick,
         handleFortifyButtonClick: this.handleFortifyButtonClick,
-        cardsCard: this.state.cardsCard
+        cardsCard: this.state.cardsCard,
+        cards: this.state.cards
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
@@ -47890,7 +47914,10 @@ var InfoCard = /*#__PURE__*/function (_Component) {
       if (activePlayer === currentPlayer) {
         if (phase === 'deploy') {
           if (cardsCard === true) {
-            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsCard__WEBPACK_IMPORTED_MODULE_5__["default"], null);
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsCard__WEBPACK_IMPORTED_MODULE_5__["default"], {
+              currentPlayer: currentPlayer,
+              cards: cards
+            });
           } else {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeployCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
               unitsToDeploy: unitsToDeploy,
@@ -50295,8 +50322,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "iceland",
-        fill: "none",
-        fillOpacity: "1",
+        fill: "#fff",
+        fillOpacity: "0",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52920,19 +52947,12 @@ var update = {
     }).then(function (data) {
       console.log(data);
       object.setState({
-        territories: data.territories
-      });
-      object.setState({
-        turns: data.players
-      });
-      object.setState({
-        unitsToDeploy: data.unitsToDeploy
-      });
-      object.setState({
-        activePlayer: data.players[data.turn]
-      });
-      object.setState({
-        phase: data.phase
+        territories: data.territories,
+        turns: data.players,
+        activePlayer: data.players[data.turn],
+        phase: data.phase,
+        unitsToDeploy: data.unitsToDeploy,
+        cards: data.cards
       });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
@@ -52942,7 +52962,6 @@ var update = {
     var toSend = {
       territory: territory
     };
-    console.log(toSend);
     fetch("../occupy/".concat(object.state.game_id), {
       method: "POST",
       headers: {
@@ -52954,7 +52973,17 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
-      console.log(data);
+      object.setState({
+        turns: data.players,
+        turnIndex: data.turn,
+        activePlayer: data.players[data.turn],
+        territories: data.territories,
+        phase: data.phase,
+        unitsToDistribute: data.unitsToDistribute,
+        occupyMove: true
+      });
+      update.addNumberOfUnits(object.state);
+      update.colorTerritories(object.state);
     });
   },
   sendAttackToServer: function sendAttackToServer(attacking, defending, object) {
