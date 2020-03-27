@@ -2720,7 +2720,7 @@ class Map extends React.Component {
             opacity="1"
           ></path>
           <path
-            id="yakursk"
+            id="yakutsk"
             style={{ marker: "none" }}
             fill="#fff"
             fillOpacity="0"
@@ -3239,7 +3239,7 @@ class Map extends React.Component {
             opacity="1"
           ></path>
           <path
-            id="quebec"
+            id="eastern_canada"
             fill="#fff"
             fillOpacity="0"
             fillRule="evenodd"
@@ -3553,7 +3553,7 @@ class Map extends React.Component {
             opacity="0.893"
             wordSpacing="0"
           >
-            <tspan id="quebec-units-text" x="378.184" y="251.719">
+            <tspan id="eastern_canada-units-text" x="378.184" y="251.719">
               
             </tspan>
           </text>
@@ -4819,7 +4819,7 @@ class Map extends React.Component {
             opacity="0.893"
             wordSpacing="0"
           >
-            <tspan id="yakursk-units-text" x="767.249" y="191.689">
+            <tspan id="yakutsk-units-text" x="767.249" y="191.689">
               
             </tspan>
           </text>
