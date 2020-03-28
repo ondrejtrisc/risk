@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Card from './Card';
+import update from '../Functions/update'
 
 let cardsOwned = [];
 
@@ -34,18 +35,8 @@ class CardsCard extends Component {
         && cardsPlayed[0].type != cardsPlayed[2].type 
         && cardsPlayed[1].type != cardsPlayed[2].type)){
           event.preventDefault();
-          fetch('../playcards/14', {
-              method: 'POST',
-              headers: {
-                  'Content-type': 'application/json',
-                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-              },
-              body: JSON.stringify({
-                  'set': cardsPlayed
-              })
-          })
-              .then(response => response.json())
-              .then(data => {})
+          update.sendCardsToServer(this.props.object, cardsPlayed, this.props.game_id)
+          
           
           cardsPlayed = [];
       }else{

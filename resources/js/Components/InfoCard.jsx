@@ -14,7 +14,7 @@ class InfoCard extends Component {
   }
 
   render() {
-    const {activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards, handleOccupyClick, handleCancelOccupyClick, handleStrengthenClick, handleCancelStrengthenClick, unitsToDistribute} = this.props
+    const {object, game_id, attackerLost, defenderLost, activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards, handleOccupyClick, handleCancelOccupyClick, handleStrengthenClick, handleCancelStrengthenClick, unitsToDistribute} = this.props
     if(activePlayer === currentPlayer) {
       if(phase === 'deploy') {
         if(cardsCard === true) {
@@ -22,6 +22,8 @@ class InfoCard extends Component {
             <CardsCard
               currentPlayer={currentPlayer}
               cards={cards}
+              object={this}
+              game_id={game_id}
 
             
             />
@@ -40,6 +42,8 @@ class InfoCard extends Component {
             firstTerritory={firstTerritory}
             attackerDice={attackerDice}
             defenderDice={defenderDice}
+            attackerLost={attackerLost}
+            defenderLost={defenderLost}
           />
         )
 

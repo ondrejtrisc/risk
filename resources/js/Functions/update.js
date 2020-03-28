@@ -117,6 +117,8 @@ const update = {
         object.setState({ attackerDice: data.attackerDice })
         object.setState({ defenderDice: data.defenderDice })
         object.setState({ territories: data.territories })
+        object.setState({ attackerLost: data.attackerLost })
+        object.setState({ defenderLost: data.defenderLost })
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
       });
@@ -187,6 +189,33 @@ const update = {
         )
       });
   },
+
+  sendCardsToServer: function (object, set, game_id) {
+    let toSend = {
+      set: set
+    }
+    console.log(toSend)
+    fetch(`../playcards/${game_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(toSend)
+      }
+    )
+      .then(response => response.json())// parses response as JSON
+      .then(data => {
+        object.setState({ 
+          phase: data.phase,
+          players: data.players,
+          territories: data.territories,
+          unitsToDeploy: data.unitsToDeploy
+         })
+      });
+
+  }
 
 }
 

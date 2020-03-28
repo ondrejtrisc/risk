@@ -14,7 +14,7 @@ class AttackCard extends Component {
   }
 
   render(){
-    const {firstTerritory, attackerDice, defenderDice} = this.props
+    const {firstTerritory, attackerDice, defenderDice, attackerLost, defenderLost} = this.props
     if(attackerDice !== null) {
       attackerDice.sort(function(a, b){return b-a})
     }
@@ -22,8 +22,8 @@ class AttackCard extends Component {
       defenderDice.sort(function(a, b){return b-a})
     }
 
-    console.log('attacker', attackerDice)
-    console.log('defender', defenderDice)
+    console.log('attacker', attackerLost)
+    console.log('defender', defenderLost)
 
     if(attackerDice === null || attackerDice[0] !== 'blitz') {
       return (
@@ -80,11 +80,11 @@ class AttackCard extends Component {
             <p>
               {(firstTerritory === '') ? "Choose territory from where to attack" : `Choose territory to attack from ${validate.humanize(firstTerritory)}`}
             </p>
-              {(attackerDice !== null && defenderDice !== null) ? 
+              {(attackerDice !== null) ? 
                   <div>
-                    You lost {defenderDice[0]} units
+                    You lost {attackerLost} units
                     <hr />
-                    Defender lost {defenderDice[1]} units 
+                    Defender lost {defenderLost} units 
                     <br/>
                  </div> : ''
               }

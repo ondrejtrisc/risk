@@ -42,7 +42,9 @@ class App extends Component {
       interval: '',
       unitsToDistribute: 0,
       clicked: false,
-      cards: []
+      cards: [],
+      attackerLost: 0,
+      defenderLost: 0
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -426,6 +428,10 @@ class App extends Component {
               cardsCard={this.state.cardsCard}
               cards={this.state.cards}
               unitsToDistribute={this.state.unitsToDistribute}
+              defenderLost={this.state.defenderLost}
+              attackerLost={this.state.attackerLost}
+              game_id={this.state.game_id}
+              object={this}
             />
             <PlayerList
               userList={this.state.userList}

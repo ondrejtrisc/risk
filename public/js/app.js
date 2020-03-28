@@ -46497,7 +46497,9 @@ var App = /*#__PURE__*/function (_Component) {
       interval: '',
       unitsToDistribute: 0,
       clicked: false,
-      cards: []
+      cards: [],
+      attackerLost: 0,
+      defenderLost: 0
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
@@ -46935,7 +46937,11 @@ var App = /*#__PURE__*/function (_Component) {
         handleStrengthenClick: this.handleStrengthenClick,
         cardsCard: this.state.cardsCard,
         cards: this.state.cards,
-        unitsToDistribute: this.state.unitsToDistribute
+        unitsToDistribute: this.state.unitsToDistribute,
+        defenderLost: this.state.defenderLost,
+        attackerLost: this.state.attackerLost,
+        game_id: this.state.game_id,
+        object: this
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
@@ -47047,7 +47053,9 @@ var AttackCard = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           firstTerritory = _this$props.firstTerritory,
           attackerDice = _this$props.attackerDice,
-          defenderDice = _this$props.defenderDice;
+          defenderDice = _this$props.defenderDice,
+          attackerLost = _this$props.attackerLost,
+          defenderLost = _this$props.defenderLost;
 
       if (attackerDice !== null) {
         attackerDice.sort(function (a, b) {
@@ -47061,8 +47069,8 @@ var AttackCard = /*#__PURE__*/function (_Component) {
         });
       }
 
-      console.log('attacker', attackerDice);
-      console.log('defender', defenderDice);
+      console.log('attacker', attackerLost);
+      console.log('defender', defenderLost);
 
       if (attackerDice === null || attackerDice[0] !== 'blitz') {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -47215,7 +47223,7 @@ var AttackCard = /*#__PURE__*/function (_Component) {
           className: "card-body"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
           className: "card-title"
-        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null && defenderDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "You lost ", defenderDice[0], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender lost ", defenderDice[1], " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)) : ''));
+        }, "Attack phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, firstTerritory === '' ? "Choose territory from where to attack" : "Choose territory to attack from ".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(firstTerritory))), attackerDice !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "You lost ", attackerLost, " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Defender lost ", defenderLost, " units", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)) : ''));
       }
     }
   }]);
@@ -47457,6 +47465,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Card */ "./resources/js/Components/Card.jsx");
+/* harmony import */ var _Functions_update__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Functions/update */ "./resources/js/Functions/update.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47478,6 +47487,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -47518,18 +47528,7 @@ var CardsCard = /*#__PURE__*/function (_Component) {
       if (cardsPlayed.length == 3) {
         if (cardsPlayed[0].type == cardsPlayed[1].type && cardsPlayed[0].type == cardsPlayed[2].type || cardsPlayed[0].type != cardsPlayed[1].type && cardsPlayed[0].type != cardsPlayed[2].type && cardsPlayed[1].type != cardsPlayed[2].type) {
           event.preventDefault();
-          fetch('../playcards/14', {
-            method: 'POST',
-            headers: {
-              'Content-type': 'application/json',
-              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-              'set': cardsPlayed
-            })
-          }).then(function (response) {
-            return response.json();
-          }).then(function (data) {});
+          _Functions_update__WEBPACK_IMPORTED_MODULE_2__["default"].sendCardsToServer(this.props.object, cardsPlayed, this.props.game_id);
           cardsPlayed = [];
         } else {
           console.log('not allowed');
@@ -48020,6 +48019,10 @@ var InfoCard = /*#__PURE__*/function (_Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
+          object = _this$props.object,
+          game_id = _this$props.game_id,
+          attackerLost = _this$props.attackerLost,
+          defenderLost = _this$props.defenderLost,
           activePlayer = _this$props.activePlayer,
           cardsCard = _this$props.cardsCard,
           currentPlayer = _this$props.currentPlayer,
@@ -48048,7 +48051,9 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           if (cardsCard === true) {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsCard__WEBPACK_IMPORTED_MODULE_5__["default"], {
               currentPlayer: currentPlayer,
-              cards: cards
+              cards: cards,
+              object: this,
+              game_id: game_id
             });
           } else {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeployCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -48060,7 +48065,9 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AttackCard__WEBPACK_IMPORTED_MODULE_1__["default"], {
             firstTerritory: firstTerritory,
             attackerDice: attackerDice,
-            defenderDice: defenderDice
+            defenderDice: defenderDice,
+            attackerLost: attackerLost,
+            defenderLost: defenderLost
           });
         } else if (phase === 'fortify') {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FortifyCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -53325,6 +53332,12 @@ var update = {
       object.setState({
         territories: data.territories
       });
+      object.setState({
+        attackerLost: data.attackerLost
+      });
+      object.setState({
+        defenderLost: data.defenderLost
+      });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
     });
@@ -53389,6 +53402,30 @@ var update = {
         defenderDice: data.defenderDice,
         unitsToDeploy: data.unitsToDeploy,
         activePlayer: data.players[data.turn]
+      });
+    });
+  },
+  sendCardsToServer: function sendCardsToServer(object, set, game_id) {
+    var toSend = {
+      set: set
+    };
+    console.log(toSend);
+    fetch("../playcards/".concat(game_id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(toSend)
+    }).then(function (response) {
+      return response.json();
+    }) // parses response as JSON
+    .then(function (data) {
+      object.setState({
+        phase: data.phase,
+        players: data.players,
+        territories: data.territories,
+        unitsToDeploy: data.unitsToDeploy
       });
     });
   }
@@ -53711,8 +53748,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
