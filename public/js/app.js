@@ -46707,7 +46707,7 @@ var App = /*#__PURE__*/function (_Component) {
               var updatedTerritories = JSON.parse(JSON.stringify(this.state.territories));
               updatedTerritories.map(function (territory) {
                 if (event.target.id === territory.name) {
-                  territory.units += 1;
+                  territory.units = Number(territory.units) + 1;
                 }
               });
 

@@ -219,7 +219,7 @@ class App extends Component {
           let updatedTerritories = JSON.parse(JSON.stringify(this.state.territories))
           updatedTerritories.map(territory => {
             if (event.target.id === territory.name) {
-              territory.units += 1
+              territory.units = Number(territory.units) + 1
             }
           })
 
