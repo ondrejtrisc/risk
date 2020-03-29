@@ -22,7 +22,7 @@ class InfoCard extends Component {
             <CardsCard
               currentPlayer={currentPlayer}
               cards={cards}
-              object={this}
+              object={object}
               game_id={game_id}
 
             
