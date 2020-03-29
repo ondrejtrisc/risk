@@ -891,8 +891,8 @@ class GamestateController extends Controller
         if ($defenderEliminated)
         {
             $player = $state->players[$state->turn];
-            $cards->$player = array_merge($cards->$player, $cards->$defender);
-            unset($cards->$defender);
+            $state->cards->$player = array_merge($state->cards->$player, $state->cards->$defender);
+            unset($state->cards->$defender);
 
             $defenderIndex = array_search($defender, $state->players);
             array_splice($state->players, $defenderIndex, 1);
