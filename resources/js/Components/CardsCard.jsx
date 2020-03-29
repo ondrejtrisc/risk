@@ -3,13 +3,6 @@ import Card from './Card';
 import update from '../Functions/update'
 
 let cardsOwned = [];
-
-// let cardsOwned = [
-//   {'territory': 'China', 'troops': 'artillery'},
-//   {'territory': 'India', 'troops': 'infantry'},
-//   {'territory': 'Iceland', 'troops': 'infantry'},
-//   {'territory': 'Brazil', 'troops': 'cavalry'}
-// ];
 let cardsPlayed = [];
 
 
@@ -22,7 +15,9 @@ class CardsCard extends Component {
     
     this.state = {
       cardsOwned: cardsOwned,
-      cardsPlayed: cardsPlayed
+      cardsPlayed: cardsPlayed,
+      canPlay: false,
+      warning: ''
     }
   }
 
@@ -34,20 +29,20 @@ class CardsCard extends Component {
       || (cardsPlayed[0].type != cardsPlayed[1].type 
         && cardsPlayed[0].type != cardsPlayed[2].type 
         && cardsPlayed[1].type != cardsPlayed[2].type)){
-          event.preventDefault();
           update.sendCardsToServer(this.props.object, cardsPlayed, this.props.game_id)
           
           
           cardsPlayed = [];
       }else{
-        console.log('not allowed')
+        this.setState({warning: 'Cards must all be same or unique type'})
       }
-    }
-
-
+    } 
   }
 
   handleCancelClick(event) {
+    this.setState({
+      cardsOwned: cardsOwned,
+    })
     // console.log("cardsOwned before", cardsOwned)
     // console.log("cardsPlayed before", cardsPlayed)
     // console.log("props before", this.props.cards)
@@ -68,10 +63,13 @@ class CardsCard extends Component {
           cardsOwned.splice(index, 1)
           cardsPlayed.push(card)
         }
+        if(cardsPlayed.length === 3) {
+          this.setState({canPlay: true})
+        }
       });
     }
 
-    this.setState({cardsOwned: cardsOwned, cardsPlayed: cardsPlayed})
+    this.setState({cardsOwned: cardsOwned, cardsPlayed: cardsPlayed, warning: ''})
   }
 
   handleDeselectCardClick(event){
@@ -80,9 +78,12 @@ class CardsCard extends Component {
         cardsPlayed.splice(index, 1)
         cardsOwned.push(card)
       }
+      if(cardsPlayed.length < 3) {
+        this.setState({canPlay: false})
+      }
     });
 
-    this.setState({cardsOwned: cardsOwned, cardsPlayed: cardsPlayed})
+    this.setState({cardsOwned: cardsOwned, cardsPlayed: cardsPlayed, warning: ''})
   }
 
   handleOnCardClick(event, action){
@@ -94,7 +95,7 @@ class CardsCard extends Component {
   }
 
   render(){
-    console.log(this.props)
+    console.log(this.state.canPlay)
     const currentPlayer = this.props.currentPlayer;
     switch (currentPlayer){
       case "red":
@@ -120,9 +121,9 @@ class CardsCard extends Component {
     return (
       <div className="card ml-5 mb-4">
         <div className="card-body">
-          <h5 className="card-title">Play Cards</h5>
-          Section for cards owned <br />
-          <div className="row d-flex justify-content-around">
+          {(this.state.warning) ? (<span className="text-danger"> {this.state.warning} </span>) : 'Choose three cards to play'}
+          <br />
+          <div style={{maxWidth: '95%'}} className="row d-flex flex-row justify-content-center flex-nowrap mt-2">
             {cardsOwned !== null && cardsOwned.length > 0 ?
             cardsOwned.map((card, i) => (
               <Card 
@@ -130,6 +131,7 @@ class CardsCard extends Component {
                 territory = {card.territory}
                 troops={card.type}
                 handleOnCardClick={(e) => this.handleOnCardClick(e, 'select')}
+                
               />
               )) : (
                 <></>
@@ -138,10 +140,12 @@ class CardsCard extends Component {
           </div>
           <hr/>
 
-          Section for cards to be played
-          <br />
-
-          <div className="row d-flex justify-content-around">
+          <div 
+          className="row d-flex justify-content-center"
+          style={{minHeight:'75px', maxWidth: '95%'}}
+          className="row d-flex flex-row justify-content-center flex-nowrap mt-2"
+          >
+          
             {cardsPlayed !== null && cardsPlayed.length > 0 ?
             cardsPlayed.map((card, i) => (
               <Card 
@@ -155,11 +159,10 @@ class CardsCard extends Component {
               )
             }
           </div>
-
-          <br />
+          <br/>
           <button 
             onClick={(e) => this.handleSubmitClick(e)} 
-            hidden={true ? false : true} type="button" 
+            disabled={(this.state.canPlay === false) ? true : false} type="button" 
             className="btn btn-success float-left btn-sm"
             >Play Cards</button>
 

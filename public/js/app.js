@@ -46914,7 +46914,7 @@ var App = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Map__WEBPACK_IMPORTED_MODULE_1__["default"], {
         handleMapClick: this.handleMapClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
+        className: "col-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
         activePlayer: this.state.activePlayer,
         currentPlayer: this.state.currentPlayer,
@@ -47354,26 +47354,20 @@ var Card = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this = this;
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
-        id: "".concat(this.props.territory),
-        className: "card",
-        width: "50",
-        height: "70",
-        viewBox: "0 0 100 100",
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-2"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        id: this.props.territory,
+        src: "../images/cards/card_".concat(this.props.territory, ".png"),
         onClick: function onClick(e, action) {
           return _this.props.handleOnCardClick(e, action);
-        }
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
-        id: this.props.territory
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-        className: "card-territory",
-        x: "15",
-        y: "30"
-      }, this.props.territory), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-        className: "card-troops",
-        x: "15",
-        y: "70"
-      }, this.props.troops));
+        },
+        className: "card",
+        style: {
+          height: "75px"
+        },
+        alt: "card_".concat(this.props.territory)
+      }));
     }
   }]);
 
@@ -47468,6 +47462,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Functions_update__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Functions/update */ "./resources/js/Functions/update.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -47491,13 +47487,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var cardsOwned = []; // let cardsOwned = [
-//   {'territory': 'China', 'troops': 'artillery'},
-//   {'territory': 'India', 'troops': 'infantry'},
-//   {'territory': 'Iceland', 'troops': 'infantry'},
-//   {'territory': 'Brazil', 'troops': 'cavalry'}
-// ];
-
+var cardsOwned = [];
 var cardsPlayed = [];
 
 var CardsCard = /*#__PURE__*/function (_Component) {
@@ -47516,7 +47506,9 @@ var CardsCard = /*#__PURE__*/function (_Component) {
     _this.handleOnCardClick = _this.handleOnCardClick.bind(_assertThisInitialized(_this));
     _this.state = {
       cardsOwned: cardsOwned,
-      cardsPlayed: cardsPlayed
+      cardsPlayed: cardsPlayed,
+      canPlay: false,
+      warning: ''
     };
     return _this;
   }
@@ -47527,17 +47519,21 @@ var CardsCard = /*#__PURE__*/function (_Component) {
       // console.log(event.target)
       if (cardsPlayed.length == 3) {
         if (cardsPlayed[0].type == cardsPlayed[1].type && cardsPlayed[0].type == cardsPlayed[2].type || cardsPlayed[0].type != cardsPlayed[1].type && cardsPlayed[0].type != cardsPlayed[2].type && cardsPlayed[1].type != cardsPlayed[2].type) {
-          event.preventDefault();
           _Functions_update__WEBPACK_IMPORTED_MODULE_2__["default"].sendCardsToServer(this.props.object, cardsPlayed, this.props.game_id);
           cardsPlayed = [];
         } else {
-          console.log('not allowed');
+          this.setState({
+            warning: 'Cards must all be same or unique type'
+          });
         }
       }
     }
   }, {
     key: "handleCancelClick",
-    value: function handleCancelClick(event) {// console.log("cardsOwned before", cardsOwned)
+    value: function handleCancelClick(event) {
+      this.setState({
+        cardsOwned: cardsOwned
+      }); // console.log("cardsOwned before", cardsOwned)
       // console.log("cardsPlayed before", cardsPlayed)
       // console.log("props before", this.props.cards)
       // if(cardsPlayed.length > 0){
@@ -47552,32 +47548,50 @@ var CardsCard = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleSelectCardClick",
     value: function handleSelectCardClick(event) {
+      var _this2 = this;
+
       if (cardsPlayed.length < 3) {
         cardsOwned.forEach(function (card, index) {
           if (card.territory === event.target.id) {
             cardsOwned.splice(index, 1);
             cardsPlayed.push(card);
           }
+
+          if (cardsPlayed.length === 3) {
+            _this2.setState({
+              canPlay: true
+            });
+          }
         });
       }
 
       this.setState({
         cardsOwned: cardsOwned,
-        cardsPlayed: cardsPlayed
+        cardsPlayed: cardsPlayed,
+        warning: ''
       });
     }
   }, {
     key: "handleDeselectCardClick",
     value: function handleDeselectCardClick(event) {
+      var _this3 = this;
+
       cardsPlayed.forEach(function (card, index) {
         if (card.territory === event.target.id) {
           cardsPlayed.splice(index, 1);
           cardsOwned.push(card);
         }
+
+        if (cardsPlayed.length < 3) {
+          _this3.setState({
+            canPlay: false
+          });
+        }
       });
       this.setState({
         cardsOwned: cardsOwned,
-        cardsPlayed: cardsPlayed
+        cardsPlayed: cardsPlayed,
+        warning: ''
       });
     }
   }, {
@@ -47592,9 +47606,9 @@ var CardsCard = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
-      console.log(this.props);
+      console.log(this.state.canPlay);
       var currentPlayer = this.props.currentPlayer;
 
       switch (currentPlayer) {
@@ -47627,40 +47641,47 @@ var CardsCard = /*#__PURE__*/function (_Component) {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-        className: "card-title"
-      }, "Play Cards"), "Section for cards owned ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row d-flex justify-content-around"
+      }, this.state.warning ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "text-danger"
+      }, " ", this.state.warning, " ") : 'Choose three cards to play', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          maxWidth: '95%'
+        },
+        className: "row d-flex flex-row justify-content-center flex-nowrap mt-2"
       }, cardsOwned !== null && cardsOwned.length > 0 ? cardsOwned.map(function (card, i) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: card.territory,
           territory: card.territory,
           troops: card.type,
           handleOnCardClick: function handleOnCardClick(e) {
-            return _this2.handleOnCardClick(e, 'select');
+            return _this4.handleOnCardClick(e, 'select');
           }
         });
-      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Section for cards to be played", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row d-flex justify-content-around"
-      }, cardsPlayed !== null && cardsPlayed.length > 0 ? cardsPlayed.map(function (card, i) {
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _defineProperty({
+        className: "row d-flex justify-content-center",
+        style: {
+          minHeight: '75px',
+          maxWidth: '95%'
+        }
+      }, "className", "row d-flex flex-row justify-content-center flex-nowrap mt-2"), cardsPlayed !== null && cardsPlayed.length > 0 ? cardsPlayed.map(function (card, i) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: card.territory,
           territory: card.territory,
           troops: card.type,
           handleOnCardClick: function handleOnCardClick(e) {
-            return _this2.handleOnCardClick(e, 'deselect');
+            return _this4.handleOnCardClick(e, 'deselect');
           }
         });
       }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick(e) {
-          return _this2.handleSubmitClick(e);
+          return _this4.handleSubmitClick(e);
         },
-        hidden: true ? false : undefined,
+        disabled: this.state.canPlay === false ? true : false,
         type: "button",
         className: "btn btn-success float-left btn-sm"
       }, "Play Cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick(e) {
-          return _this2.handleCancelClick(e);
+          return _this4.handleCancelClick(e);
         },
         hidden: true ? false : undefined,
         type: "button",
@@ -47800,14 +47821,7 @@ var DifferentTurnCard = /*#__PURE__*/function (_Component) {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "../images/afghanistan.png",
-        className: "img-thumbnail",
-        style: {
-          height: "150px"
-        },
-        alt: ""
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 

@@ -404,7 +404,7 @@ class App extends Component {
           <Map
             handleMapClick={this.handleMapClick}
           />
-          <div className="col">
+          <div className="col-4">
             <InfoCard
               activePlayer={this.state.activePlayer}
               currentPlayer={this.state.currentPlayer}
