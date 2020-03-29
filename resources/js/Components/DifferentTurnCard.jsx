@@ -12,6 +12,7 @@ class DifferentTurnCard extends Component {
       <div className="card-body">
         <h5 className="card-title">Game information</h5>
         { (this.props.activePlayer) ? `${validate.humanize(this.props.activePlayer)} player's turn` : '' }
+        <img src="../images/afghanistan.png" className="img-thumbnail" style={{height: "150px"}} alt=""/>
         <br/>
       </div>
     </div>    

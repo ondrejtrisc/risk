@@ -47800,7 +47800,14 @@ var DifferentTurnCard = /*#__PURE__*/function (_Component) {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }, "Game information"), this.props.activePlayer ? "".concat(_Functions_validate__WEBPACK_IMPORTED_MODULE_1__["default"].humanize(this.props.activePlayer), " player's turn") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "../images/afghanistan.png",
+        className: "img-thumbnail",
+        style: {
+          height: "150px"
+        },
+        alt: ""
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -53323,6 +53330,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log(data);
       object.setState({
         attackerDice: data.attackerDice
       });
