@@ -724,6 +724,20 @@ class GamestateController extends Controller
         }
 
         //returns the cards to the back of the deck
+        $player = $state->players[$state->turn];
+        foreach ($set as $cardPlayed)
+        {
+            $index = null;
+            foreach ($state->cards->$player as $i => $cardHeld)
+            {
+                if ($cardPlayed->territory === $cardHeld->territory && $cardPlayed->type === $cardHeld->type)
+                {
+                $index = $i;    
+                break;
+                }
+            }
+            array_splice($state->cards->$player, $index, 1);
+        }
         $state->deck = array_merge($state->deck, $set);
 
         //creates the new gamestate
