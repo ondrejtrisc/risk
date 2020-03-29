@@ -207,6 +207,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log(data)
         object.setState({ 
           phase: data.phase,
           players: data.players,

@@ -48052,7 +48052,7 @@ var InfoCard = /*#__PURE__*/function (_Component) {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsCard__WEBPACK_IMPORTED_MODULE_5__["default"], {
               currentPlayer: currentPlayer,
               cards: cards,
-              object: this,
+              object: object,
               game_id: game_id
             });
           } else {
@@ -53421,6 +53421,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log(data);
       object.setState({
         phase: data.phase,
         players: data.players,
