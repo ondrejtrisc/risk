@@ -46946,7 +46946,8 @@ var App = /*#__PURE__*/function (_Component) {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
         turns: this.state.turns,
-        territories: this.state.territories
+        territories: this.state.territories,
+        cards: this.state.cards
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -53067,6 +53068,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -53107,23 +53120,50 @@ var PlayerList = /*#__PURE__*/function (_Component) {
           userList = _this$props.userList,
           activePlayer = _this$props.activePlayer,
           turns = _this$props.turns,
-          territories = _this$props.territories;
-      var classList = ['danger', 'primary', 'success', 'warning', 'secondary', 'info'];
+          territories = _this$props.territories,
+          cards = _this$props.cards;
+      var style = ['#e3342f', '#3490dc', '#38c172', '#ffed4a', '#8B4513', '#9561e2'];
+      var numberOfCards = [];
+
+      if (cards.red) {
+        var players = Object.values(cards);
+        players.forEach(function (player) {
+          return numberOfCards.push(player.length);
+        });
+      }
+
+      console.log(numberOfCards);
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "list-group mb-4 ml-5"
       }, userList.map(function (user, index) {
         if (turns[index] === activePlayer) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item mb-1 border border-".concat(classList[index], " rounded")
+            className: "list-group-item mb-1 rounded",
+            style: {
+              border: "1px solid ".concat(style[index])
+            }
           }, user, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-            className: "badge badge-primary text-uppercase ml-3"
+            className: "badge badge-secondary text-uppercase ml-3"
           }, " Playing "));
         } else {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
             key: index,
-            className: "list-group-item mb-1 border border-".concat(classList[index], " rounded")
-          }, user);
+            className: "list-group-item mb-1 rounded",
+            style: {
+              border: "1px solid ".concat(style[index])
+            }
+          }, user, _toConsumableArray(Array(numberOfCards[index])).map(function (e, i) {
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+              key: i,
+              src: "../images/cards/risk_card.png",
+              className: "rounded float-right m-0",
+              style: {
+                height: "25px"
+              },
+              alt: "card_back"
+            });
+          }));
         }
       })));
     }
@@ -53675,6 +53715,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Components_App_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Components/App.jsx */ "./resources/js/Components/App.jsx");
+__webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js");
+
 __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
 

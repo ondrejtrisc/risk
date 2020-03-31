@@ -438,6 +438,7 @@ class App extends Component {
               activePlayer={this.state.activePlayer}
               turns={this.state.turns}
               territories={this.state.territories}
+              cards={this.state.cards}
 
             />
           </div>
