@@ -29,30 +29,52 @@ class GameController extends Controller
     private function usersIdStrToArrOfUserNames($game){
       $str_users_ids = $game->users_ids;
       $arr_users_ids = explode(';', $str_users_ids);
+      $user_names = "";
       foreach($arr_users_ids as $user_id){
           $user = User::findOrFail($user_id);
-          $user_names[] = $user->name;
+          $user_names = $user_names."  ".$user->name;
       }
       // dd($user_names);
       return $user_names;
     }
 
-    public function index(){
+    private function usersIdStrToArrOfUserNamesArr($game){
+        $str_users_ids = $game->users_ids;
+        $arr_users_ids = explode(';', $str_users_ids);
+        foreach($arr_users_ids as $user_id){
+            $user = User::findOrFail($user_id);
+            $user_names[] = $user->name;
+        }
+        return $user_names;
+      }
+
+      public function index(){
         $game_users = [];
+        $game_users_names_list = [];
         $num_users = [];
         $usernames_arr =[];
 
-        $games = Game::all();
+        $games = Game::where('id', '!=', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();;
         $users = User::all();
         foreach($users as $u){
             $usernames_arr[$u->id] = $u->name;
         }
         foreach($games as $game){
             $game_users[$game->id] = $this->usersIdStrToArrOfUsers($game);
+            $game_users_names_list[$game->id] = $this->usersIdStrToArrOfUserNames($game);
             $num_users[$game->id] = count($this->usersIdStrToArrOfUsers($game));
         }
+
+        if(\Auth::User()){
+            $user=\Auth::User();
+        }
         // var_dump($game_users);
-        return view('games/index', compact('games', 'game_users', 'usernames_arr', 'num_users'));
+        
+        // return view('games/index', compact('games', 'game_users', 'usernames_arr', 'num_users'));
+        $data = compact('games', 'game_users', 'game_users_names_list', 'usernames_arr', 'num_users', 'user');
+        return $data;
     }
 
     public function show($id){
@@ -63,7 +85,8 @@ class GameController extends Controller
         }
         $game_users = $this->usersIdStrToArrOfUsers($game);
         $num_users = count($this->usersIdStrToArrOfUsers($game));
-        return view('games/show', compact('game', 'game_users', 'usernames_arr', 'num_users'));  
+        // return view('games/show', compact('game', 'game_users', 'usernames_arr', 'num_users')); 
+        return $game->toJson();
     }
 
     public function create(){
@@ -78,7 +101,8 @@ class GameController extends Controller
         $game->init_deployment = $request->input('init_deployment');
         $game->status = 'join';
         $game->save();
-        return redirect('/games/'. $game->id);
+        return redirect('/home');                //'. $game->id
+        // return response()->json('Game created!');
     }
 
     public function leave(Request $request, $id){
@@ -105,18 +129,73 @@ class GameController extends Controller
     public function update(Request $request, $id){
         $game = Game::findOrFail($id);
         $game->users_ids = $game->users_ids.';'.\Auth::id();
-        // var_dump();
-        if ($game->max_users - 1 == count($this->usersIdStrToArrOfUsers($game))) { 
+        if ((int)$game->max_players == count($this->usersIdStrToArrOfUsers($game))) { 
             $game->status = 'ready';
         }
         $game->save();
-        return redirect('/games/'. $game->id);
+        // return redirect('/games');
+
+        //from index()
+        $game_users = [];
+        $game_users_names_list = [];
+        $num_users = [];
+        $usernames_arr =[];
+
+        $games = Game::where('id', '!=', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();;
+        $users = User::all();
+        foreach($users as $u){
+            $usernames_arr[$u->id] = $u->name;
+        }
+        foreach($games as $game){
+            $game_users[$game->id] = $this->usersIdStrToArrOfUsers($game);
+            $game_users_names_list[$game->id] = $this->usersIdStrToArrOfUserNames($game);
+            $num_users[$game->id] = count($this->usersIdStrToArrOfUsers($game));
+        }
+
+        if(\Auth::User()){
+            $user=\Auth::User();
+        }
+        // var_dump($game_users);
+        
+        // return view('games/index', compact('games', 'game_users', 'usernames_arr', 'num_users'));
+        $data = compact('games', 'game_users', 'game_users_names_list', 'usernames_arr', 'num_users', 'user');
+        return $data;
+
     }
 
-    public function delete($id){
+    public function delete(Request $request, $id){
         $game = Game::findOrFail($id);
         $game->delete();
-        return redirect('/games');
+        // return redirect('/games');
+        //from index()
+        $game_users = [];
+        $game_users_names_list = [];
+        $num_users = [];
+        $usernames_arr =[];
+
+        $games = Game::where('id', '!=', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();;
+        $users = User::all();
+        foreach($users as $u){
+            $usernames_arr[$u->id] = $u->name;
+        }
+        foreach($games as $game){
+            $game_users[$game->id] = $this->usersIdStrToArrOfUsers($game);
+            $game_users_names_list[$game->id] = $this->usersIdStrToArrOfUserNames($game);
+            $num_users[$game->id] = count($this->usersIdStrToArrOfUsers($game));
+        }
+
+        if(\Auth::User()){
+            $user=\Auth::User();
+        }
+        // var_dump($game_users);
+        
+        // return view('games/index', compact('games', 'game_users', 'usernames_arr', 'num_users'));
+        $data = compact('games', 'game_users', 'game_users_names_list', 'usernames_arr', 'num_users', 'user');
+        return $data;
     }
 
     public function launch($id){
@@ -136,7 +215,36 @@ class GameController extends Controller
         // $colour = $colours[$index];
         // $user_name = \Auth::user()->name;
         // return view('map/map', compact('game_id', 'colour')); //     'game/'.$id
-        return redirect('/games/'. $game->id);
+        // return redirect('/games/'. $game->id);
+
+        //from index()
+        $game_users = [];
+        $game_users_names_list = [];
+        $num_users = [];
+        $usernames_arr =[];
+
+        $games = Game::where('id', '!=', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();;
+        $users = User::all();
+        foreach($users as $u){
+            $usernames_arr[$u->id] = $u->name;
+        }
+        foreach($games as $game){
+            $game_users[$game->id] = $this->usersIdStrToArrOfUsers($game);
+            $game_users_names_list[$game->id] = $this->usersIdStrToArrOfUserNames($game);
+            $num_users[$game->id] = count($this->usersIdStrToArrOfUsers($game));
+        }
+
+        if(\Auth::User()){
+            $user=\Auth::User();
+        }
+        // var_dump($game_users);
+        
+        // return view('games/index', compact('games', 'game_users', 'usernames_arr', 'num_users'));
+        $data = compact('games', 'game_users', 'game_users_names_list', 'usernames_arr', 'num_users', 'user');
+        return $data;
+        
     }
 
     public function play($id) {
@@ -145,7 +253,7 @@ class GameController extends Controller
         $game_id = $id;
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
-        $users = $this->usersIdStrToArrOfUserNames($game);
+        $users = $this->usersIdStrToArrOfUserNamesArr($game);
         return view('map/map', compact('game_id', 'colour', 'users')); //     'game/'.$id
     }
 }

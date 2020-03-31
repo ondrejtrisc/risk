@@ -15,7 +15,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Welcome to Risk</div>
 
@@ -27,16 +27,17 @@
                     @endif
 
                     @auth
-                        <h2>Hi {{ Auth::user()->name }}, let's play!)</h2>
-                        <form action="" method="get">
+                        <h2 class="row justify-content-center">Hi {{ Auth::user()->name }}, let's play!)</h2>
+                        {{-- <form action="" method="get">
                             <button type="submit">User settings</button>
+                        </form>   --}}
+                        <form action="{{ action('GameController@create') }}" method="get" class="row justify-content-center">
+                            <button type="submit" class="btn btn-secondary btn-sm">Create a new game</button>
                         </form>  
-                        <form action="{{ action('GameController@create') }}" method="get">
-                            <button type="submit">Create a new game</button>
-                        </form>  
-                        <form action="{{ action('GameController@index') }}" method="get">
+                        {{-- <form action="{{ action('GameController@index') }}" method="get">
                             <button type="submit">Go to the game list</button>
-                        </form>  
+                        </form>   --}}
+                        <div id="lobby"></div>
                     @endauth
                 </div>
             </div>
