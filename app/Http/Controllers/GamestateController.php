@@ -219,7 +219,12 @@ class GamestateController extends Controller
         $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
         $state->unitsToDeploy = $state->unitsOfTerritorries;
         
-        $state->unitsOfContinents = 0;
+        $state->unitsOfNorthAmerica = null;
+        $state->unitsOfSouthAmerica = null;
+        $state->unitsOfEurope = null;
+        $state->unitsOfAfrica = null;
+        $state->unitsOfAsia = null;
+        $state->unitsOfAustralia = null;
         $holdsNorthAmerica = true;
         for ($i = 0; $i < 9; $i++)
         {
@@ -231,7 +236,8 @@ class GamestateController extends Controller
         }
         if ($holdsNorthAmerica)
         {
-            $state->unitsOfContinents += 5;
+            $state->unitsToDeploy += 5;
+            $state->unitsOfNorthAmerica = 5;
         }
         $holdsSouthAmerica = true;
         for ($i = 9; $i < 13; $i++)
@@ -244,7 +250,8 @@ class GamestateController extends Controller
         }
         if ($holdsSouthAmerica)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 2;
+            $state->unitsOfSouthAmerica = 2;
         }
         $holdsEurope = true;
         for ($i = 13; $i < 20; $i++)
@@ -257,7 +264,8 @@ class GamestateController extends Controller
         }
         if ($holdsEurope)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 5;
+            $state->unitsOfEurope = 5;
         }
         $holdsAfrica = true;
         for ($i = 20; $i < 26; $i++)
@@ -270,7 +278,8 @@ class GamestateController extends Controller
         }
         if ($holdsAfrica)
         {
-            $state->unitsOfContinents += 3;
+            $state->unitsToDeploy += 3;
+            $state->unitsOfAfrica = 3;
         }
         $holdsAsia = true;
         for ($i = 26; $i < 38; $i++)
@@ -283,7 +292,8 @@ class GamestateController extends Controller
         }
         if ($holdsAsia)
         {
-            $state->unitsOfContinents += 7;
+            $state->unitsToDeploy += 7;
+            $state->unitsOfAsia = 7;
         }
         $holdsAustralia = true;
         for ($i = 38; $i < 42; $i++)
@@ -296,9 +306,9 @@ class GamestateController extends Controller
         }
         if ($holdsAustralia)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 2;
+            $state->unitsOfAustralia = 2;
         }
-        $state->unitsToDeploy += $state->unitsOfContinents;
 
         $gamestate->state = json_encode($state);
 
@@ -574,7 +584,12 @@ class GamestateController extends Controller
             $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
             $state->unitsToDeploy = $state->unitsOfTerritorries;
             
-            $state->unitsOfContinents = 0;
+            $state->unitsOfNorthAmerica = null;
+            $state->unitsOfSouthAmerica = null;
+            $state->unitsOfEurope = null;
+            $state->unitsOfAfrica = null;
+            $state->unitsOfAsia = null;
+            $state->unitsOfAustralia = null;
             $holdsNorthAmerica = true;
             for ($i = 0; $i < 9; $i++)
             {
@@ -586,7 +601,8 @@ class GamestateController extends Controller
             }
             if ($holdsNorthAmerica)
             {
-                $state->unitsOfContinents += 5;
+                $state->unitsToDeploy += 5;
+                $state->unitsOfNorthAmerica = 5;
             }
             $holdsSouthAmerica = true;
             for ($i = 9; $i < 13; $i++)
@@ -599,7 +615,8 @@ class GamestateController extends Controller
             }
             if ($holdsSouthAmerica)
             {
-                $state->unitsOfContinents += 2;
+                $state->unitsToDeploy += 2;
+                $state->unitsOfSouthAmerica = 2;
             }
             $holdsEurope = true;
             for ($i = 13; $i < 20; $i++)
@@ -612,7 +629,8 @@ class GamestateController extends Controller
             }
             if ($holdsEurope)
             {
-                $state->unitsOfContinents += 2;
+                $state->unitsToDeploy += 5;
+                $state->unitsOfEurope = 5;
             }
             $holdsAfrica = true;
             for ($i = 20; $i < 26; $i++)
@@ -625,7 +643,8 @@ class GamestateController extends Controller
             }
             if ($holdsAfrica)
             {
-                $state->unitsOfContinents += 3;
+                $state->unitsToDeploy += 3;
+                $state->unitsOfAfrica = 3;
             }
             $holdsAsia = true;
             for ($i = 26; $i < 38; $i++)
@@ -638,7 +657,8 @@ class GamestateController extends Controller
             }
             if ($holdsAsia)
             {
-                $state->unitsOfContinents += 7;
+                $state->unitsToDeploy += 7;
+                $state->unitsOfAsia = 7;
             }
             $holdsAustralia = true;
             for ($i = 38; $i < 42; $i++)
@@ -651,9 +671,9 @@ class GamestateController extends Controller
             }
             if ($holdsAustralia)
             {
-                $state->unitsOfContinents += 2;
+                $state->unitsToDeploy += 2;
+                $state->unitsOfAustralia = 2;
             }
-            $state->unitsToDeploy += $state->unitsOfContinents;
         }
 
         //creates the new gamestate
@@ -712,6 +732,7 @@ class GamestateController extends Controller
         $state->unitsToDeploy += $state->unitsOfCards;
 
         $territoryBonus = false;
+        $state->bonusTerritory = null;
         foreach ($set as $card)
         {
             foreach ($state->territories as $territory)
@@ -721,6 +742,7 @@ class GamestateController extends Controller
                     if ($territory->player === $state->players[$state->turn])
                     {
                         $territoryBonus = true;
+                        $state->bonusTerritory = $territory->name;
                     }
                     break;
                 }
@@ -728,8 +750,7 @@ class GamestateController extends Controller
         }
         if ($territoryBonus)
         {
-            $state->unitsOfBonus = 2;
-            $state->unitsToDeploy += $state->unitsOfBonus;
+            $state->unitsToDeploy += 2;
         }
 
         //returns the cards to the back of the deck
@@ -1003,7 +1024,12 @@ class GamestateController extends Controller
         $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
         $state->unitsToDeploy = $state->unitsOfTerritorries;
         
-        $state->unitsOfContinents = 0;
+        $state->unitsOfNorthAmerica = null;
+        $state->unitsOfSouthAmerica = null;
+        $state->unitsOfEurope = null;
+        $state->unitsOfAfrica = null;
+        $state->unitsOfAsia = null;
+        $state->unitsOfAustralia = null;
         $holdsNorthAmerica = true;
         for ($i = 0; $i < 9; $i++)
         {
@@ -1015,7 +1041,8 @@ class GamestateController extends Controller
         }
         if ($holdsNorthAmerica)
         {
-            $state->unitsOfContinents += 5;
+            $state->unitsToDeploy += 5;
+            $state->unitsOfNorthAmerica = 5;
         }
         $holdsSouthAmerica = true;
         for ($i = 9; $i < 13; $i++)
@@ -1028,7 +1055,8 @@ class GamestateController extends Controller
         }
         if ($holdsSouthAmerica)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 2;
+            $state->unitsOfSouthAmerica = 2;
         }
         $holdsEurope = true;
         for ($i = 13; $i < 20; $i++)
@@ -1041,7 +1069,8 @@ class GamestateController extends Controller
         }
         if ($holdsEurope)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 5;
+            $state->unitsOfEurope = 5;
         }
         $holdsAfrica = true;
         for ($i = 20; $i < 26; $i++)
@@ -1054,7 +1083,8 @@ class GamestateController extends Controller
         }
         if ($holdsAfrica)
         {
-            $state->unitsOfContinents += 3;
+            $state->unitsToDeploy += 3;
+            $state->unitsOfAfrica = 3;
         }
         $holdsAsia = true;
         for ($i = 26; $i < 38; $i++)
@@ -1067,7 +1097,8 @@ class GamestateController extends Controller
         }
         if ($holdsAsia)
         {
-            $state->unitsOfContinents += 7;
+            $state->unitsToDeploy += 7;
+            $state->unitsOfAsia = 7;
         }
         $holdsAustralia = true;
         for ($i = 38; $i < 42; $i++)
@@ -1080,9 +1111,9 @@ class GamestateController extends Controller
         }
         if ($holdsAustralia)
         {
-            $state->unitsOfContinents += 2;
+            $state->unitsToDeploy += 2;
+            $state->unitsOfAustralia = 2;
         }
-        $state->unitsToDeploy += $state->unitsOfContinents;
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
@@ -1307,11 +1338,61 @@ class GamestateController extends Controller
 
             case 'deploy':
 
-
+                $enemyStrengths = [];
+                $playerStrengths = [];
+                $territoryVulnerability = [];
+                $distribution = [];
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player)
+                    {
+                        $enemyStrength = 0;
+                        foreach ($neighbours[$territory->name] as $neighbour)
+                        {
+                            foreach ($state->territories as $anotherTerritory)
+                            {
+                                if ($anotherTerritory->name === $neighbour)
+                                {
+                                    if ($anotherTerritory->player !== $player)
+                                    {
+                                        $enemyStrength += $territory->units;
+                                    }
+                                }
+                            }
+                        }
+                        $distribution[$territory->name] = 0;
+                        $enemyStrengths[$territory->name] = $enemyStrength;
+                        $playerStrengths[$territory->name] = $territory->units;
+                        $territoryVulnerability[$territory->name] = $enemyStrength / $territory->units;
+                    }
+                }
+                $availabeUnits = $state->unitsToDistribute;
+                while ($availabeUnits > 0)
+                {
+                    $theMostVulnerableTerritory = array_search(max($territoryVulnerability), $territoryVulnerability);
+                    $distribution[$theMostVulnerableTerritory]++;
+                    $availabeUnits--;
+                    $playerStrengths[$theMostVulnerableTerritory]++;
+                    $territoryVulnerability[$theMostVulnerableTerritory] = $enemyStrengths[$theMostVulnerableTerritory] / $playerStrengths[$theMostVulnerableTerritory];
+                }
+                $move = $state->territories;
+                foreach ($move as $territory)
+                {
+                    if (array_key_exists($territory->name, $distribution))
+                    {
+                        $territory->units += $distribution[$territory->name];
+                    }
+                }
+                /*
+                    play the $move
+                */
 
             break;
             
             case 'attack':
+
+
+
             break;
         }        
     }
