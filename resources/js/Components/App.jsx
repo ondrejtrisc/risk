@@ -219,7 +219,7 @@ class App extends Component {
           let updatedTerritories = JSON.parse(JSON.stringify(this.state.territories))
           updatedTerritories.map(territory => {
             if (event.target.id === territory.name) {
-              territory.units += 1
+              territory.units = Number(territory.units) + 1
             }
           })
 
@@ -404,7 +404,7 @@ class App extends Component {
           <Map
             handleMapClick={this.handleMapClick}
           />
-          <div className="col">
+          <div className="col-4">
             <InfoCard
               activePlayer={this.state.activePlayer}
               currentPlayer={this.state.currentPlayer}
@@ -438,6 +438,7 @@ class App extends Component {
               activePlayer={this.state.activePlayer}
               turns={this.state.turns}
               territories={this.state.territories}
+              cards={this.state.cards}
 
             />
           </div>

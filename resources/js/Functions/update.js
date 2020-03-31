@@ -114,6 +114,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log(data)
         object.setState({ attackerDice: data.attackerDice })
         object.setState({ defenderDice: data.defenderDice })
         object.setState({ territories: data.territories })

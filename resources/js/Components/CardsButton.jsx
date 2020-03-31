@@ -10,7 +10,8 @@ class CardsButton extends Component {
       <button 
         type="button" 
         onClick={(e) => this.props.handleCardsClick(e)}
-        className="btn btn-secondary mr-3">
+        className="btn btn-secondary mr-3"
+        >
           Cards
       </button>
       )
