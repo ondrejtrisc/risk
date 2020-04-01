@@ -23,11 +23,13 @@ class LobbyGamesList extends Component {
     if (games && users) {    //
       content = (
             <div>
+
+
                 {
                     games.map(game => (
                       <div key={ game.id } className="card">
                         <div className="card-body">
-                          <div className="created_at"><strong>Created at: </strong> { game.created_at }</div>
+                          <div className="created_at"><strong>Created at: </strong> { game.created_at.replace('T', ' ').replace('.000000Z', '') }</div>
                           <div className="founder"><strong>Created by: </strong> { users[game.id][0].name }</div>
                           <div className="players"><strong>Players: </strong> { usersList[game.id] }</div>
                           <div className="max_players"><strong>Maximum number of players: </strong> { game.max_players }</div>
@@ -74,7 +76,7 @@ class LobbyGamesList extends Component {
                     ))
                 }
             </div>
-        )
+      )
     }
 
     return (

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LobbyGamesList from './LobbyGamesList'
+import LobbyCreateGame from './LobbyCreateGame'
+import ButtonLobbyMenu from './ButtonLobbyMenu'
+
 
 export default class Lobby extends Component {
   constructor () {
@@ -10,13 +13,21 @@ export default class Lobby extends Component {
     this.handleJoinClick = this.handleJoinClick.bind(this)
     this.handleDeleteClick = this.handleDeleteClick.bind(this)
     this.handleLaunchClick = this.handleLaunchClick.bind(this)
+    this.handleMenuClick = this.handleMenuClick.bind(this)
     this.state = {
+      pageIsCreate: false,
       games: null,
       users: null,
       user: null,
       usersList: null,
       usernames_arr: null
     }
+  }
+
+  handleMenuClick(e){
+    this.setState({
+      pageIsCreate: !this.state.pageIsCreate
+    })
   }
 
   handleDeleteClick(e) {
@@ -119,27 +130,39 @@ export default class Lobby extends Component {
 
 
   render () {
-    return (
-      // <BrowserRouter>
-      //   <div>
-      //     <Switch>
-            // <Route exact path='games' component={LobbyGamesList} />
-      //     </Switch>
-      //   </div>
-      // </BrowserRouter>
+    let content = '';
+    if(this.state.pageIsCreate){ //
+      content = (
+        <div>
+          <LobbyCreateGame 
 
-      <LobbyGamesList 
-        games={this.state.games}
-        users={this.state.users}
-        usersList={this.state.usersList}
-        user={this.state.user}
-        usernames_arr={this.state.usernames_arr}
-        handleDeleteClick={this.handleDeleteClick}
-        handleJoinClick={this.handleJoinClick}
-        handleLaunchClick={this.handleLaunchClick}
-        handlePlayClick={this.handlePlayClick}
-      />
-      // <div>test</div>
+          />
+        </div>
+      )
+    }else{
+      content = (
+        <LobbyGamesList 
+          games={this.state.games}
+          users={this.state.users}
+          usersList={this.state.usersList}
+          user={this.state.user}
+          usernames_arr={this.state.usernames_arr}
+          handleDeleteClick={this.handleDeleteClick}
+          handleJoinClick={this.handleJoinClick}
+          handleLaunchClick={this.handleLaunchClick}
+          handlePlayClick={this.handlePlayClick}
+        />
+      )
+    }
+    return (
+      <>
+        <ButtonLobbyMenu 
+          pageIsCreate={this.state.pageIsCreate}
+          handleMenuClick={this.handleMenuClick}
+        />
+
+        {content}
+      </>
     )
   }
 }

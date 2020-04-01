@@ -27,17 +27,19 @@
                     @endif
 
                     @auth
-                        <h2 class="row justify-content-center">Hi {{ Auth::user()->name }}, let's play!)</h2>
-                        {{-- <form action="" method="get">
-                            <button type="submit">User settings</button>
-                        </form>   --}}
-                        <form action="{{ action('GameController@create') }}" method="get" class="row justify-content-center">
-                            <button type="submit" class="btn btn-secondary btn-sm">Create a new game</button>
-                        </form>  
-                        {{-- <form action="{{ action('GameController@index') }}" method="get">
-                            <button type="submit">Go to the game list</button>
-                        </form>   --}}
-                        <div id="lobby"></div>
+                        <div class="col">
+                            <h2 class="row justify-content-center">Hi {{ Auth::user()->name }}, let's play!)</h2>
+                            {{-- <form action="" method="get">
+                                <button type="submit">User settings</button>
+                            </form>   --}}
+                            {{-- <form action="{{ action('GameController@create') }}" method="get" class="row justify-content-center">
+                                <button type="submit" class="btn btn-secondary btn-sm">Create a new game</button>
+                            </form>   --}}
+                            {{-- <form action="{{ action('GameController@index') }}" method="get">
+                                <button type="submit">Go to the game list</button>
+                            </form>   --}}
+                            <div id="lobby" class="row justify-content-center"></div>
+                        </div>
                     @endauth
                 </div>
             </div>
