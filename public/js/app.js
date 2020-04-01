@@ -46479,7 +46479,7 @@ var App = /*#__PURE__*/function (_Component) {
       secondTerritory: '',
       blitz: false,
       game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
-      phase: 'deploy',
+      phase: '',
       unitsToDeploy: 0,
       endOfPhase: false,
       deployed_units: [],
@@ -46500,7 +46500,14 @@ var App = /*#__PURE__*/function (_Component) {
       cards: [],
       attackerLost: 0,
       defenderLost: 0,
-      unitsOfContinents: 0
+      unitsOfContinents: 0,
+      unitsOfAfrica: null,
+      unitsOfEurope: null,
+      unitsOfAustralia: null,
+      unitsOfNorthAmerica: null,
+      unitsOfSouthAmerica: null,
+      unitsOfAsia: null,
+      unitsOfTerritories: null
     };
     _this.handleMapClick = _this.handleMapClick.bind(_assertThisInitialized(_this));
     _this.handleBlitzClick = _this.handleBlitzClick.bind(_assertThisInitialized(_this));
@@ -46896,6 +46903,7 @@ var App = /*#__PURE__*/function (_Component) {
     value: function render() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
+      console.log(this.state);
       var phaseValue = "0%";
       var phaseDesc = '';
 
@@ -46950,7 +46958,14 @@ var App = /*#__PURE__*/function (_Component) {
         defenderLost: this.state.defenderLost,
         attackerLost: this.state.attackerLost,
         game_id: this.state.game_id,
-        object: this
+        object: this,
+        unitsOfAfrica: this.state.unitsOfAfrica,
+        unitsOfEurope: this.state.unitsOfEurope,
+        unitsOfAustralia: this.state.unitsOfAustralia,
+        unitsOfNorthAmerica: this.state.unitsOfNorthAmerica,
+        unitsOfSouthAmerica: this.state.unitsOfSouthAmerica,
+        unitsOfAsia: this.state.unitsOfAsia,
+        unitsOfTerritories: this.state.unitsOfTerritories
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
         userList: this.state.userList,
         activePlayer: this.state.activePlayer,
@@ -48149,14 +48164,22 @@ var DeployCard = /*#__PURE__*/function (_Component) {
   _createClass(DeployCard, [{
     key: "render",
     value: function render() {
-      var unitsToDeploy = this.props.unitsToDeploy;
+      var _this$props = this.props,
+          unitsToDeploy = _this$props.unitsToDeploy,
+          unitsOfAfrica = _this$props.unitsOfAfrica,
+          unitsOfEurope = _this$props.unitsOfEurope,
+          unitsOfAustralia = _this$props.unitsOfAustralia,
+          unitsOfNorthAmerica = _this$props.unitsOfNorthAmerica,
+          unitsOfAsia = _this$props.unitsOfAsia,
+          unitsOfSouthAmerica = _this$props.unitsOfSouthAmerica,
+          unitsOfTerritories = _this$props.unitsOfTerritories;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Deploy phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Reinforce your territories", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), unitsToDeploy > 0 ? "You still have ".concat(unitsToDeploy, " units to deploy") : 'Deployment complete')));
+      }, "Deploy phase"), unitsOfAfrica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAfrica, " units for controlling Africa")) : '', unitsOfEurope ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfEurope, " units for controlling Europe")) : '', unitsOfAustralia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAustralia, " units for controlling Australia")) : '', unitsOfNorthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfNorthAmerica, " units for controlling North America")) : '', unitsOfAsia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAsia, " units for controlling Asia")) : '', unitsOfSouthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfSouthAmerica, " units for controlling South America")) : '', unitsOfTerritories ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfTerritores, " units for controlling territories")) : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Reinforce your territories", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), unitsToDeploy > 0 ? "You still have ".concat(unitsToDeploy, " units to deploy") : 'Deployment complete')));
     }
   }]);
 
@@ -48444,6 +48467,13 @@ var InfoCard = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this$props = this.props,
           object = _this$props.object,
+          unitsOfTerritories = _this$props.unitsOfTerritories,
+          unitsOfAfrica = _this$props.unitsOfAfrica,
+          unitsOfEurope = _this$props.unitsOfEurope,
+          unitsOfAustralia = _this$props.unitsOfAustralia,
+          unitsOfNorthAmerica = _this$props.unitsOfNorthAmerica,
+          unitsOfAsia = _this$props.unitsOfAsia,
+          unitsOfSouthAmerica = _this$props.unitsOfSouthAmerica,
           game_id = _this$props.game_id,
           attackerLost = _this$props.attackerLost,
           defenderLost = _this$props.defenderLost,
@@ -48482,7 +48512,14 @@ var InfoCard = /*#__PURE__*/function (_Component) {
           } else {
             return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeployCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
               unitsToDeploy: unitsToDeploy,
-              firstTerritory: firstTerritory
+              firstTerritory: firstTerritory,
+              unitsOfAfrica: unitsOfAfrica,
+              unitsOfEurope: unitsOfEurope,
+              unitsOfAustralia: unitsOfAustralia,
+              unitsOfNorthAmerica: unitsOfNorthAmerica,
+              unitsOfSouthAmerica: unitsOfSouthAmerica,
+              unitsOfAsia: unitsOfAsia,
+              unitsOfTerritories: unitsOfTerritories
             });
           }
         } else if (phase === 'attack') {
@@ -54367,7 +54404,13 @@ var update = {
         activePlayer: data.turn,
         territories: data.territories,
         phase: data.phase,
-        unitsToDistribute: data.unitsToDistribute
+        unitsToDistribute: data.unitsToDistribute,
+        unitsOfAfrica: data.unitsOfAfrica,
+        unitsOfEurope: data.unitsOfEurope,
+        unitsOfAustralia: data.unitsOfAustralia,
+        unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+        unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+        unitsOfAsia: data.unitsOfAsia
       });
       update.addNumberOfUnits(object.state);
       update.colorTerritories(object.state);
@@ -54471,7 +54514,13 @@ var update = {
         defenderDice: data.defenderDice,
         unitsToDeploy: data.unitsToDeploy,
         activePlayer: data.players[data.turn],
-        unitsFromContinents: data.unitsOfContinents
+        unitsOfAfrica: data.unitsOfAfrica,
+        unitsOfEurope: data.unitsOfEurope,
+        unitsOfAustralia: data.unitsOfAustralia,
+        unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+        unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+        unitsOfAsia: data.unitsOfAsia,
+        unitsOfTerritories: data.unitsOfTerritories
       });
     });
   },
@@ -54827,8 +54876,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
