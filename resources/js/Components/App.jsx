@@ -24,7 +24,7 @@ class App extends Component {
       secondTerritory: '',
       blitz: false,
       game_id: document.querySelector('meta[name="game_id"]').getAttribute('content'),
-      phase: 'deploy',
+      phase: '',
       unitsToDeploy: 0,
       endOfPhase: false,
       deployed_units: [],
@@ -45,7 +45,14 @@ class App extends Component {
       cards: [],
       attackerLost: 0,
       defenderLost: 0,
-      unitsOfContinents: 0
+      unitsOfContinents: 0,
+      unitsOfAfrica: null,
+      unitsOfEurope: null,
+      unitsOfAustralia: null,
+      unitsOfNorthAmerica: null,
+      unitsOfSouthAmerica: null,
+      unitsOfAsia: null,
+      unitsOfTerritories: null
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -383,6 +390,7 @@ class App extends Component {
   render() {
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
+    console.log(this.state)
 
     let phaseValue = "0%"
     let phaseDesc = ''
@@ -438,7 +446,14 @@ class App extends Component {
               attackerLost={this.state.attackerLost}
               game_id={this.state.game_id}
               object={this}
-            />
+              unitsOfAfrica={this.state.unitsOfAfrica}
+              unitsOfEurope={this.state.unitsOfEurope}
+              unitsOfAustralia={this.state.unitsOfAustralia}
+              unitsOfNorthAmerica={this.state.unitsOfNorthAmerica}
+              unitsOfSouthAmerica={this.state.unitsOfSouthAmerica}
+              unitsOfAsia={this.state.unitsOfAsia}
+              unitsOfTerritories={this.state.unitsOfTerritories}
+              />
             <PlayerList
               userList={this.state.userList}
               activePlayer={this.state.activePlayer}
