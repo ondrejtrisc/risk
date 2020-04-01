@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import ButtonDelete from './ButtonDelete';
 import ButtonJoin from './ButtonJoin';
 import ButtonPlay from './ButtonPlay';
