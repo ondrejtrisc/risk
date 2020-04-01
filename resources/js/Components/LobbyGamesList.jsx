@@ -57,8 +57,8 @@ class LobbyGamesList extends Component {
                             </div>
                             ):('')}
                             {game.users_ids.split(";").includes(user.id.toString()) 
-                              && game.status == 'launched' 
-                              && users[game.id].length == game.max_players ? (
+                              && game.status == 'launched' ? (
+                              // && users[game.id].length == game.max_players ? (
                               <div className="col-4">
                                 <ButtonPlay 
                                   handlePlayClick={(e) => this.props.handlePlayClick(e)}
@@ -67,8 +67,8 @@ class LobbyGamesList extends Component {
                               </div> 
                             ):('')}
                             {users[game.id][0].id == user.id 
-                              && game.status != 'launched' 
-                              && users[game.id].length == game.max_players ? (
+                              && game.status != 'launched' ? (
+                              // && users[game.id].length == game.max_players ? (
                               <div className="col-4">
                                 <ButtonLaunch
                                   handleLaunchClick={(e) => this.props.handleLaunchClick(e)}

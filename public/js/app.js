@@ -49096,14 +49096,20 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
               return _this.props.handleLeaveClick(e);
             },
             game_id: game.id
-          })) : '', game.users_ids.split(";").includes(user.id.toString()) && game.status == 'launched' && users[game.id].length == game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })) : '', game.users_ids.split(";").includes(user.id.toString()) && game.status == 'launched' ?
+          /*#__PURE__*/
+          // && users[game.id].length == game.max_players ? (
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "col-4"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonPlay__WEBPACK_IMPORTED_MODULE_3__["default"], {
             handlePlayClick: function handlePlayClick(e) {
               return _this.props.handlePlayClick(e);
             },
             game_id: game.id
-          })) : '', users[game.id][0].id == user.id && game.status != 'launched' && users[game.id].length == game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })) : '', users[game.id][0].id == user.id && game.status != 'launched' ?
+          /*#__PURE__*/
+          // && users[game.id].length == game.max_players ? (
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "col-4"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLaunch__WEBPACK_IMPORTED_MODULE_4__["default"], {
             handleLaunchClick: function handleLaunchClick(e) {
