@@ -66,7 +66,6 @@ class LobbyCreateGame extends Component {
     let content = (
       <div className="loading">Loading...</div>
     );
-    console.log(this.state)
 
 
     content = (

@@ -47520,6 +47520,75 @@ var ButtonLaunch = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/js/Components/ButtonLeave.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/Components/ButtonLeave.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var ButtonLeave = /*#__PURE__*/function (_Component) {
+  _inherits(ButtonLeave, _Component);
+
+  var _super = _createSuper(ButtonLeave);
+
+  function ButtonLeave(props) {
+    _classCallCheck(this, ButtonLeave);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(ButtonLeave, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-danger btn-sm",
+        value: this.props.game_id,
+        onClick: function onClick(e) {
+          return _this.props.handleLeaveClick(e);
+        }
+      }, "Leave"));
+    }
+  }]);
+
+  return ButtonLeave;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (ButtonLeave);
+
+/***/ }),
+
 /***/ "./resources/js/Components/ButtonLobbyMenu.jsx":
 /*!*****************************************************!*\
   !*** ./resources/js/Components/ButtonLobbyMenu.jsx ***!
@@ -48544,6 +48613,7 @@ var Lobby = /*#__PURE__*/function (_Component) {
     _this.handleJoinClick = _this.handleJoinClick.bind(_assertThisInitialized(_this));
     _this.handleDeleteClick = _this.handleDeleteClick.bind(_assertThisInitialized(_this));
     _this.handleLaunchClick = _this.handleLaunchClick.bind(_assertThisInitialized(_this));
+    _this.handleLeaveClick = _this.handleLeaveClick.bind(_assertThisInitialized(_this));
     _this.handleMenuClick = _this.handleMenuClick.bind(_assertThisInitialized(_this));
     _this.state = {
       pageIsCreate: false,
@@ -48645,17 +48715,22 @@ var Lobby = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
-    key: "handlePlayClick",
-    value: function handlePlayClick(e) {
-      console.log(e.target.value);
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "handleLeaveClick",
+    value: function handleLeaveClick(e) {
       var _this5 = this;
 
-      fetch('/games').then(function (response) {
-        return response.json();
+      fetch("../games/".concat(e.target.value, "/leave"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // "Content-Type": "application/x-www-form-urlencoded",
+
+        },
+        body: JSON.stringify({
+          id: e.target.value
+        })
+      }).then(function (response) {
+        return response.json(); // parses response as JSON
       }).then(function (data) {
         _this5.setState({
           games: data.games,
@@ -48665,6 +48740,43 @@ var Lobby = /*#__PURE__*/function (_Component) {
           usernames_arr: data.usernames_arr
         });
       });
+    }
+  }, {
+    key: "handlePlayClick",
+    value: function handlePlayClick(e) {
+      console.log(e.target.value);
+    }
+  }, {
+    key: "updateGamesList",
+    value: function updateGamesList() {
+      var _this6 = this;
+
+      fetch('/games').then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        _this6.setState({
+          games: data.games,
+          users: data.game_users,
+          usersList: data.game_users_names_list,
+          user: data.user,
+          usernames_arr: data.usernames_arr
+        });
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this7 = this;
+
+      this.updateGamesList();
+      this.intervalId = setInterval(function () {
+        _this7.updateGamesList();
+      }, 2000);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.intervalId);
     }
   }, {
     key: "render",
@@ -48684,11 +48796,14 @@ var Lobby = /*#__PURE__*/function (_Component) {
           handleDeleteClick: this.handleDeleteClick,
           handleJoinClick: this.handleJoinClick,
           handleLaunchClick: this.handleLaunchClick,
-          handlePlayClick: this.handlePlayClick
+          handlePlayClick: this.handlePlayClick,
+          handleLeaveClick: this.handleLeaveClick
         });
       }
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLobbyMenu__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-10 d-flex flex-column"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLobbyMenu__WEBPACK_IMPORTED_MODULE_3__["default"], {
         pageIsCreate: this.state.pageIsCreate,
         handleMenuClick: this.handleMenuClick
       }), content);
@@ -48814,7 +48929,6 @@ var LobbyCreateGame = /*#__PURE__*/function (_Component) {
       var content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "loading"
       }, "Loading...");
-      console.log(this.state);
       content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Create a new game"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
@@ -48888,6 +49002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ButtonJoin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ButtonJoin */ "./resources/js/Components/ButtonJoin.jsx");
 /* harmony import */ var _ButtonPlay__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ButtonPlay */ "./resources/js/Components/ButtonPlay.jsx");
 /* harmony import */ var _ButtonLaunch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ButtonLaunch */ "./resources/js/Components/ButtonLaunch.jsx");
+/* harmony import */ var _ButtonLeave__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ButtonLeave */ "./resources/js/Components/ButtonLeave.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48909,6 +49024,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -48965,7 +49081,7 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Initial deployment: "), " ", game.init_deployment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "status"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Status: "), " ", game.status), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "row d-flex flex-row justify-content-start"
+            className: "row d-flex flex-wrap justify-content-start"
           }, game.users_ids.split(";").includes(user.id.toString()) == false && game.status != 'launched' && users[game.id].length < game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "col-4"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonJoin__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -48973,14 +49089,27 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
               return _this.props.handleJoinClick(e);
             },
             game_id: game.id
-          })) : '', game.users_ids.split(";").includes(user.id.toString()) && game.status == 'launched' && users[game.id].length == game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })) : '', game.users_ids.split(";").includes(user.id.toString()) == true && users[game.id][0].id != user.id && game.status != 'launched' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "col-4"
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLeave__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            handleLeaveClick: function handleLeaveClick(e) {
+              return _this.props.handleLeaveClick(e);
+            },
+            game_id: game.id
+          })) : '', game.users_ids.split(";").includes(user.id.toString()) && game.status == 'launched' ?
+          /*#__PURE__*/
+          // && users[game.id].length == game.max_players ? (
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "col-4"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonPlay__WEBPACK_IMPORTED_MODULE_3__["default"], {
             handlePlayClick: function handlePlayClick(e) {
               return _this.props.handlePlayClick(e);
             },
             game_id: game.id
-          })) : '', users[game.id][0].id == user.id && game.status != 'launched' && users[game.id].length == game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          })) : '', users[game.id][0].id == user.id && game.status != 'launched' ?
+          /*#__PURE__*/
+          // && users[game.id].length == game.max_players ? (
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "col-4"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLaunch__WEBPACK_IMPORTED_MODULE_4__["default"], {
             handleLaunchClick: function handleLaunchClick(e) {

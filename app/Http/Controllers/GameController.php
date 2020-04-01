@@ -114,7 +114,7 @@ class GameController extends Controller
         $new_users_ids = substr_replace($users_ids, '', $strpos);
         // var_dump($new_users_ids);
         $game->users_ids = $new_users_ids;
-        $game->status = 'you can join the game';
+        $game->status = 'join';
         $game->save();
 
         return redirect('/games');
@@ -204,10 +204,16 @@ class GameController extends Controller
         $game->status = 'launched';
         $game->save();
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
-        $user_colours = array_slice($colours, 0, count($this->usersIdStrToArrOfUsers($game)));
-        // dd($user_colours);
+        $user_colours = array_slice($colours, 0, $game->max_players);
+        if(count($this->usersIdStrToArrOfUsers($game)) < $game->max_players){
+            // count($this->usersIdStrToArrOfUsers($game))
+            for($i = count($this->usersIdStrToArrOfUsers($game)); $i < $game->max_players; $i++){
+                $ai_users_ids[] = $i;
+            }
+        }
+        // dd($ai_users_ids);
         $gamestate = new GamestateController;
-        $gamestate->create_initial($id, $user_colours);
+        $gamestate->create_initial($id, $user_colours, $ai_users_ids);
         $colours = ['red', 'blue', 'green', 'yellow', 'brown', 'purple'];
         // $game = Game::findOrFail($id);
         $game_id = $id;
@@ -254,6 +260,12 @@ class GameController extends Controller
         $index = array_search(\Auth::id(), $this->usersIdStrToArrOfUsersIds($game));
         $colour = $colours[$index];
         $users = $this->usersIdStrToArrOfUserNamesArr($game);
+        if(count($this->usersIdStrToArrOfUsers($game)) < $game->max_players){
+            for($i = count($this->usersIdStrToArrOfUsers($game)); $i < $game->max_players; $i++){
+                $users[] = 'Computer_'.$i;
+            }
+        }
+
         return view('map/map', compact('game_id', 'colour', 'users')); //     'game/'.$id
     }
 }
