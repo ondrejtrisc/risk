@@ -185,7 +185,8 @@ const update = {
             attackerDice: data.attackerDice,
             defenderDice: data.defenderDice,
             unitsToDeploy: data.unitsToDeploy,
-            activePlayer: data.players[data.turn]
+            activePlayer: data.players[data.turn],
+            unitsFromContinents: data.unitsOfContinents
           }
         )
       });

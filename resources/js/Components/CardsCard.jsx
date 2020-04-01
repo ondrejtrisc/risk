@@ -10,7 +10,6 @@ class CardsCard extends Component {
   constructor(props){
     super(props)
     this.handleSubmitClick = this.handleSubmitClick.bind(this)
-    this.handleCancelClick = this.handleCancelClick.bind(this)
     this.handleOnCardClick = this.handleOnCardClick.bind(this)
     
     this.state = {
@@ -37,23 +36,6 @@ class CardsCard extends Component {
         this.setState({warning: 'Cards must all be same or unique type'})
       }
     } 
-  }
-
-  handleCancelClick(event) {
-    this.setState({
-      cardsOwned: cardsOwned,
-    })
-    // console.log("cardsOwned before", cardsOwned)
-    // console.log("cardsPlayed before", cardsPlayed)
-    // console.log("props before", this.props.cards)
-    // if(cardsPlayed.length > 0){
-    //   cardsOwned = cardsOwned.concat(cardsPlayed)
-    //   cardsPlayed = []
-    // }
-    // console.log("cardsOwned after", cardsOwned)
-    // console.log("cardsPlayed after", cardsPlayed)
-    // console.log("props after", this.props.cards)
-    // this.setState({})
   }
 
   handleSelectCardClick(event){
@@ -123,7 +105,8 @@ class CardsCard extends Component {
         <div className="card-body">
           {(this.state.warning) ? (<span className="text-danger"> {this.state.warning} </span>) : 'Choose three cards to play'}
           <br />
-          <div style={{maxWidth: '95%'}} className="row d-flex flex-row justify-content-center flex-nowrap mt-2">
+          <br/>
+          <div style={{maxWidth: '95%', minHeight: '75px'}} className="row d-flex flex-row justify-content-center flex-nowrap mt-2">
             {cardsOwned !== null && cardsOwned.length > 0 ?
             cardsOwned.map((card, i) => (
               <Card 
@@ -160,18 +143,15 @@ class CardsCard extends Component {
             }
           </div>
           <br/>
-          <button 
-            onClick={(e) => this.handleSubmitClick(e)} 
-            disabled={(this.state.canPlay === false) ? true : false} type="button" 
-            className="btn btn-success float-left btn-sm"
-            >Play Cards</button>
+            <div className="row d-flex flex-row justify-content-center flex-nowrap mt-2">
+              <button 
+                onClick={(e) => this.handleSubmitClick(e)} 
+                disabled={(this.state.canPlay === false) ? true : false} type="button" 
+                className="btn btn-success btn-sm"
+                >Play Cards</button>
+            </div>
 
-          <button 
-            onClick={(e) => this.handleCancelClick(e)} 
-            hidden={true ? false : true} type="button" 
-            className="btn btn-danger float-right btn-sm">Cancel</button>
-          <br/>
-        </div>
+       </div>
       </div>    
     )
   }
