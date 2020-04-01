@@ -1391,7 +1391,24 @@ class GamestateController extends Controller
             
             case 'attack':
 
-
+                $linesOfAttack = [];
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player)
+                    {
+                        foreach ($neighbours[$territory->name] as $neighbour)
+                        {
+                            if ($neighbour->player !== $player)
+                            {
+                                $line = new stdClass();
+                                $line->attackingTerritory = $territory->name;
+                                $line->defendingTerritory = $neighbour->name;
+                                $line->ratio = $territory->units / $neighbour->units;
+                                $linesOfAttack[] = $line;
+                            }
+                        }
+                    }
+                }
 
             break;
         }        
