@@ -44,7 +44,8 @@ class App extends Component {
       clicked: false,
       cards: [],
       attackerLost: 0,
-      defenderLost: 0
+      defenderLost: 0,
+      unitsOfContinents: 0
     }
     this.handleMapClick = this.handleMapClick.bind(this)
     this.handleBlitzClick = this.handleBlitzClick.bind(this)
@@ -399,7 +400,11 @@ class App extends Component {
 
     return (
       <div className="container">
-
+        <div className="fixed-top mt-3 mr-3">
+          <a href="../home">
+            <button className="btn btn-primary float-right">Home</button> 
+          </a> 
+        </div>
         <div className="row d-flex flex-row justify-content-center align-items-end">
           <Map
             handleMapClick={this.handleMapClick}
