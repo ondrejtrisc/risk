@@ -12,16 +12,11 @@ class DeployCard extends Component {
         <div className="card ml-5 mb-4">
           <div className="card-body">
             <h5 className="card-title">Deploy phase</h5>
-            Deploy reinforcements on your territories            
             <br/>
+            Reinforce your territories            
+            <hr/>
             {(unitsToDeploy > 0) ? `You still have ${unitsToDeploy} units to deploy` : 'Deployment complete'}
-            <br />
-            How many territories you own:
-            <br/>
-            How many continents you have:
-            <br/>
-            How many units you will deploy next turn calculation
-            <br/>
+
           </div>
         </div>
 

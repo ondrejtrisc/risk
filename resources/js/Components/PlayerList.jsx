@@ -16,9 +16,6 @@ class PlayerList extends Component {
       players.forEach(player => numberOfCards.push(player.length))
     }
 
-    console.log(numberOfCards)
-
-
     return (
       <div>
         <ul className="list-group mb-4 ml-5">
@@ -32,6 +29,17 @@ class PlayerList extends Component {
                     style={{ border: `1px solid ${style[index]}` }}
                   >{user}
                     <span className="badge badge-secondary text-uppercase ml-3"> Playing </span>
+                    {[...Array(numberOfCards[index])].map((e, i) =>
+                      <img
+                        key={i}
+                        src={`../images/cards/risk_card.png`}
+                        className="rounded float-right m-0"
+                        style={{ height: "25px", marginLeft:'4px' }}
+                        alt={`card_back`}
+                      />
+                    )
+                    }
+
                   </li>
                 )
               } else {
@@ -47,8 +55,8 @@ class PlayerList extends Component {
                       <img
                         key={i}
                         src={`../images/cards/risk_card.png`}
-                        className="rounded float-right m-0"
-                        style={{ height: "25px" }}
+                        className="rounded float-right"
+                        style={{ height: "25px", marginLeft:'1px' }}
                         alt={`card_back`}
                       />
                     )

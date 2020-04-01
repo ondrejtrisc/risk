@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LobbyGamesList from './LobbyGamesList'
 import LobbyCreateGame from './LobbyCreateGame'
 import ButtonLobbyMenu from './ButtonLobbyMenu'
@@ -167,4 +165,3 @@ export default class Lobby extends Component {
   }
 }
 
-// ReactDOM.render(<Lobby />, document.getElementById('lobby'))

@@ -13,4 +13,8 @@ yarn-error.log
 /public/js/app.js.map
 /public/mix-manifest.json
 /public/css/app.css.map
+<<<<<<< HEAD
 phploy.ini
+=======
+phploy.ini
+>>>>>>> 5dcf61fa14e9d0596fc833defa5161ec007c45e9
