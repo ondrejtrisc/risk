@@ -114,7 +114,7 @@ class GameController extends Controller
         $new_users_ids = substr_replace($users_ids, '', $strpos);
         // var_dump($new_users_ids);
         $game->users_ids = $new_users_ids;
-        $game->status = 'you can join the game';
+        $game->status = 'join';
         $game->save();
 
         return redirect('/games');
