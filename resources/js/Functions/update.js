@@ -88,6 +88,12 @@ const update = {
           territories: data.territories,
           phase: data.phase,
           unitsToDistribute: data.unitsToDistribute,
+          unitsOfAfrica: data.unitsOfAfrica,
+          unitsOfEurope: data.unitsOfEurope,
+          unitsOfAustralia: data.unitsOfAustralia,
+          unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+          unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+          unitsOfAsia: data.unitsOfAsia
         })
         update.addNumberOfUnits(object.state)
         update.colorTerritories(object.state)
@@ -186,7 +192,13 @@ const update = {
             defenderDice: data.defenderDice,
             unitsToDeploy: data.unitsToDeploy,
             activePlayer: data.players[data.turn],
-            unitsFromContinents: data.unitsOfContinents
+            unitsOfAfrica: data.unitsOfAfrica,
+            unitsOfEurope: data.unitsOfEurope,
+            unitsOfAustralia: data.unitsOfAustralia,
+            unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+            unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+            unitsOfAsia: data.unitsOfAsia,
+            unitsOfTerritories: data.unitsOfTerritories
           }
         )
       });
