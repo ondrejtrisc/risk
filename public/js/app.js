@@ -46532,6 +46532,8 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
+      setTimeout(console.log('waiting'), 500);
+
       if (this.state.activePlayer === this.state.currentPlayer) {
         clearInterval(this.intervalId);
       }

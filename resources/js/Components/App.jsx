@@ -72,6 +72,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    setTimeout(console.log('waiting'), 500)
 
     if (this.state.activePlayer === this.state.currentPlayer) {
       clearInterval(this.intervalId)
