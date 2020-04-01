@@ -199,6 +199,7 @@ class GameController extends Controller
     }
 
     public function launch($id){
+        $ai_users_ids = [];
         $game = Game::findOrFail($id);
         // dd($this->usersIdStrToArrOfUsersIds($game));
         $game->status = 'launched';
