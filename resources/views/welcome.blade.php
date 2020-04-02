@@ -10,10 +10,12 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
 
+
         <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
         <style>
             html, body {
-                background-color: #fff;
                 background-image: url("/images/background.jpg");
                 background-position: center;
                 background-repeat: no-repeat;
@@ -24,7 +26,28 @@
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
+                position: relative;
             }
+            .background {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: #F8E0B0;
+                opacity: .3;
+            }
+
+            .topbar {
+                position: absolute;
+                width: 100%;
+                height: 10%;
+                background-color:  #281010;
+                opacity: .8;
+
+
+            }
+
+
+            
 
             .full-height {
                 height: 100vh;
@@ -56,11 +79,11 @@
 
             .title {
                 color: #281010;
-                font-size: 200px;
+                font-size: 180px;
             }
             .subtitle {
                 color: #281010;
-                font-size: 50px;
+                font-size: 24px;
             }
 
             .links > a {
@@ -79,6 +102,8 @@
         </style>
     </head>
     <body>
+        <div class="topbar"></div>
+        <div class="background"></div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -97,14 +122,16 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
+                <div class="title">
                     RISK
                 </div>
-
-                <div class="subtitle m-b-md">
-                    THE BOARD GAME
+                <div class="subtitle m-b-md rounded" style="background-color: #281010; padding: 15px 25px 15px 25px; opacity: .9">
+                    <h3 style="color:#F8E0B0;">Battle others for world domination in this timeless boardgame from Hasbro</h3>
                 </div>
 
+                <a href="{{ url('/home') }}">
+                    <button type="button" class="btn btn-success btn-lg mt-4">PLAY AND CONQUER</button>
+                </a>
 
                 <div class="links">
                     {{-- <a href="./description" style="color: #281010; font-size: 16px">Description and rules</a> --}}
