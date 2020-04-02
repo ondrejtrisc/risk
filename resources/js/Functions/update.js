@@ -181,7 +181,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
-        console.log(data)
+        console.log('gamestate from fortify', data)
         object.setState(
           {
             turn: data.turn,
