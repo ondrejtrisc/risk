@@ -214,6 +214,7 @@ class App extends Component {
 
     // DEPLOY PHASE
     else if (this.state.phase === 'deploy') {
+      if(this.state.cards[this.state.activePlayer].length >= 5) return
 
       //Is it a territory?
       if (validate.territoryClick(event, this) === false) {
@@ -453,6 +454,7 @@ class App extends Component {
               unitsOfSouthAmerica={this.state.unitsOfSouthAmerica}
               unitsOfAsia={this.state.unitsOfAsia}
               unitsOfTerritories={this.state.unitsOfTerritories}
+              
               />
             <PlayerList
               userList={this.state.userList}
