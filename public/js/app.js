@@ -46703,7 +46703,8 @@ var App = /*#__PURE__*/function (_Component) {
         }
       } // DEPLOY PHASE
       else if (this.state.phase === 'deploy') {
-          //Is it a territory?
+          if (this.state.cards[this.state.activePlayer].length >= 5) return; //Is it a territory?
+
           if (_Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].territoryClick(event, this) === false) {
             console.log('not territory');
             return;
@@ -48030,7 +48031,7 @@ var CardsCard = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      console.log(this.state.canPlay);
+      console.log(cardsPlayed);
       var currentPlayer = this.props.currentPlayer;
 
       switch (currentPlayer) {
@@ -48165,6 +48166,7 @@ var DeployCard = /*#__PURE__*/function (_Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
+          activePlayer = _this$props.activePlayer,
           unitsToDeploy = _this$props.unitsToDeploy,
           unitsOfAfrica = _this$props.unitsOfAfrica,
           unitsOfEurope = _this$props.unitsOfEurope,
@@ -48172,14 +48174,30 @@ var DeployCard = /*#__PURE__*/function (_Component) {
           unitsOfNorthAmerica = _this$props.unitsOfNorthAmerica,
           unitsOfAsia = _this$props.unitsOfAsia,
           unitsOfSouthAmerica = _this$props.unitsOfSouthAmerica,
-          unitsOfTerritories = _this$props.unitsOfTerritories;
+          unitsOfTerritories = _this$props.unitsOfTerritories,
+          cards = _this$props.cards;
+      console.log('cards', cards[activePlayer].length);
+      console.log('activePlayer', activePlayer);
+
+      if (cards && cards[activePlayer].length >= 5) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card ml-5 mb-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+          className: "card-title"
+        }, "Deploy phase"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          className: "text-danger"
+        }, "You have ", cards[activePlayer].length, " cards, you must play them now"))));
+      }
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
         className: "card-title"
-      }, "Deploy phase"), unitsOfAfrica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAfrica, " units for controlling Africa")) : '', unitsOfEurope ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfEurope, " units for controlling Europe")) : '', unitsOfAustralia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAustralia, " units for controlling Australia")) : '', unitsOfNorthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfNorthAmerica, " units for controlling North America")) : '', unitsOfAsia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAsia, " units for controlling Asia")) : '', unitsOfSouthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfSouthAmerica, " units for controlling South America")) : '', unitsOfTerritories ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfTerritores, " units for controlling territories")) : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Reinforce your territories", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), unitsToDeploy > 0 ? "You still have ".concat(unitsToDeploy, " units to deploy") : 'Deployment complete')));
+      }, "Deploy phase"), unitsOfAfrica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAfrica, " units for controlling Africa")) : '', unitsOfEurope ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfEurope, " units for controlling Europe")) : '', unitsOfAustralia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAustralia, " units for controlling Australia")) : '', unitsOfNorthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfNorthAmerica, " units for controlling North America")) : '', unitsOfAsia ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfAsia, " units for controlling Asia")) : '', unitsOfSouthAmerica ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfSouthAmerica, " units for controlling South America")) : '', unitsOfTerritories ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "".concat(unitsOfTerritories, " units for controlling territories")) : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), "Reinforce your territories", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), unitsToDeploy > 0 ? "You still have ".concat(unitsToDeploy, " units to deploy") : 'Deployment complete')));
     }
   }]);
 
@@ -48519,7 +48537,9 @@ var InfoCard = /*#__PURE__*/function (_Component) {
               unitsOfNorthAmerica: unitsOfNorthAmerica,
               unitsOfSouthAmerica: unitsOfSouthAmerica,
               unitsOfAsia: unitsOfAsia,
-              unitsOfTerritories: unitsOfTerritories
+              unitsOfTerritories: unitsOfTerritories,
+              cards: cards,
+              activePlayer: activePlayer
             });
           }
         } else if (phase === 'attack') {
@@ -54346,13 +54366,21 @@ var update = {
     fetch("../".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
+      console.log('data', data);
       object.setState({
         territories: data.territories,
         turns: data.players,
         activePlayer: data.turn,
         phase: data.phase,
         unitsToDeploy: data.unitsToDeploy,
-        cards: data.cards
+        cards: data.cards,
+        unitsOfAfrica: data.unitsOfAfrica,
+        unitsOfEurope: data.unitsOfEurope,
+        unitsOfAustralia: data.unitsOfAustralia,
+        unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+        unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+        unitsOfAsia: data.unitsOfAsia,
+        unitsOfTerritories: data.unitsOfTerritories
       });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
@@ -54504,7 +54532,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
-      console.log(data);
+      console.log('gamestate from fortify', data);
       object.setState({
         turn: data.turn,
         phase: data.phase,
@@ -54513,14 +54541,7 @@ var update = {
         attackerDice: data.attackerDice,
         defenderDice: data.defenderDice,
         unitsToDeploy: data.unitsToDeploy,
-        activePlayer: data.players[data.turn],
-        unitsOfAfrica: data.unitsOfAfrica,
-        unitsOfEurope: data.unitsOfEurope,
-        unitsOfAustralia: data.unitsOfAustralia,
-        unitsOfNorthAmerica: data.unitsOfNorthAmerica,
-        unitsOfSouthAmerica: data.unitsOfSouthAmerica,
-        unitsOfAsia: data.unitsOfAsia,
-        unitsOfTerritories: data.unitsOfTerritories
+        activePlayer: data.players[data.turn]
       });
     });
   },
