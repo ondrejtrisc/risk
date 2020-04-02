@@ -1362,7 +1362,7 @@ class GamestateController extends Controller
             case 'strengthen':
 
                 $continentStrength = [];
-                foreach ($contintets as $continent)
+                foreach ($continents as $continent)
                 {
                     $strength = 0;
                     foreach ($continent as $territoryIndex)
@@ -1377,7 +1377,7 @@ class GamestateController extends Controller
                 $strongestContinentIndex = array_search(max($continentStrength), $continentStrength);
 
                 $territoryVulnerability = [];
-                foreach ($contintets[$strongestContinentIndex] as $territoryIndex)
+                foreach ($continents[$strongestContinentIndex] as $territoryIndex)
                 {
                     if ($state->territories[$territoryIndex]->player === $player)
                     {
@@ -1403,7 +1403,8 @@ class GamestateController extends Controller
                         $territoryVulnerability[] = 0;
                     }
                 }
-                $theMostVulnerableTerritoryIndex = array_search(max($territoryVulnerability), $territoryVulnerability);
+                $theMostVulnerableTerritoryIndex = $continents[$strongestContinentIndex][array_search(max($territoryVulnerability), $territoryVulnerability)];
+
                 $move = new stdClass();
                 $move->territory = $state->territories[$theMostVulnerableTerritoryIndex]->name;
                 
