@@ -9950,7 +9950,7 @@ body::after {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.15;
+  opacity: 0.3;
   top: 0;
   left: 0;
   bottom: 0;
@@ -10003,5 +10003,11 @@ body::after {
 
 #map:hover {
   cursor: default;
+}
+
+.bottom {
+  width: 100%;
+  background-color: #281010;
+  opacity: 0.8;
 }
 /*# sourceMappingURL=app.css.map*/
