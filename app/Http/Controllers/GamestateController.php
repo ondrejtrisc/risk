@@ -1314,7 +1314,7 @@ class GamestateController extends Controller
                         $holdsTerritory = false;
                         foreach ($continent as $territoryIndex)
                         {
-                            if ($tate->territories[$territoryIndex]->player === $player)
+                            if ($state->territories[$territoryIndex]->player === $player)
                             {
                                 $holdsTerritory = true;
                                 break;
@@ -1322,18 +1322,18 @@ class GamestateController extends Controller
                         }
                         if ($holdsTerritory)
                         {
-                            $emptyTerritories = [];
-                            foreach ($continent as $territory)
+                            $emptyTerritoryIndices = [];
+                            foreach ($continent as $territoryIndex)
                             {
-                                if ($territory->player === null)
+                                if ($state->territories[$territoryIndex]->player === null)
                                 {
-                                    $emptyTerritories[] = $territory;
+                                    $emptyTerritoryIndices[] = $territoryIndex;
                                 }
                             }
-                            if (count($emptyTerritories) > 0)
+                            if (count($emptyTerritoryIndices) > 0)
                             {
                                 $move = new stdClass();
-                                $move->territory = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
+                                $move->territory = $state->territories[$emptyTerritoryIndices[rand(0, count($emptyTerritoryIndices) - 1)]]->name;
                                 break;
                             }
                         }
