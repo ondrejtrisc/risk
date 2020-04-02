@@ -14,7 +14,7 @@ class InfoCard extends Component {
   }
 
   render() {
-    const {object,unitsOfTerritories, unitsOfAfrica, unitsOfEurope, unitsOfAustralia, unitsOfNorthAmerica, unitsOfAsia, unitsOfSouthAmerica, game_id, attackerLost, defenderLost, activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards, handleOccupyClick, handleCancelOccupyClick, handleStrengthenClick, handleCancelStrengthenClick, unitsToDistribute} = this.props
+    const {object, unitsOfTerritories, unitsOfAfrica, unitsOfEurope, unitsOfAustralia, unitsOfNorthAmerica, unitsOfAsia, unitsOfSouthAmerica, game_id, attackerLost, defenderLost, activePlayer, cardsCard, currentPlayer, territories, phase, unitsToDeploy, firstTerritory, attackerDice, defenderDice, secondTerritory, fromFortifyUnits, toFortifyUnits, handleFromInputChange, handleToInputChange, handleFortifyButtonClick, handleCancelFortifyClick, cards, handleOccupyClick, handleCancelOccupyClick, handleStrengthenClick, handleCancelStrengthenClick, unitsToDistribute} = this.props
     if(activePlayer === currentPlayer) {
       if(phase === 'deploy') {
         if(cardsCard === true) {
@@ -40,6 +40,8 @@ class InfoCard extends Component {
               unitsOfSouthAmerica={unitsOfSouthAmerica}
               unitsOfAsia={unitsOfAsia}
               unitsOfTerritories={unitsOfTerritories}
+              cards={cards}
+              activePlayer={activePlayer}
             />
         )
       }          

@@ -23,13 +23,21 @@ const update = {
     fetch(`../${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
+        console.log('data', data)
         object.setState({ 
           territories: data.territories,
           turns: data.players,
           activePlayer: data.turn,
           phase: data.phase,
           unitsToDeploy: data.unitsToDeploy,
-          cards: data.cards
+          cards: data.cards,
+          unitsOfAfrica: data.unitsOfAfrica,
+          unitsOfEurope: data.unitsOfEurope,
+          unitsOfAustralia: data.unitsOfAustralia,
+          unitsOfNorthAmerica: data.unitsOfNorthAmerica,
+          unitsOfSouthAmerica: data.unitsOfSouthAmerica,
+          unitsOfAsia: data.unitsOfAsia,
+          unitsOfTerritories: data.unitsOfTerritories
         })
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
@@ -191,14 +199,7 @@ const update = {
             attackerDice: data.attackerDice,
             defenderDice: data.defenderDice,
             unitsToDeploy: data.unitsToDeploy,
-            activePlayer: data.players[data.turn],
-            unitsOfAfrica: data.unitsOfAfrica,
-            unitsOfEurope: data.unitsOfEurope,
-            unitsOfAustralia: data.unitsOfAustralia,
-            unitsOfNorthAmerica: data.unitsOfNorthAmerica,
-            unitsOfSouthAmerica: data.unitsOfSouthAmerica,
-            unitsOfAsia: data.unitsOfAsia,
-            unitsOfTerritories: data.unitsOfTerritories
+            activePlayer: data.players[data.turn]
           }
         )
       });

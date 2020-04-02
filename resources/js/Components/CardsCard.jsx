@@ -77,7 +77,7 @@ class CardsCard extends Component {
   }
 
   render(){
-    console.log(this.state.canPlay)
+    console.log(cardsPlayed)
     const currentPlayer = this.props.currentPlayer;
     switch (currentPlayer){
       case "red":

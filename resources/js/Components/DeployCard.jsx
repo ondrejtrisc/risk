@@ -6,7 +6,26 @@ class DeployCard extends Component {
   }
 
   render(){
-    const {unitsToDeploy, unitsOfAfrica, unitsOfEurope, unitsOfAustralia, unitsOfNorthAmerica, unitsOfAsia, unitsOfSouthAmerica, unitsOfTerritories} = this.props
+    const {activePlayer, unitsToDeploy, unitsOfAfrica, unitsOfEurope, unitsOfAustralia, unitsOfNorthAmerica, unitsOfAsia, unitsOfSouthAmerica, unitsOfTerritories, cards} = this.props
+    console.log('cards',cards[activePlayer].length)
+    console.log('activePlayer', activePlayer)
+
+    if(cards && cards[activePlayer].length >= 5) {
+      return (
+        <div>
+        <div className="card ml-5 mb-4">
+          <div className="card-body">
+            <h5 className="card-title">Deploy phase</h5>
+            <p className="text-danger">You have {cards[activePlayer].length} cards, you must play them now</p>
+
+          </div>
+        </div>
+
+      </div>
+
+      )
+
+    }
 
     return (
       <div>
@@ -19,7 +38,7 @@ class DeployCard extends Component {
             {(unitsOfNorthAmerica) ? (<p>{`${unitsOfNorthAmerica} units for controlling North America`}</p>) : ''}
             {(unitsOfAsia) ? (<p>{`${unitsOfAsia} units for controlling Asia`}</p>) : ''}
             {(unitsOfSouthAmerica) ? (<p>{`${unitsOfSouthAmerica} units for controlling South America`}</p>) : ''}
-            {(unitsOfTerritories) ? (<p>{`${unitsOfTerritores} units for controlling territories`}</p>) : ''}
+            {(unitsOfTerritories) ? (<p>{`${unitsOfTerritories} units for controlling territories`}</p>) : ''}
 
             <hr/>
             Reinforce your territories            
