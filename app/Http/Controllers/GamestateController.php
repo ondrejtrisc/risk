@@ -530,7 +530,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //checks if it is a computer's turn and if so, lets it play
-        if (array_search($state->turn, $state->computerPlayers))
+        if (array_search($state->turn, $state->computerPlayers) !== false)
         {
             $this->computers_turn($game_id);
             return $this->get_current_state($game_id);
@@ -705,7 +705,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //checks if it is a computer's turn and if so, lets it play
-        if (array_search($state->turn, $state->computerPlayers))
+        if (array_search($state->turn, $state->computerPlayers) !== false)
         {
             $this->computers_turn($game_id);
             return $this->get_current_state($game_id);
@@ -1191,7 +1191,7 @@ class GamestateController extends Controller
         $newGamestate->save();
 
         //checks if it is a computer's turn and if so, lets it play
-        if (array_search($state->turn, $state->computerPlayers))
+        if (array_search($state->turn, $state->computerPlayers) !== false)
         {
             $this->computers_turn($game_id);
             return $this->get_current_state($game_id);
@@ -1728,7 +1728,7 @@ class GamestateController extends Controller
         $state = json_decode($gamestate->state);
 
         //checks if it is a computer's turn and if so, lets it play
-        if (array_search($state->turn, $state->computerPlayers))
+        if (array_search($state->turn, $state->computerPlayers) !== false)
         {
             $this->computers_turn($game_id);
         }        
