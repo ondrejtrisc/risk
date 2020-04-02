@@ -33,7 +33,7 @@
                 width: 100%;
                 height: 100%;
                 background-color: #F8E0B0;
-                opacity: .3;
+                opacity: .4;
             }
 
             .topbar {

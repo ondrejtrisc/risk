@@ -51396,8 +51396,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
           marker: "none"
         },
         id: "eastern_australia",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51419,8 +51419,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         visibility: "visible"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "indonesia",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51436,8 +51436,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "new_guinea",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51453,8 +51453,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "alaska",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51470,8 +51470,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "ontario",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51487,8 +51487,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "northwest_territory",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51504,8 +51504,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "venezuela",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51521,8 +51521,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "madagascar",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51538,8 +51538,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "north_africa",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51555,8 +51555,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "greenland",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51574,8 +51574,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "iceland",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51600,8 +51600,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         wordSpacing: "normal"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "great_britain",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51629,8 +51629,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
           marker: "none"
         },
         id: "scandinavia",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51650,8 +51650,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         visibility: "visible"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "japan",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51672,8 +51672,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51698,8 +51698,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51724,8 +51724,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51750,8 +51750,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51776,8 +51776,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51802,8 +51802,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51828,8 +51828,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51854,8 +51854,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51880,8 +51880,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51906,8 +51906,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51932,8 +51932,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51958,8 +51958,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -51984,8 +51984,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52010,8 +52010,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52036,8 +52036,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52059,8 +52059,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         visibility: "visible"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "egypt",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52076,8 +52076,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "east_africa",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52093,8 +52093,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "central_africa",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52110,8 +52110,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "south_africa",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52127,8 +52127,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "brazil",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52144,8 +52144,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "argentina",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52161,8 +52161,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "eastern_united_states",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52178,8 +52178,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "western_united_states",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52195,8 +52195,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "eastern_canada",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52212,8 +52212,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "central_america",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52229,8 +52229,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         opacity: "1"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
         id: "peru",
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52249,8 +52249,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -52275,8 +52275,8 @@ var Map = /*#__PURE__*/function (_React$Component) {
         style: {
           marker: "none"
         },
-        fill: "#fff",
-        fillOpacity: "0",
+        fill: "#adadae",
+        fillOpacity: "1",
         fillRule: "evenodd",
         stroke: "#000",
         strokeDasharray: "none",
@@ -54906,8 +54906,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

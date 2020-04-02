@@ -2436,8 +2436,8 @@ class Map extends React.Component {
           <path
             style={{ marker: "none" }}
             id="eastern_australia"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2460,8 +2460,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="indonesia"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2478,8 +2478,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="new_guinea"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2496,8 +2496,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="alaska"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2514,8 +2514,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="ontario"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2532,8 +2532,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="northwest_territory"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2550,8 +2550,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="venezuela"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2568,8 +2568,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="madagascar"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2586,8 +2586,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="north_africa"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2604,8 +2604,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="greenland"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2624,8 +2624,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="iceland"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2651,8 +2651,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="great_britain"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2679,8 +2679,8 @@ class Map extends React.Component {
           <path
             style={{ marker: "none" }}
             id="scandinavia"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2701,8 +2701,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="japan"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2722,8 +2722,8 @@ class Map extends React.Component {
           <path
             id="yakutsk"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2747,8 +2747,8 @@ class Map extends React.Component {
           <path
             id="kamchatka"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2772,8 +2772,8 @@ class Map extends React.Component {
           <path
             id="siberia"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2797,8 +2797,8 @@ class Map extends React.Component {
           <path
             id="ural"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2822,8 +2822,8 @@ class Map extends React.Component {
           <path
             id="afghanistan"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2847,8 +2847,8 @@ class Map extends React.Component {
           <path
             id="middle_east"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2872,8 +2872,8 @@ class Map extends React.Component {
           <path
             id="india"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2897,8 +2897,8 @@ class Map extends React.Component {
           <path
             id="southeast_asia"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2922,8 +2922,8 @@ class Map extends React.Component {
           <path
             id="china"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2947,8 +2947,8 @@ class Map extends React.Component {
           <path
             id="mongolia"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2972,8 +2972,8 @@ class Map extends React.Component {
           <path
             id="irkutsk"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -2997,8 +2997,8 @@ class Map extends React.Component {
           <path
             id="russia"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3022,8 +3022,8 @@ class Map extends React.Component {
           <path
             id="southern_europe"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3047,8 +3047,8 @@ class Map extends React.Component {
           <path
             id="western_europe"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3072,8 +3072,8 @@ class Map extends React.Component {
           <path
             id="northern_europe"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3096,8 +3096,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="egypt"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3114,8 +3114,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="east_africa"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3132,8 +3132,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="central_africa"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3150,8 +3150,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="south_africa"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3168,8 +3168,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="brazil"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3186,8 +3186,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="argentina"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3204,8 +3204,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="eastern_united_states"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3222,8 +3222,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="western_united_states"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3240,8 +3240,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="eastern_canada"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3258,8 +3258,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="central_america"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3276,8 +3276,8 @@ class Map extends React.Component {
           ></path>
           <path
             id="peru"
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3297,8 +3297,8 @@ class Map extends React.Component {
           <path
             id="western_australia"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
@@ -3322,8 +3322,8 @@ class Map extends React.Component {
           <path
             id="alberta"
             style={{ marker: "none" }}
-            fill="#fff"
-            fillOpacity="0"
+            fill="#adadae"
+            fillOpacity="1"
             fillRule="evenodd"
             stroke="#000"
             strokeDasharray="none"
