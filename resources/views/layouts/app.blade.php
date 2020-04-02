@@ -15,16 +15,32 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md shadow-sm navbar-dark" 
+        style=
+        "background-color: rgb(40,16,16, .8); 
+        font-family: 'Bree Serif', serif; 
+        font-weight: 200;
+        padding: 0 25px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: .1rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        height: 60px;
+        color: #F8E0B0 !important;
+        ">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    RISK
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -37,7 +53,7 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto" style="color: #F8E0B0;">
                         <!-- Authentication Links -->
                         @guest
                             <a class="nav-link" href="{{ url('/home') }}">Home</a>
@@ -61,13 +77,13 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="background-color: #F8E0B0"; >
                                     {{-- <a class="dropdown-item" href="{{ url('/home') }}">Home</a>
                                     <a class="dropdown-item" href="{{ url('/description') }}">Description</a>
                                     <a class="dropdown-item" href="{{ url('/rules') }}">Rules</a> --}}
                 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                                       onclick="event.preventDefault();"
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>

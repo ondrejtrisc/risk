@@ -25,9 +25,20 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Welcome to Risk</div>
+        <div class="col-md-8">
+            <div class="card" style="background-color: rgb(248,224,176, .9)">
+                <div class="card-header" style="background-color: rgb(40,16,16, 1)">
+                    <h3 class="text-center" 
+                    style=
+                    "font-family: 'Bree Serif', serif; 
+                    font-weight: 200; 
+                    font-weight: 600; 
+                    color:#F8E0B0; 
+                    text-transform: uppercase;
+                    letter-spacing: .1rem;
+
+                    ">Lobby of games</h3>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -48,7 +59,7 @@
                             {{-- <form action="{{ action('GameController@index') }}" method="get">
                                 <button type="submit">Go to the game list</button>
                             </form>   --}}
-                            <div id="lobby" class="row justify-content-center"></div>
+                            <div id="lobby" class="row justify-content-center" style="background-color: rgb(248,224,176, 0)"></div>
                         </div>
                     @endauth
                 </div>

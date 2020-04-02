@@ -71,7 +71,7 @@ class LobbyCreateGame extends Component {
     content = (
       <div>
         {
-          <div className="card-body">
+          <div className="card-body" >
             <h3>Create a new game</h3>
             <form onSubmit={e => this.handleSubmit(e)} className="d-flex flex-column"> 
               <label>Number of players: </label>

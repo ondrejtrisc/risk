@@ -17,16 +17,16 @@ class FortifyCard extends Component {
 
 
   handleFromInputChange(event) {
-    this.setState({fromInput: event.target.value})
+    this.setState({fromInput: Number(event.target.value)})
   }
 
   handleToInputChange(event) {
-    this.setState({toInput : event.target.value})
+    this.setState({toInput : Number(event.target.value)})
   }
 
   render() {
     const { firstTerritory, secondTerritory, fromFortifyUnits, toFortifyUnits, handleCancelFortifyClick, handleFortifyButtonClick } = this.props
-    const maximumFortifyUnits = fromFortifyUnits + toFortifyUnits - 1
+    const maximumFortifyUnits = Number(fromFortifyUnits) + Number(toFortifyUnits) - 1
 
 
     return (
@@ -38,13 +38,13 @@ class FortifyCard extends Component {
             <div className="input-group-prepend">
               <span className="input-group-text" id="inputGroup-sizing-sm">From {validate.humanize(firstTerritory)}</span>
             </div>
-            <input type="number" onChange={(e) => this.props.handleFromInputChange(e)} value={fromFortifyUnits} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
+            <input type="number" onChange={(e) => this.props.handleFromInputChange(e)} value={Number(fromFortifyUnits)} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
           </div>
           <div className="input-group input-group-sm mb-3">
             <div className="input-group-prepend">
               <span className="input-group-text" id="inputGroup-sizing-sm">To {validate.humanize(secondTerritory)}</span>
             </div>
-            <input type="number" onChange={(e) => this.props.handleToInputChange(e)} value={toFortifyUnits} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
+            <input type="number" onChange={(e) => this.props.handleToInputChange(e)} value={Number(toFortifyUnits)} className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></input>
           </div>
 
           <button 

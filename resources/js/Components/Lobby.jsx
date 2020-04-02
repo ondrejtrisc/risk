@@ -166,8 +166,8 @@ export default class Lobby extends Component {
     if(this.state.pageIsCreate){ //
       content = (
         <div>
-          <LobbyCreateGame 
-
+          <LobbyCreateGame
+           
           />
         </div>
       )
