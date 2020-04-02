@@ -54902,8 +54902,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

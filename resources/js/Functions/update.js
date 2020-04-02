@@ -23,7 +23,7 @@ const update = {
     fetch(`../${object.state.game_id}`)
       .then(promise => promise.json())
       .then(data => {
-        console.log('data', data)
+        console.log('state_of_game', data)
         object.setState({ 
           territories: data.territories,
           turns: data.players,
@@ -61,6 +61,8 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log('occupy', data)
+
         object.setState({
           turns: data.players,
           activePlayer: data.turn,
@@ -90,6 +92,8 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log('strengthen', data)
+
         object.setState({
           turns: data.players,
           activePlayer: data.turn,
@@ -128,7 +132,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
-        console.log(data)
+        console.log('attack', data)
         object.setState({ attackerDice: data.attackerDice })
         object.setState({ defenderDice: data.defenderDice })
         object.setState({ territories: data.territories })
@@ -156,6 +160,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log('deploy', data)
         object.setState({ phase: data.phase })
       });
   },
@@ -189,6 +194,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
+        console.log('fortify', data)
         console.log('gamestate from fortify', data)
         object.setState(
           {
@@ -222,7 +228,7 @@ const update = {
     )
       .then(response => response.json())// parses response as JSON
       .then(data => {
-        console.log(data)
+        console.log('cards', data)
         object.setState({ 
           phase: data.phase,
           players: data.players,
