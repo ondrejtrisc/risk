@@ -14,15 +14,15 @@ class GamestateController extends Controller
         $game = Game::findOrFail($game_id);
         if($game->init_deployment === 'random')
         {
-            $this->create_initial_random($game_id, $players);
+            $this->create_initial_random($game_id, $players, $computerPlayers);
         }
         else
         {
-            $this->create_initial_manual($game_id, $players);
+            $this->create_initial_manual($game_id, $players, $computerPlayers);
         }
     }
 
-    public function create_initial_random($game_id, $players)
+    public function create_initial_random($game_id, $players, $computerPlayers)
     {
         $gamestate = new Gamestate();
         $gamestate->game_id = $game_id;
@@ -30,6 +30,7 @@ class GamestateController extends Controller
 
         $state = new stdClass();
         $state->players = $players;
+        $state->computerPlayers = $computerPlayers;
         $state->territories = [];
         
         $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'eastern_canada', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakutsk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
@@ -315,7 +316,7 @@ class GamestateController extends Controller
         $gamestate->save();
     }
 
-    public function create_initial_manual($game_id, $players)
+    public function create_initial_manual($game_id, $players, $computerPlayers)
     {
         $gamestate = new Gamestate();
         $gamestate->game_id = $game_id;
@@ -323,6 +324,7 @@ class GamestateController extends Controller
 
         $state = new stdClass();
         $state->players = $players;
+        $state->computerPlayers = $computerPlayers;
         $state->territories = [];
         
         $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'eastern_canada', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakutsk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
@@ -948,14 +950,31 @@ class GamestateController extends Controller
         if ($defenderEliminated)
         {
             $player = $state->players[$state->turn];
-            $state->cards->$player = array_merge($state->cards->$player, $state->cards->$defender);
-            unset($state->cards->$defender);
 
             $defenderIndex = array_search($defender, $state->players);
             array_splice($state->players, $defenderIndex, 1);
 
-            $state->phase = 'deploy';
-            $state->unitsToDeploy = 0;
+            if (count($state->cards->$defender) > 0)
+            {
+                $state->phase = 'deploy';
+                $state->unitsToDeploy = 0;
+            }
+            $state->cards->$player = array_merge($state->cards->$player, $state->cards->$defender);
+            unset($state->cards->$defender);
+
+            if (array_search($defenderIndex, $state->computerPlayers))
+            {
+                array_splice($state->computerPlayers, $defenderIndex, 1);
+            }
+            foreach ($state->computerPlayers as $computerPlayer)
+            {
+                if ($computerPlayer > $defenderIndex)
+                {
+                    $computerPlayer--;
+                }
+            }
+
+            $state->playerEliminated = $defender;
         }
 
         //creates the new gamestate
@@ -1258,10 +1277,10 @@ class GamestateController extends Controller
                         }
                         if ($continentIsEmpty)
                         {
-                            $move = $state->territories[rand($continent[0], $continent[count($continent) - 1])]->name;
-                            /*
-                                play the $move
-                            */
+                            $move = new stdClass();
+                            $move->territory = $state->territories[rand($continent[0], $continent[count($continent) - 1])]->name;
+                            //plays the move
+                            $this->occupy_process($game_id, $move);
                             break;
                         }
                     }
@@ -1292,7 +1311,8 @@ class GamestateController extends Controller
                             }
                             if (count($emptyTerritories) > 0)
                             {
-                                $move = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
+                                $move = new stdClass();
+                                $move->territory = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
                                 break;
                             }
                         }
@@ -1308,11 +1328,12 @@ class GamestateController extends Controller
                                 $emptyTerritories[] = $territory;
                             }
                         }
-                        $move = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
+                        $move = new stdClass();
+                        $move->territory = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
                     }
-                    /*
-                        play the $move
-                    */
+                
+                    //plays the move
+                    $this->occupy_process($game_id, $move);
                 }
 
             break;
@@ -1362,10 +1383,11 @@ class GamestateController extends Controller
                     }
                 }
                 $theMostVulnerableTerritoryIndex = array_search(max($territoryVulnerability), $territoryVulnerability);
-                $move = $state->territories[$theMostVulnerableTerritoryIndex]->name;
-                /*
-                    play the $move
-                */
+                $move = new stdClass();
+                $move->territory = $state->territories[$theMostVulnerableTerritoryIndex]->name;
+                
+                //plays the $move
+                $this->strengthen_process($game_id, $move);
 
             break;
 
@@ -1475,9 +1497,10 @@ class GamestateController extends Controller
                 }
                 if (count($set) === 3)
                 {
-                    /*
-                        play the cards with $set
-                    */
+                    //plays the move
+                    $move = new stdClass();
+                    $move->set = $set;
+                    $this->play_cards_process($game_id, $move);
                 }
 
                 $enemyStrengths = [];
@@ -1518,17 +1541,17 @@ class GamestateController extends Controller
                     $playerStrengths[$theMostVulnerableTerritory]++;
                     $territoryVulnerability[$theMostVulnerableTerritory] = $enemyStrengths[$theMostVulnerableTerritory] / $playerStrengths[$theMostVulnerableTerritory];
                 }
-                $move = $state->territories;
-                foreach ($move as $territory)
+                $move = new stdClass();
+                $move->territories = $state->territories;
+                foreach ($move->territories as $territory)
                 {
                     if (array_key_exists($territory->name, $distribution))
                     {
                         $territory->units += $distribution[$territory->name];
                     }
                 }
-                /*
-                    play the $move
-                */
+                //plays the move
+                $this->deploy_process($game_id, $move);
 
             break;
             
@@ -1585,9 +1608,8 @@ class GamestateController extends Controller
                 }
                 if ($move !== null)
                 {
-                    /*
-                        play the attack $move;
-                    */
+                    //play the attack move
+                    $this->attack_process($game_id, $move);
                 }
                 else
                 {
@@ -1667,18 +1689,16 @@ class GamestateController extends Controller
                     }
                     if ($move !== null)
                     {
-                        /*
-                            play the fortify $move
-                        */
+                        //play the fortify move
+                        $this->fortify_process($game_id, $move);
                     }
                     else
                     {
-                        /*
-                            play empty fortify $move
-                        */   
+                        $move = new stdClass();
+                        //play the empty fortify move
+                        $this->fortify_process($game_id, $move);
                     }
                 }
-
             break;
         }        
     }
