@@ -1579,55 +1579,62 @@ class GamestateController extends Controller
             
             case 'attack':
 
-                // $linesOfAttack = [];
-                // foreach ($state->territories as $territory)
-                // {
-                //     if ($territory->player === $player)
-                //     {
-                //         foreach ($neighbours[$territory->name] as $neighbour)
-                //         {
-                //             if ($neighbour->player !== $player)
-                //             {
-                //                 $line = new stdClass();
-                //                 $line->attackingTerritory = $territory->name;
-                //                 $line->defendingTerritory = $neighbour->name;
-                //                 $line->ratio = $territory->units / $neighbour->units;
-                //                 $linesOfAttack[] = $line;
-                //             }
-                //         }
-                //     }
-                // }
-                // $maxRatio = -1;
-                // $maxRatioIndex = -1;
-                // foreach ($linesOfAttack as $i => $line)
-                // {
-                //     if ($line->ratio > $maxRatio)
-                //     {
-                //         $maxRatio = $line->ratio;
-                //         $maxRatioIndex = $i;
-                //     }
-                // }
+                $linesOfAttack = [];
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player)
+                    {
+                        foreach ($neighbours[$territory->name] as $neighbour)
+                        {  
+                            foreach ($state->territories as $anotherTerritory)
+                            {
+                                if ($anotherTerritory->name === $neighbour)
+                                {
+                                    if ($anotherTerritory->player !== $player)
+                                    {
+                                        $line = new stdClass();
+                                        $line->attackingTerritory = $territory->name;
+                                        $line->defendingTerritory = $anotherTerritory->name;
+                                        $line->ratio = $territory->units / $anotherTerritory->units;
+                                        $linesOfAttack[] = $line;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                $maxRatio = -1;
+                $maxRatioIndex = -1;
+                foreach ($linesOfAttack as $i => $line)
+                {
+                    if ($line->ratio > $maxRatio)
+                    {
+                        $maxRatio = $line->ratio;
+                        $maxRatioIndex = $i;
+                    }
+                }
                 $move = null;
-                // if(!$state->hasGainedTerritory)
-                // {
-                //     if ($maxRatio >= 1)
-                //     {
-                //         $move = new stdClass();
-                //         $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
-                //         $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
-                //         $move->blitz = 'false';
-                //     }
-                // }
-                // else
-                // {
-                //     if ($maxRatio >= 2)
-                //     {
-                //         $move = new stdClass();
-                //         $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
-                //         $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
-                //         $move->blitz = 'false';
-                //     }
-                // }
+                if(!$state->hasGainedTerritory)
+                {
+                    if ($maxRatio >= 1)
+                    {
+                        $move = new stdClass();
+                        $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
+                        $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
+                        $move->blitz = 'false';
+                    }
+                }
+                else
+                {
+                    if ($maxRatio >= 2)
+                    {
+                        $move = new stdClass();
+                        $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
+                        $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
+                        $move->blitz = 'false';
+                    }
+                }
                 if ($move !== null)
                 {
                     //play the attack move
