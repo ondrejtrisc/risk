@@ -216,8 +216,8 @@ class GamestateController extends Controller
                 $playerHeldTerritories++;
             }
         }
-        $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
-        $state->unitsToDeploy = $state->unitsOfTerritorries;
+        $state->unitsOfTerritories = max(3, floor($playerHeldTerritories / 3));
+        $state->unitsToDeploy = $state->unitsOfTerritories;
         
         $state->unitsOfNorthAmerica = null;
         $state->unitsOfSouthAmerica = null;
@@ -591,8 +591,8 @@ class GamestateController extends Controller
                     $playerHeldTerritories++;
                 }
             }
-            $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
-            $state->unitsToDeploy = $state->unitsOfTerritorries;
+            $state->unitsOfTerritories = max(3, floor($playerHeldTerritories / 3));
+            $state->unitsToDeploy = $state->unitsOfTerritories;
             
             $state->unitsOfNorthAmerica = null;
             $state->unitsOfSouthAmerica = null;
@@ -1054,8 +1054,8 @@ class GamestateController extends Controller
                 $playerHeldTerritories++;
             }
         }
-        $state->unitsOfTerritorries = max(3, floor($playerHeldTerritories / 3));
-        $state->unitsToDeploy = $state->unitsOfTerritorries;
+        $state->unitsOfTerritories = max(3, floor($playerHeldTerritories / 3));
+        $state->unitsToDeploy = $state->unitsOfTerritories;
         
         $state->unitsOfNorthAmerica = null;
         $state->unitsOfSouthAmerica = null;
