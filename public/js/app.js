@@ -49142,16 +49142,16 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Initial deployment: "), " ", game.init_deployment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "status"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Status: "), " ", game.status), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "row d-flex flex-wrap justify-content-start"
+            className: "row d-flex flex-wrap justify-content-space-between"
           }, game.users_ids.split(";").includes(user.id.toString()) == false && game.status != 'launched' && users[game.id].length < game.max_players ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "col-4"
+            className: "col-6"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonJoin__WEBPACK_IMPORTED_MODULE_2__["default"], {
             handleJoinClick: function handleJoinClick(e) {
               return _this.props.handleJoinClick(e);
             },
             game_id: game.id
           })) : '', game.users_ids.split(";").includes(user.id.toString()) == true && users[game.id][0].id != user.id && game.status != 'launched' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "col-4"
+            className: "col-6"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLeave__WEBPACK_IMPORTED_MODULE_5__["default"], {
             handleLeaveClick: function handleLeaveClick(e) {
               return _this.props.handleLeaveClick(e);
@@ -49161,7 +49161,7 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
           /*#__PURE__*/
           // && users[game.id].length == game.max_players ? (
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "col-4"
+            className: "col-6"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonPlay__WEBPACK_IMPORTED_MODULE_3__["default"], {
             handlePlayClick: function handlePlayClick(e) {
               return _this.props.handlePlayClick(e);
@@ -49171,14 +49171,14 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
           /*#__PURE__*/
           // && users[game.id].length == game.max_players ? (
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "col-4"
+            className: "col-6"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLaunch__WEBPACK_IMPORTED_MODULE_4__["default"], {
             handleLaunchClick: function handleLaunchClick(e) {
               return _this.props.handleLaunchClick(e);
             },
             game_id: game.id
           })) : '', users[game.id][0].id == user.id && game.status != 'launched' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "col-4"
+            className: "col-6"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonDelete__WEBPACK_IMPORTED_MODULE_1__["default"], {
             handleDeleteClick: function handleDeleteClick(e) {
               return _this.props.handleDeleteClick(e);
