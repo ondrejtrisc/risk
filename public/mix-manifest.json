@@ -1,6 +1,10 @@
 {
-    "/js/app.js": "/js/app.js?id=8d3cdcab756a35d1da8c",
+    "/js/app.js": "/js/app.js?id=b6dd7d3eae0fc5b54686",
     "/css/app.css": "/css/app.css?id=6678d73966806d09c2e2",
+<<<<<<< HEAD
     "/js/app.js.map": "/js/app.js.map?id=6319da483b435378927e",
     "/css/app.css.map": "/css/app.css.map?id=fa445363fddd1948d073"
 }
+=======
+    "/js/app.js.map": "/js/app.js.map?
+>>>>>>> f989069e8ecfa22dc6e43ffb6ae8ef10eb4b8d2e
