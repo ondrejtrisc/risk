@@ -280,9 +280,9 @@ class App extends Component {
         validate.selectTerritory(event)
         this.setState({
           secondTerritory: event.target.id,
-          fromFortifyUnits: fromTerritory.units,
-          toFortifyUnits: toTerritory.units,
-          maxFortifyUnits: toTerritory.units + fromTerritory.units,
+          fromFortifyUnits: Number(fromTerritory.units),
+          toFortifyUnits: Number(toTerritory.units),
+          maxFortifyUnits: Number(toTerritory.units) + Number(fromTerritory.units),
           validFortify: true
         })
         return;
@@ -300,8 +300,8 @@ class App extends Component {
       return
     } else {
       this.setState({
-        fromFortifyUnits: event.target.value,
-        toFortifyUnits: this.state.maxFortifyUnits - event.target.value
+        fromFortifyUnits: Number(event.target.value),
+        toFortifyUnits: Number(this.state.maxFortifyUnits) - Number(event.target.value)
       })
     }
   }
@@ -311,8 +311,8 @@ class App extends Component {
       return
     } else {
       this.setState({
-        fromFortifyUnits: this.state.maxFortifyUnits - event.target.value,
-        toFortifyUnits: event.target.value
+        fromFortifyUnits: Number(this.state.maxFortifyUnits) - Number(event.target.value),
+        toFortifyUnits: Number(event.target.value)
       })
     }
   }

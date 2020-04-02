@@ -46780,9 +46780,9 @@ var App = /*#__PURE__*/function (_Component) {
               _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].selectTerritory(event);
               this.setState({
                 secondTerritory: event.target.id,
-                fromFortifyUnits: fromTerritory.units,
-                toFortifyUnits: toTerritory.units,
-                maxFortifyUnits: toTerritory.units + fromTerritory.units,
+                fromFortifyUnits: Number(fromTerritory.units),
+                toFortifyUnits: Number(toTerritory.units),
+                maxFortifyUnits: Number(toTerritory.units) + Number(fromTerritory.units),
                 validFortify: true
               });
               return;
@@ -46796,8 +46796,8 @@ var App = /*#__PURE__*/function (_Component) {
         return;
       } else {
         this.setState({
-          fromFortifyUnits: event.target.value,
-          toFortifyUnits: this.state.maxFortifyUnits - event.target.value
+          fromFortifyUnits: Number(event.target.value),
+          toFortifyUnits: Number(this.state.maxFortifyUnits) - Number(event.target.value)
         });
       }
     }
@@ -48338,14 +48338,14 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
     key: "handleFromInputChange",
     value: function handleFromInputChange(event) {
       this.setState({
-        fromInput: event.target.value
+        fromInput: Number(event.target.value)
       });
     }
   }, {
     key: "handleToInputChange",
     value: function handleToInputChange(event) {
       this.setState({
-        toInput: event.target.value
+        toInput: Number(event.target.value)
       });
     }
   }, {
@@ -48360,7 +48360,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
           toFortifyUnits = _this$props.toFortifyUnits,
           handleCancelFortifyClick = _this$props.handleCancelFortifyClick,
           handleFortifyButtonClick = _this$props.handleFortifyButtonClick;
-      var maximumFortifyUnits = fromFortifyUnits + toFortifyUnits - 1;
+      var maximumFortifyUnits = Number(fromFortifyUnits) + Number(toFortifyUnits) - 1;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card ml-5 mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -48379,7 +48379,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
         onChange: function onChange(e) {
           return _this2.props.handleFromInputChange(e);
         },
-        value: fromFortifyUnits,
+        value: Number(fromFortifyUnits),
         className: "form-control",
         "aria-label": "Small",
         "aria-describedby": "inputGroup-sizing-sm"
@@ -48395,7 +48395,7 @@ var FortifyCard = /*#__PURE__*/function (_Component) {
         onChange: function onChange(e) {
           return _this2.props.handleToInputChange(e);
         },
-        value: toFortifyUnits,
+        value: Number(toFortifyUnits),
         className: "form-control",
         "aria-label": "Small",
         "aria-describedby": "inputGroup-sizing-sm"
@@ -54906,8 +54906,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
