@@ -21,6 +21,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/description', function () {
+    return view('description');
+});
+Route::get('/rules', function () {
+    return view('rules');
+});
+
+
 Route::get('/games', 'GameController@index');
 Route::get('/games/create', 'GameController@create');
 Route::get('/games/{id}', 'GameController@show');

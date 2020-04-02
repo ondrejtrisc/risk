@@ -9944,6 +9944,21 @@ h3 {
     border-color: #dee2e6;
   }
 }
+body::after {
+  content: "";
+  background-image: url("/images/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.15;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
 .board {
   max-width: 100%;
   position: relative;

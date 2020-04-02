@@ -188,7 +188,7 @@ export default class Lobby extends Component {
       )
     }
     return (
-      <div  className="col-10 d-flex flex-column">
+      <div  className="col-12 d-flex flex-column">
         <ButtonLobbyMenu 
           pageIsCreate={this.state.pageIsCreate}
           handleMenuClick={this.handleMenuClick}

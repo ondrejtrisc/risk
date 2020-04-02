@@ -48839,7 +48839,7 @@ var Lobby = /*#__PURE__*/function (_Component) {
       }
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-10 d-flex flex-column"
+        className: "col-12 d-flex flex-column"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonLobbyMenu__WEBPACK_IMPORTED_MODULE_3__["default"], {
         pageIsCreate: this.state.pageIsCreate,
         handleMenuClick: this.handleMenuClick
@@ -49096,6 +49096,10 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
       var content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "loading"
       }, "Loading...");
+      var divStyle = {
+        'overflowY': 'scroll',
+        'height': '280px'
+      };
 
       if (games && users) {
         //
@@ -49175,7 +49179,8 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-header"
       }, "List of games"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
+        className: "card-body",
+        style: divStyle
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, content))))));
     }
   }]);
@@ -54504,7 +54509,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
-      console.log(data);
+      console.log('gamestate from fortify', data);
       object.setState({
         turn: data.turn,
         phase: data.phase,
@@ -54876,8 +54881,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

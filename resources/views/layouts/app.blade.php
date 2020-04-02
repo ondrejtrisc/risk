@@ -40,6 +40,10 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
+                            <a class="nav-link" href="{{ url('/home') }}">Home</a>
+                            <a class="nav-link" href="{{ url('/description') }}">Description</a>
+                            <a class="nav-link" href="{{ url('/rules') }}">Rules</a>
+    
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
@@ -55,6 +59,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/home') }}">Home</a>
+                                    <a class="dropdown-item" href="{{ url('/description') }}">Description</a>
+                                    <a class="dropdown-item" href="{{ url('/rules') }}">Rules</a>
+                
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

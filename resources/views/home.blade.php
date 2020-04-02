@@ -3,19 +3,29 @@
 @section('content')
 
 <style>
+    body{
+        height: 100vh;
+        background-color: #fff;
+        background-image: url("/images/background.jpg");
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
     form{
         padding: 0.2em;
-      }
-    
-      button{
-        min-width: 150px;
-      }
+    }
+
+    button{
+    min-width: 150px;
+    }
 
 </style>   
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">Welcome to Risk</div>
 

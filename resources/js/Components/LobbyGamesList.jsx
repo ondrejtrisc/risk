@@ -20,6 +20,11 @@ class LobbyGamesList extends Component {
       <div className="loading">Loading...</div>
     );
 
+    const divStyle = {
+      'overflowY': 'scroll',
+      'height': '280px'
+    }
+
     if (games && users) {    //
       content = (
             <div>
@@ -101,7 +106,7 @@ class LobbyGamesList extends Component {
           <div className='col-md-12'>
             <div className='card'>
               <div className='card-header'>List of games</div>
-              <div className='card-body'>
+              <div className='card-body'  style={divStyle}>
 
                 <div>
                   { content }
