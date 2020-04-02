@@ -529,6 +529,13 @@ class GamestateController extends Controller
         //saves the new gamestate to the database
         $newGamestate->save();
 
+        //checks if it is a computer's turn and if so, lets it play
+        if (array_search($state->turn, $state->computerPlayers) !== false)
+        {
+            $this->computers_turn($game_id);
+            return $this->get_current_state($game_id);
+        }
+
         //returns the new state to the frontend
         unset($state->deck);
         $state->turn = $state->players[$state->turn];
@@ -696,6 +703,13 @@ class GamestateController extends Controller
 
         //saves the new gamestate to the database
         $newGamestate->save();
+
+        //checks if it is a computer's turn and if so, lets it play
+        if (array_search($state->turn, $state->computerPlayers) !== false)
+        {
+            $this->computers_turn($game_id);
+            return $this->get_current_state($game_id);
+        }
 
         //returns the new state to the frontend
         unset($state->deck);
@@ -1175,6 +1189,13 @@ class GamestateController extends Controller
 
         //saves the new gamestate to the database
         $newGamestate->save();
+
+        //checks if it is a computer's turn and if so, lets it play
+        if (array_search($state->turn, $state->computerPlayers) !== false)
+        {
+            $this->computers_turn($game_id);
+            return $this->get_current_state($game_id);
+        }
 
         //returns the new state to the frontend
         unset($state->deck);
@@ -1700,6 +1721,16 @@ class GamestateController extends Controller
                     }
                 }
             break;
+        }
+
+        //gets the most recent gamestate from the database
+        $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
+        $state = json_decode($gamestate->state);
+
+        //checks if it is a computer's turn and if so, lets it play
+        if (array_search($state->turn, $state->computerPlayers) !== false)
+        {
+            $this->computers_turn($game_id);
         }        
     }
 

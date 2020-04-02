@@ -54371,7 +54371,7 @@ var update = {
     fetch("../".concat(object.state.game_id)).then(function (promise) {
       return promise.json();
     }).then(function (data) {
-      console.log('data', data);
+      console.log('state_of_game', data);
       object.setState({
         territories: data.territories,
         turns: data.players,
@@ -54406,6 +54406,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log('occupy', data);
       object.setState({
         turns: data.players,
         activePlayer: data.turn,
@@ -54432,6 +54433,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log('strengthen', data);
       object.setState({
         turns: data.players,
         activePlayer: data.turn,
@@ -54467,7 +54469,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
-      console.log(data);
+      console.log('attack', data);
       object.setState({
         attackerDice: data.attackerDice
       });
@@ -54503,6 +54505,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log('deploy', data);
       object.setState({
         phase: data.phase
       });
@@ -54537,6 +54540,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
+      console.log('fortify', data);
       console.log('gamestate from fortify', data);
       object.setState({
         turn: data.turn,
@@ -54566,7 +54570,7 @@ var update = {
       return response.json();
     }) // parses response as JSON
     .then(function (data) {
-      console.log(data);
+      console.log('cards', data);
       object.setState({
         phase: data.phase,
         players: data.players,
@@ -54902,8 +54906,8 @@ module.exports = "/images/side6.png?2f875ff09a89cc869ae40ca0bf2415c6";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\web\bootcamp\projects\risk3\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Coding\Bootcamp\projects\Final Project CLEAN\risk\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
