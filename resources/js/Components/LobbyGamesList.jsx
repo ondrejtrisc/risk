@@ -40,11 +40,11 @@ class LobbyGamesList extends Component {
                           <div className="max_players"><strong>Maximum number of players: </strong> { game.max_players }</div>
                           <div className="init_deploy"><strong>Initial deployment: </strong> { game.init_deployment }</div>
                           <div className="status"><strong>Status: </strong> { game.status }</div>
-                          <div className="row d-flex flex-wrap justify-content-start">
+                          <div className="row d-flex flex-wrap justify-content-space-between">
                             {game.users_ids.split(";").includes(user.id.toString()) == false 
                               && game.status != 'launched' 
                               && users[game.id].length < game.max_players ? (
-                            <div className="col-4">
+                            <div className="col-6">
                               <ButtonJoin
                                 handleJoinClick={(e) => this.props.handleJoinClick(e)}
                                 game_id = {game.id}
@@ -54,7 +54,7 @@ class LobbyGamesList extends Component {
                             {game.users_ids.split(";").includes(user.id.toString()) == true 
                               && users[game.id][0].id != user.id
                               && game.status != 'launched' ? (
-                            <div className="col-4">
+                            <div className="col-6">
                               <ButtonLeave
                                 handleLeaveClick={(e) => this.props.handleLeaveClick(e)}
                                 game_id = {game.id}
@@ -64,7 +64,7 @@ class LobbyGamesList extends Component {
                             {game.users_ids.split(";").includes(user.id.toString()) 
                               && game.status == 'launched' ? (
                               // && users[game.id].length == game.max_players ? (
-                              <div className="col-4">
+                              <div className="col-6">
                                 <ButtonPlay 
                                   handlePlayClick={(e) => this.props.handlePlayClick(e)}
                                   game_id = {game.id}
@@ -74,7 +74,7 @@ class LobbyGamesList extends Component {
                             {users[game.id][0].id == user.id 
                               && game.status != 'launched' ? (
                               // && users[game.id].length == game.max_players ? (
-                              <div className="col-4">
+                              <div className="col-6">
                                 <ButtonLaunch
                                   handleLaunchClick={(e) => this.props.handleLaunchClick(e)}
                                   game_id = {game.id}
@@ -83,7 +83,7 @@ class LobbyGamesList extends Component {
                             ) : (
                               '')} 
                             {users[game.id][0].id == user.id && game.status != 'launched' ? (
-                              <div className="col-4">
+                              <div className="col-6">
                                 <ButtonDelete
                                   handleDeleteClick={(e) => this.props.handleDeleteClick(e)}
                                   game_id = {game.id}
