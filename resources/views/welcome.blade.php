@@ -39,9 +39,9 @@
             .topbar {
                 position: absolute;
                 width: 100%;
-                height: 10%;
+                height: 60px;
                 background-color:  #281010;
-                opacity: .8;
+                opacity: .9;
 
 
             }
@@ -104,6 +104,7 @@
     <body>
         <div class="topbar"></div>
         <div class="background"></div>
+    
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
