@@ -408,6 +408,7 @@ class App extends Component {
 
     }
 
+    if(this.state.turns.length !== 1) {
     return (
       <div className="container">
         <div className="fixed-top mt-3 mr-3">
@@ -454,7 +455,7 @@ class App extends Component {
               unitsOfSouthAmerica={this.state.unitsOfSouthAmerica}
               unitsOfAsia={this.state.unitsOfAsia}
               unitsOfTerritories={this.state.unitsOfTerritories}
-              
+                           
               />
             <PlayerList
               userList={this.state.userList}
@@ -493,6 +494,33 @@ class App extends Component {
         </div>
       </div>
     );
+    }
+    else {
+      return (
+        <div className="container mt-5">
+          <div class="jumbotron" style={{backgroundColor: "rgb(248,224,176, .9)"}}>
+          <h1 style={{
+                    fontFamily: 'Bree Serif, serif', 
+                    fontWeight: "600", 
+                    color:"rgb(40,16,16, 1)", 
+                    textTransform: "uppercase",
+                    letterSpacing: ".1rem",
+                    
+                   }}
+                   >
+                     Player {this.state.turns[0]} has won! 
+                    </h1>
+                    <br/>
+            <p class="lead">Congratulations to the conqueror, you are now the sole hegemon of the world!</p>
+            <hr class="my-4" />
+            <p>Bask in your glory for a while and then you can return home to join more games</p>
+            <p class="lead">
+              <a class="btn btn-primary btn-lg" href="../home" role="button">HOME</a>
+            </p>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
