@@ -403,7 +403,7 @@ class App extends Component {
   render() {
     update.addNumberOfUnits(this.state)
     update.colorTerritories(this.state)
-    console.log(this.state)
+    console.log('look here', this.state)
 
     let phaseValue = "0%"
     let phaseDesc = ''

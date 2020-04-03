@@ -46915,7 +46915,7 @@ var App = /*#__PURE__*/function (_Component) {
     value: function render() {
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].addNumberOfUnits(this.state);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].colorTerritories(this.state);
-      console.log(this.state);
+      console.log('look here', this.state);
       var phaseValue = "0%";
       var phaseDesc = '';
 
