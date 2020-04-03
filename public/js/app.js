@@ -46808,8 +46808,8 @@ var App = /*#__PURE__*/function (_Component) {
         return;
       } else {
         this.setState({
-          fromFortifyUnits: this.state.maxFortifyUnits - event.target.value,
-          toFortifyUnits: event.target.value
+          fromFortifyUnits: Number(this.state.maxFortifyUnits) - Number(event.target.value),
+          toFortifyUnits: Number(event.target.value)
         });
       }
     }
@@ -46919,84 +46919,113 @@ var App = /*#__PURE__*/function (_Component) {
         phaseDesc = 'Fortify';
       }
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "fixed-top mt-3 mr-3"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "../home"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-primary float-right"
-      }, "Home"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row d-flex flex-row justify-content-center align-items-end"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Map__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        handleMapClick: this.handleMapClick
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        activePlayer: this.state.activePlayer,
-        currentPlayer: this.state.currentPlayer,
-        territories: this.state.territories,
-        attackerDice: this.state.attackerDice,
-        defenderDice: this.state.defenderDice,
-        phase: this.state.phase,
-        unitsToDeploy: this.state.unitsToDeploy,
-        firstTerritory: this.state.firstTerritory,
-        secondTerritory: this.state.secondTerritory,
-        fromFortifyUnits: this.state.fromFortifyUnits,
-        toFortifyUnits: this.state.toFortifyUnits,
-        handleFromInputChange: this.handleFromInputChange,
-        handleToInputChange: this.handleToInputChange,
-        handleCancelFortifyClick: this.handleCancelFortifyClick,
-        handleFortifyButtonClick: this.handleFortifyButtonClick,
-        handleCancelOccupyClick: this.handleCancelOccupyClick,
-        handleOccupyClick: this.handleOccupyClick,
-        handleCancelStrengthenClick: this.handleCancelStrengthenClick,
-        handleStrengthenClick: this.handleStrengthenClick,
-        cardsCard: this.state.cardsCard,
-        cards: this.state.cards,
-        unitsToDistribute: this.state.unitsToDistribute,
-        defenderLost: this.state.defenderLost,
-        attackerLost: this.state.attackerLost,
-        game_id: this.state.game_id,
-        object: this,
-        unitsOfAfrica: this.state.unitsOfAfrica,
-        unitsOfEurope: this.state.unitsOfEurope,
-        unitsOfAustralia: this.state.unitsOfAustralia,
-        unitsOfNorthAmerica: this.state.unitsOfNorthAmerica,
-        unitsOfSouthAmerica: this.state.unitsOfSouthAmerica,
-        unitsOfAsia: this.state.unitsOfAsia,
-        unitsOfTerritories: this.state.unitsOfTerritories
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        userList: this.state.userList,
-        activePlayer: this.state.activePlayer,
-        turns: this.state.turns,
-        territories: this.state.territories,
-        cards: this.state.cards
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-3 flex-row justify-content-space-between"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        blitz: this.state.blitz,
-        handleBlitzClick: this.handleBlitzClick
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
-        handleCardsClick: this.handleCardsClick
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-5 d-flex flex-row justify-content-stretch"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        phase: this.state.phase,
-        phaseValue: phaseValue,
-        phaseDesc: phaseDesc
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NextPhaseButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        handleNextPhaseClick: this.handleNextPhaseClick,
-        phaseDesc: phaseDesc,
-        endOfPhase: this.state.endOfPhase,
-        activePlayer: this.state.activePlayer,
-        currentPlayer: this.state.currentPlayer
-      }))));
+      if (this.state.turns.length !== 1) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "fixed-top mt-3 mr-3"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "../home"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-primary float-right"
+        }, "Home"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row d-flex flex-row justify-content-center align-items-end"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Map__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          handleMapClick: this.handleMapClick
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InfoCard__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          activePlayer: this.state.activePlayer,
+          currentPlayer: this.state.currentPlayer,
+          territories: this.state.territories,
+          attackerDice: this.state.attackerDice,
+          defenderDice: this.state.defenderDice,
+          phase: this.state.phase,
+          unitsToDeploy: this.state.unitsToDeploy,
+          firstTerritory: this.state.firstTerritory,
+          secondTerritory: this.state.secondTerritory,
+          fromFortifyUnits: this.state.fromFortifyUnits,
+          toFortifyUnits: this.state.toFortifyUnits,
+          handleFromInputChange: this.handleFromInputChange,
+          handleToInputChange: this.handleToInputChange,
+          handleCancelFortifyClick: this.handleCancelFortifyClick,
+          handleFortifyButtonClick: this.handleFortifyButtonClick,
+          handleCancelOccupyClick: this.handleCancelOccupyClick,
+          handleOccupyClick: this.handleOccupyClick,
+          handleCancelStrengthenClick: this.handleCancelStrengthenClick,
+          handleStrengthenClick: this.handleStrengthenClick,
+          cardsCard: this.state.cardsCard,
+          cards: this.state.cards,
+          unitsToDistribute: this.state.unitsToDistribute,
+          defenderLost: this.state.defenderLost,
+          attackerLost: this.state.attackerLost,
+          game_id: this.state.game_id,
+          object: this,
+          unitsOfAfrica: this.state.unitsOfAfrica,
+          unitsOfEurope: this.state.unitsOfEurope,
+          unitsOfAustralia: this.state.unitsOfAustralia,
+          unitsOfNorthAmerica: this.state.unitsOfNorthAmerica,
+          unitsOfSouthAmerica: this.state.unitsOfSouthAmerica,
+          unitsOfAsia: this.state.unitsOfAsia,
+          unitsOfTerritories: this.state.unitsOfTerritories
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PlayerList__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          userList: this.state.userList,
+          activePlayer: this.state.activePlayer,
+          turns: this.state.turns,
+          territories: this.state.territories,
+          cards: this.state.cards
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-3 flex-row justify-content-space-between"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ButtonBlitz__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          blitz: this.state.blitz,
+          handleBlitzClick: this.handleBlitzClick
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CardsButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          handleCardsClick: this.handleCardsClick
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-5 d-flex flex-row justify-content-stretch"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PhaseBreadcrumb__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          phase: this.state.phase,
+          phaseValue: phaseValue,
+          phaseDesc: phaseDesc
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NextPhaseButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          handleNextPhaseClick: this.handleNextPhaseClick,
+          phaseDesc: phaseDesc,
+          endOfPhase: this.state.endOfPhase,
+          activePlayer: this.state.activePlayer,
+          currentPlayer: this.state.currentPlayer
+        }))));
+      } else {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container mt-5"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          "class": "jumbotron",
+          style: {
+            backgroundColor: "rgb(248,224,176, .9)"
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+          style: {
+            fontFamily: 'Bree Serif, serif',
+            fontWeight: "600",
+            color: "rgb(40,16,16, 1)",
+            textTransform: "uppercase",
+            letterSpacing: ".1rem"
+          }
+        }, "Player ", this.state.turns[0], " has won!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          "class": "lead"
+        }, "Congratulations to the conqueror, you are now the sole hegemon of the world!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", {
+          "class": "my-4"
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Bask in your glory for a while and then you can return home to join more games"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          "class": "lead"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          "class": "btn btn-primary btn-lg",
+          href: "../home",
+          role: "button"
+        }, "HOME"))));
+      }
     }
   }]);
 
@@ -48887,6 +48916,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -48979,7 +49010,8 @@ var LobbyCreateGame = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this3 = this,
+          _ref;
 
       // const { games, users, usersList, user } = this.props;
       // console.log(this.props)
@@ -49030,9 +49062,21 @@ var LobbyCreateGame = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header"
-      }, "Create a new game"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
+        className: "card-header",
+        style: {
+          backgroundColor: "rgb(248,224,176, .4)"
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        "class": "text-center",
+        style: (_ref = {
+          fontFamily: "Bree Serif, serif",
+          fontWeight: "200"
+        }, _defineProperty(_ref, "fontWeight", "600"), _defineProperty(_ref, "color", "rgb(40,16,16, 1)"), _defineProperty(_ref, "textTransform", "uppercase"), _defineProperty(_ref, "letterSpacing", ".1rem"), _ref)
+      }, "create a new game")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body",
+        style: {
+          backgroundColor: "rgb(248,224,176, .2)"
+        }
       }, content)))));
     }
   }]);
@@ -49061,6 +49105,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ButtonLaunch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ButtonLaunch */ "./resources/js/Components/ButtonLaunch.jsx");
 /* harmony import */ var _ButtonLeave__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ButtonLeave */ "./resources/js/Components/ButtonLeave.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -49105,7 +49151,8 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
   _createClass(LobbyGamesList, [{
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this = this,
+          _ref;
 
       var _this$props = this.props,
           games = _this$props.games,
@@ -49118,7 +49165,8 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
       }, "Loading...");
       var divStyle = {
         'overflowY': 'scroll',
-        'height': '280px'
+        'height': '280px',
+        backgroundColor: "rgb(248,224,176, .2)"
       };
 
       if (games && users) {
@@ -49128,7 +49176,10 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
             key: game.id,
             className: "card"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "card-body"
+            className: "card-body",
+            style: {
+              backgroundColor: "rgb(248,224,176, .2)"
+            }
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "created_at"
           }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Created at: "), " ", game.created_at.replace('T', ' ').replace('.000000Z', '')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -49197,8 +49248,17 @@ var LobbyGamesList = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header"
-      }, "List of games"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-header",
+        style: {
+          backgroundColor: "rgb(248,224,176, .4)"
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        "class": "text-center",
+        style: (_ref = {
+          fontFamily: "Bree Serif, serif",
+          fontWeight: "200"
+        }, _defineProperty(_ref, "fontWeight", "600"), _defineProperty(_ref, "color", "rgb(40,16,16, 1)"), _defineProperty(_ref, "textTransform", "uppercase"), _defineProperty(_ref, "letterSpacing", ".1rem"), _ref)
+      }, "List of games")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body",
         style: divStyle
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, content))))));

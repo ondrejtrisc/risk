@@ -22,7 +22,8 @@ class LobbyGamesList extends Component {
 
     const divStyle = {
       'overflowY': 'scroll',
-      'height': '280px'
+      'height': '280px',
+      backgroundColor: "rgb(248,224,176, .2)"
     }
 
     if (games && users) {    //
@@ -33,7 +34,7 @@ class LobbyGamesList extends Component {
                 {
                     games.map(game => (
                       <div key={ game.id } className="card">
-                        <div className="card-body">
+                        <div className="card-body" style={{backgroundColor: "rgb(248,224,176, .2)"}}>
                           <div className="created_at"><strong>Created at: </strong> { game.created_at.replace('T', ' ').replace('.000000Z', '') }</div>
                           <div className="founder"><strong>Created by: </strong> { users[game.id][0].name }</div>
                           <div className="players"><strong>Players: </strong> { usersList[game.id] }</div>
@@ -105,7 +106,20 @@ class LobbyGamesList extends Component {
         <div className='row justify-content-center'>
           <div className='col-md-12'>
             <div className='card'>
-              <div className='card-header'>List of games</div>
+              <div className='card-header' style={{backgroundColor: "rgb(248,224,176, .4)"}}>
+              <h5 class="text-center" 
+                    style=
+                    {{
+                    fontFamily: "Bree Serif, serif",
+                    fontWeight: "200", 
+                    fontWeight: "600", 
+                    color: "rgb(40,16,16, 1)", 
+                    textTransform: "uppercase",
+                    letterSpacing: ".1rem"
+                  }}
+
+                    >List of games</h5>
+                </div>
               <div className='card-body'  style={divStyle}>
 
                 <div>

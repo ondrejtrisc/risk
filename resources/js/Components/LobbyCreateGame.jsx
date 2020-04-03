@@ -100,8 +100,21 @@ class LobbyCreateGame extends Component {
         <div className='row justify-content-center'>
           <div className='col-md-12'>
             <div className='card'>
-              <div className='card-header'>Create a new game</div>
-              <div className='card-body'>
+              <div className='card-header' style={{backgroundColor: "rgb(248,224,176, .4)"}}>
+              <h5 class="text-center" 
+                    style=
+                    {{
+                    fontFamily: "Bree Serif, serif",
+                    fontWeight: "200", 
+                    fontWeight: "600", 
+                    color: "rgb(40,16,16, 1)", 
+                    textTransform: "uppercase",
+                    letterSpacing: ".1rem"
+                  }}
+
+                    >create a new game</h5>
+                </div>
+              <div className='card-body' style={{backgroundColor: "rgb(248,224,176, .2)"}}>
 
                 {content}
 

@@ -49,7 +49,6 @@
 
                     @auth
                         <div class="col">
-                            <h2 class="row justify-content-center">Hi {{ Auth::user()->name }}, let's play!)</h2>
                             {{-- <form action="" method="get">
                                 <button type="submit">User settings</button>
                             </form>   --}}

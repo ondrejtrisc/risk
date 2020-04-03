@@ -30,8 +30,8 @@ class DeployCard extends Component {
     return (
       <div>
         <div className="card ml-5 mb-4">
-          <div className="card-body">
-            <h5 className="card-title">Deploy phase</h5>
+          <div className="card-body" >
+            <h5 className="card-title" >Deploy phase</h5>
             {(unitsOfAfrica) ? (<p>{`${unitsOfAfrica} units for controlling Africa`}</p>) : ''}
             {(unitsOfEurope) ? (<p>{`${unitsOfEurope} units for controlling Europe`}</p>) : ''}
             {(unitsOfAustralia) ? (<p>{`${unitsOfAustralia} units for controlling Australia`}</p>) : ''}

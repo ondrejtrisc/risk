@@ -16,9 +16,20 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header" style="background-color: rgb(40,16,16, 1)">
+                    <h3 class="text-center" 
+                        style=
+                        "font-family: 'Bree Serif', serif; 
+                        font-weight: 200; 
+                        font-weight: 600; 
+                        color:#F8E0B0; 
+                        text-transform: uppercase;
+                        letter-spacing: .1rem;
+    
+                        ">Register</h3>
+                </div>
 
-                <div class="card-body">
+                <div class="card-body" style="background-color: rgb(248,224,176)">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 

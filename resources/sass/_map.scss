@@ -1,3 +1,8 @@
+body {
+  background-color: rgb(40,16,16, .3);
+
+}
+
 body::after {
   content: "";
   background-image: url("/images/background.jpg");
@@ -52,7 +57,7 @@ body::after {
 .selected {
   fill: none;
   fill-opacity: 1 !important;
-  fill:#4a4a4b !important;
+  fill:rgb(74,74,75, 1)!important;
   z-index: 99;
 }
 
