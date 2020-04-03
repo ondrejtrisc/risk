@@ -25,7 +25,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header" style="background-color: rgb(40,16,16, 1)">
                     <h3 class="text-center" 

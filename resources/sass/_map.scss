@@ -1,3 +1,8 @@
+body {
+  background-color: rgb(40,16,16, .3);
+
+}
+
 body::after {
   content: "";
   background-image: url("/images/background.jpg");

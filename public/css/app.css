@@ -9944,6 +9944,10 @@ h3 {
     border-color: #dee2e6;
   }
 }
+body {
+  background-color: rgba(40, 16, 16, 0.3);
+}
+
 body::after {
   content: "";
   background-image: url("/images/background.jpg");
