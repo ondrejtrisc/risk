@@ -138,6 +138,7 @@ const update = {
         object.setState({ territories: data.territories })
         object.setState({ attackerLost: data.attackerLost })
         object.setState({ defenderLost: data.defenderLost })
+        object.setState({ turns: data.players })
         update.colorTerritories(object.state)
         update.addNumberOfUnits(object.state)
       });

@@ -83,7 +83,7 @@ class App extends Component {
 
     if (this.state.activePlayer === this.state.currentPlayer) {
       clearInterval(this.intervalId)
-    } 
+    }
   }
 
   componentWillUnmount() {
@@ -110,6 +110,17 @@ class App extends Component {
       }
     } else if (this.state.phase === 'fortify') {
       update.sendFortifyToServer(this, false)
+      validate.deselectAllTerritories(this)
+      this.setState({
+        firstTerritory: '',
+        secondTerritory: '',
+        fromFortifyUnits: 0,
+        toFortifyUnits: 0,
+        maxFortifyUnits: 0,
+        validFortify: false,
+        activePlayer: 'Waiting for next '
+      })
+
       this.intervalId = setInterval(() => update.getStateOfGame(this), 2000)
     }
   }
@@ -339,7 +350,8 @@ class App extends Component {
       fromFortifyUnits: 0,
       toFortifyUnits: 0,
       maxFortifyUnits: 0,
-      validFortify: false
+      validFortify: false,
+      activePlayer: 'Waiting for next '
     })
     this.intervalId = setInterval(() => {update.getStateOfGame(this)}, 2000)
   }
@@ -370,7 +382,7 @@ class App extends Component {
   handleStrengthenClick(event) {
     this.setState({
       firstTerritory: '',
-      activePlayer: 'no one',
+      activePlayer: 'Waiting for next ',
 
     })
     validate.deselectAllTerritories(this)

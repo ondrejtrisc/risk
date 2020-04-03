@@ -46585,6 +46585,16 @@ var App = /*#__PURE__*/function (_Component) {
         }
       } else if (this.state.phase === 'fortify') {
         _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendFortifyToServer(this, false);
+        _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
+        this.setState({
+          firstTerritory: '',
+          secondTerritory: '',
+          fromFortifyUnits: 0,
+          toFortifyUnits: 0,
+          maxFortifyUnits: 0,
+          validFortify: false,
+          activePlayer: 'Waiting for next '
+        });
         this.intervalId = setInterval(function () {
           return _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this3);
         }, 2000);
@@ -46840,7 +46850,8 @@ var App = /*#__PURE__*/function (_Component) {
         fromFortifyUnits: 0,
         toFortifyUnits: 0,
         maxFortifyUnits: 0,
-        validFortify: false
+        validFortify: false,
+        activePlayer: 'Waiting for next '
       });
       this.intervalId = setInterval(function () {
         _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].getStateOfGame(_this5);
@@ -46883,7 +46894,7 @@ var App = /*#__PURE__*/function (_Component) {
 
       this.setState({
         firstTerritory: '',
-        activePlayer: 'no one'
+        activePlayer: 'Waiting for next '
       });
       _Functions_validate__WEBPACK_IMPORTED_MODULE_3__["default"].deselectAllTerritories(this);
       _Functions_update__WEBPACK_IMPORTED_MODULE_4__["default"].sendStrengthenToServer(this, this.state.firstTerritory);
@@ -54544,6 +54555,9 @@ var update = {
       });
       object.setState({
         defenderLost: data.defenderLost
+      });
+      object.setState({
+        turns: data.players
       });
       update.colorTerritories(object.state);
       update.addNumberOfUnits(object.state);
