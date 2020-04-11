@@ -38,7 +38,6 @@ Route::post('/games/{id}/launch', 'GameController@launch');
 Route::get('/games/{id}/edit', 'GameController@edit');
 Route::post('/games/{id}/update', 'GameController@update');
 Route::delete('/games/{id}/delete', 'GameController@delete');
-Route::get('/test', 'GamestateController@test');
 Route::post('/occupy/{game_id}', 'GamestateController@occupy');
 Route::post('/strengthen/{game_id}', 'GamestateController@strengthen');
 Route::post('/playcards/{game_id}', 'GamestateController@play_cards');

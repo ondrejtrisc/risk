@@ -58,7 +58,7 @@ class GamestateController extends Controller
                 case 'southeast_asia':
                 case 'venezuela':
                     $card->type = 'infantry';
-                    break;
+                break;
                 case 'afghanistan':
                 case 'alberta':
                 case 'eastern_canada':
@@ -74,7 +74,7 @@ class GamestateController extends Controller
                 case 'ural':
                 case 'yakutsk':
                     $card->type = 'cavalry';
-                    break;
+                break;
                 case 'brazil':
                 case 'central_america':
                 case 'eastern_australia':
@@ -90,7 +90,7 @@ class GamestateController extends Controller
                 case 'western_europe':
                 case 'western_united_states':
                     $card->type = 'artillery';
-                    break;
+                break;
             }
             $deck[] = $card;
         }
@@ -1269,511 +1269,484 @@ class GamestateController extends Controller
             [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
             [38, 39, 40, 41]
         ];
-
-        try
+        
+        switch ($state->phase)
         {
-            switch ($state->phase)
-            {
-                case 'occupy':
+            case 'occupy':
 
-                    $firstMove = true;
-                    foreach ($state->territories as $territory)
+                $firstMove = true;
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player)
                     {
-                        if ($territory->player === $player)
-                        {
-                            $firstMove = false;
-                            break;
-                        }
+                        $firstMove = false;
+                        break;
                     }
-                    if ($firstMove)
+                }
+                if ($firstMove)
+                {
+                    foreach ($continents as $continent)
                     {
-                        foreach ($continents as $continent)
+                        $continentIsEmpty = true;
+                        foreach ($continent as $territoryIndex)
                         {
-                            $continentIsEmpty = true;
-                            foreach ($continent as $territoryIndex)
+                            if ($state->territories[$territoryIndex]->player !== null)
                             {
-                                if ($state->territories[$territoryIndex]->player !== null)
-                                {
-                                    $continentIsEmpty = false;
-                                    break;
-                                }
-                            }
-                            if ($continentIsEmpty)
-                            {
-                                $move = new stdClass();
-                                $move->territory = $state->territories[rand($continent[0], $continent[count($continent) - 1])]->name;
-                                //plays the move
-                                $this->occupy_process($game_id, $move);
+                                $continentIsEmpty = false;
                                 break;
                             }
                         }
-                    }
-                    else
-                    {
-                        $move = null;
-                        foreach ($continents as $continent)
+                        if ($continentIsEmpty)
                         {
-                            $holdsTerritory = false;
-                            foreach ($continent as $territoryIndex)
-                            {
-                                if ($state->territories[$territoryIndex]->player === $player)
-                                {
-                                    $holdsTerritory = true;
-                                    break;
-                                }
-                            }
-                            if ($holdsTerritory)
-                            {
-                                $emptyTerritoryIndices = [];
-                                foreach ($continent as $territoryIndex)
-                                {
-                                    if ($state->territories[$territoryIndex]->player === null)
-                                    {
-                                        $emptyTerritoryIndices[] = $territoryIndex;
-                                    }
-                                }
-                                if (count($emptyTerritoryIndices) > 0)
-                                {
-                                    $move = new stdClass();
-                                    $move->territory = $state->territories[$emptyTerritoryIndices[rand(0, count($emptyTerritoryIndices) - 1)]]->name;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if ($move === null)
-                        {
-                            $emptyTerritories = [];
-                            foreach ($state->territories as $territory)
-                            {
-                                if ($territory->player === null)
-                                {
-                                    $emptyTerritories[] = $territory;
-                                }
-                            }
                             $move = new stdClass();
-                            $move->territory = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
+                            $move->territory = $state->territories[rand($continent[0], $continent[count($continent) - 1])]->name;
+                            //plays the move
+                            $this->occupy_process($game_id, $move);
+                            break;
                         }
-                    
-                        //plays the move
-                        $this->occupy_process($game_id, $move);
                     }
-
-                break;
-
-                case 'strengthen':
-
-                    $continentStrength = [];
+                }
+                else
+                {
+                    $move = null;
                     foreach ($continents as $continent)
                     {
-                        $strength = 0;
+                        $holdsTerritory = false;
                         foreach ($continent as $territoryIndex)
                         {
                             if ($state->territories[$territoryIndex]->player === $player)
                             {
-                                $strength += $state->territories[$territoryIndex]->units;
+                                $holdsTerritory = true;
+                                break;
                             }
                         }
-                        $continentStrength[] = $strength;
+                        if ($holdsTerritory)
+                        {
+                            $emptyTerritoryIndices = [];
+                            foreach ($continent as $territoryIndex)
+                            {
+                                if ($state->territories[$territoryIndex]->player === null)
+                                {
+                                    $emptyTerritoryIndices[] = $territoryIndex;
+                                }
+                            }
+                            if (count($emptyTerritoryIndices) > 0)
+                            {
+                                $move = new stdClass();
+                                $move->territory = $state->territories[$emptyTerritoryIndices[rand(0, count($emptyTerritoryIndices) - 1)]]->name;
+                                break;
+                            }
+                        }
                     }
-                    $strongestContinentIndex = array_search(max($continentStrength), $continentStrength);
 
-                    $territoryVulnerability = [];
-                    foreach ($continents[$strongestContinentIndex] as $territoryIndex)
+                    if ($move === null)
+                    {
+                        $emptyTerritories = [];
+                        foreach ($state->territories as $territory)
+                        {
+                            if ($territory->player === null)
+                            {
+                                $emptyTerritories[] = $territory;
+                            }
+                        }
+                        $move = new stdClass();
+                        $move->territory = $emptyTerritories[rand(0, count($emptyTerritories) - 1)]->name;
+                    }
+                
+                    //plays the move
+                    $this->occupy_process($game_id, $move);
+                }
+
+            break;
+
+            case 'strengthen':
+
+                $continentStrength = [];
+                foreach ($continents as $continent)
+                {
+                    $strength = 0;
+                    foreach ($continent as $territoryIndex)
                     {
                         if ($state->territories[$territoryIndex]->player === $player)
                         {
-                            $enemyStrength = 0;
-                            $territoryName = $state->territories[$territoryIndex]->name;
-                            foreach ($neighbours[$territoryName] as $neighbour)
-                            {
-                                foreach ($state->territories as $territory)
-                                {
-                                    if ($territory->name === $neighbour)
-                                    {
-                                        if ($territory->player !== $player)
-                                        {
-                                            $enemyStrength += $territory->units;
-                                        }
-                                    }
-                                }
-                            }
-                            $territoryVulnerability[] = $enemyStrength / $state->territories[$territoryIndex]->units;
-                        }
-                        else
-                        {
-                            $territoryVulnerability[] = 0;
+                            $strength += $state->territories[$territoryIndex]->units;
                         }
                     }
-                    $theMostVulnerableTerritoryIndex = $continents[$strongestContinentIndex][array_search(max($territoryVulnerability), $territoryVulnerability)];
+                    $continentStrength[] = $strength;
+                }
+                $strongestContinentIndex = array_search(max($continentStrength), $continentStrength);
 
-                    $move = new stdClass();
-                    $move->territory = $state->territories[$theMostVulnerableTerritoryIndex]->name;
-                    
-                    //plays the $move
-                    $this->strengthen_process($game_id, $move);
-
-                break;
-
-                case 'deploy':
-
-                    try
+                $territoryVulnerability = [];
+                foreach ($continents[$strongestContinentIndex] as $territoryIndex)
+                {
+                    if ($state->territories[$territoryIndex]->player === $player)
                     {
-                        $cards = $state->cards->$player;
-                        $set = [];
-                        if (count($cards) > 2)
+                        $enemyStrength = 0;
+                        $territoryName = $state->territories[$territoryIndex]->name;
+                        foreach ($neighbours[$territoryName] as $neighbour)
                         {
-                            $thereIsAWildCard = false;
-                            $index = null;
-                            foreach ($cards as $i => $card)
+                            foreach ($state->territories as $territory)
                             {
-                                if ($card->type === 'wild')
+                                if ($territory->name === $neighbour)
                                 {
-                                    $thereIsAWildCard = true;
-                                    $index = $i;
-                                    $set[] = $card;
-                                    break;
-                                }
-                            }
-                            if ($thereIsAWildCard)
-                            {
-                                if ($index > 1)
-                                {
-                                    $set = array_merge($set, array_slice($cards, 0, 2));
-                                }
-                                else
-                                {
-                                    $set = array_slice($cards, 0, 3);
-                                }
-                            }
-                            else
-                            {
-                                $infantryCard = null;
-                                $cavalryCard = null;
-                                $artilleryCard = null;
-                                foreach ($cards as $card)
-                                {
-                                    switch ($card->type)
+                                    if ($territory->player !== $player)
                                     {
-                                        case 'infantry':
-                                            $infantryCard = $card;
-                                        break;
-                                        case 'cavalry':
-                                            $cavalryCard = $card;
-                                        break;
-                                        case 'artillery':
-                                            $artilleryCard = $card;
-                                        break;
-                                    }
-                                }
-                                if ($infantryCard !== null && $cavalryCard !== null && $artilleryCard !== $null)
-                                {
-                                    $set = [$infantryCard, $cavalryCard, $artilleryCard];
-                                }
-                                else
-                                {
-                                    foreach ($cards as $card)
-                                    {
-                                        if ($card->type === 'infantry')
-                                        {
-                                            $set[] = $card;
-                                        }
-                                    }
-                                    if (count($set) > 2)
-                                    {
-                                        $set = array_slice($set, 0, 3);
-                                    }
-                                    else
-                                    {
-                                        $set = [];
-                                        foreach ($cards as $card)
-                                        {
-                                            if ($card->type === 'cavalry')
-                                            {
-                                                $set[] = $card;
-                                            }
-                                        }
-                                        if (count($set) > 2)
-                                        {
-                                            $set = array_slice($set, 0, 3);
-                                        }
-                                        else
-                                        {
-                                            $set = [];
-                                            foreach ($cards as $card)
-                                            {
-                                                if ($card->type === 'artillery')
-                                                {
-                                                    $set[] = $card;
-                                                }
-                                            }
-                                            if (count($set) > 2)
-                                            {
-                                                $set = array_slice($set, 0, 3);
-                                            }
-                                            else
-                                            {
-                                                $set = [];
-                                            }
-                                        }
+                                        $enemyStrength += $territory->units;
                                     }
                                 }
                             }
                         }
-                        if (count($set) === 3)
-                        {
-                            //plays the move
-                            $move = new stdClass();
-                            $move->set = $set;
-                            $this->play_cards_process($game_id, $move);
-                            break;
-                        }
-                    }
-                    catch (Error $e){}
-
-                    $move = new stdClass();
-                    $move->territories = $state->territories;
-                    try
-                    {
-                        $enemyStrengths = [];
-                        $playerStrengths = [];
-                        $territoryVulnerability = [];
-                        $distribution = [];
-                        foreach ($state->territories as $territory)
-                        {
-                            if ($territory->player === $player)
-                            {
-                                $enemyStrength = 0;
-                                foreach ($neighbours[$territory->name] as $neighbour)
-                                {
-                                    foreach ($state->territories as $anotherTerritory)
-                                    {
-                                        if ($anotherTerritory->name === $neighbour)
-                                        {
-                                            if ($anotherTerritory->player !== $player)
-                                            {
-                                                $enemyStrength += $territory->units;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                $distribution[$territory->name] = 0;
-                                $enemyStrengths[$territory->name] = $enemyStrength;
-                                $playerStrengths[$territory->name] = $territory->units;
-                                $territoryVulnerability[$territory->name] = $enemyStrength / $territory->units;
-                            }
-                        }
-                        $availabeUnits = $state->unitsToDeploy;
-                        while ($availabeUnits > 0)
-                        {
-                            $theMostVulnerableTerritory = array_search(max($territoryVulnerability), $territoryVulnerability);
-                            $distribution[$theMostVulnerableTerritory]++;
-                            $availabeUnits--;
-                            $playerStrengths[$theMostVulnerableTerritory]++;
-                            $territoryVulnerability[$theMostVulnerableTerritory] = $enemyStrengths[$theMostVulnerableTerritory] / $playerStrengths[$theMostVulnerableTerritory];
-                        }
-                        foreach ($move->territories as $territory)
-                        {
-                            if (array_key_exists($territory->name, $distribution))
-                            {
-                                $territory->units += $distribution[$territory->name];
-                            }
-                        }
-                    }
-                    catch (Error $e) {}
-                    
-                    //plays the move
-                    $this->deploy_process($game_id, $move);
-
-                break;
-                
-                case 'attack':
-
-                    $move = null;
-                    try
-                    {
-                        $linesOfAttack = [];
-                        foreach ($state->territories as $territory)
-                        {
-                            if ($territory->player === $player)
-                            {
-                                foreach ($neighbours[$territory->name] as $neighbour)
-                                {  
-                                    foreach ($state->territories as $anotherTerritory)
-                                    {
-                                        if ($anotherTerritory->name === $neighbour)
-                                        {
-                                            if ($anotherTerritory->player !== $player)
-                                            {
-                                                $line = new stdClass();
-                                                $line->attackingTerritory = $territory->name;
-                                                $line->defendingTerritory = $anotherTerritory->name;
-                                                $line->ratio = $territory->units / $anotherTerritory->units;
-                                                $linesOfAttack[] = $line;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $maxRatio = -1;
-                        $maxRatioIndex = -1;
-                        foreach ($linesOfAttack as $i => $line)
-                        {
-                            if ($line->ratio > $maxRatio)
-                            {
-                                $maxRatio = $line->ratio;
-                                $maxRatioIndex = $i;
-                            }
-                        }
-                        if(!$state->hasGainedTerritory)
-                        {
-                            if ($maxRatio >= 1)
-                            {
-                                $move = new stdClass();
-                                $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
-                                $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
-                                $move->blitz = 'false';
-                            }
-                        }
-                        else
-                        {
-                            if ($maxRatio >= 2)
-                            {
-                                $move = new stdClass();
-                                $move->attackingTerritory = $linesOfAttack[$maxRatioIndex]->attackingTerritory;
-                                $move->defendingTerritory = $linesOfAttack[$maxRatioIndex]->defendingTerritory;
-                                $move->blitz = 'false';
-                            }
-                        }
-                    }
-                    catch (Error $e)
-                    {
-                        $move = null;
-                    }
-                    if ($move !== null)
-                    {
-                        //play the attack move
-                        $this->attack_process($game_id, $move);
+                        $territoryVulnerability[] = $enemyStrength / $state->territories[$territoryIndex]->units;
                     }
                     else
                     {
-                        $move = null;
-                        try
+                        $territoryVulnerability[] = 0;
+                    }
+                }
+                $theMostVulnerableTerritoryIndex = $continents[$strongestContinentIndex][array_search(max($territoryVulnerability), $territoryVulnerability)];
+
+                $move = new stdClass();
+                $move->territory = $state->territories[$theMostVulnerableTerritoryIndex]->name;
+                
+                //plays the $move
+                $this->strengthen_process($game_id, $move);
+
+            break;
+
+            case 'deploy':
+
+                // $cards = $state->cards->$player;
+                // $set = [];
+                // if (count($cards) > 2)
+                // {
+                //     $thereIsAWildCard = false;
+                //     $index = null;
+                //     foreach ($cards as $i => $card)
+                //     {
+                //         if ($card->type === 'wild')
+                //         {
+                //             $thereIsAWildCard = true;
+                //             $index = $i;
+                //             $set[] = $card;
+                //             break;
+                //         }
+                //     }
+                //     if ($thereIsAWildCard)
+                //     {
+                //         if ($index > 1)
+                //         {
+                //             $set = array_merge($set, array_slice($cards, 0, 2));
+                //         }
+                //         else
+                //         {
+                //             $set = array_slice($cards, 0, 3);
+                //         }
+                //     }
+                //     else
+                //     {
+                //         $infantryCard = null;
+                //         $cavalryCard = null;
+                //         $artilleryCard = null;
+                //         foreach ($cards as $card)
+                //         {
+                //             switch ($card->type)
+                //             {
+                //                 case 'infantry':
+                //                     $infantryCard = $card;
+                //                 break;
+                //                 case 'cavalry':
+                //                     $cavalryCard = $card;
+                //                 break;
+                //                 case 'artillery':
+                //                     $artilleryCard = $card;
+                //                 break;
+                //             }
+                //         }
+                //         if ($infantryCard !== null && $cavalryCard !== null && $artilleryCard !== $null)
+                //         {
+                //             $set = [$infantryCard, $cavalryCard, $artilleryCard];
+                //         }
+                //         else
+                //         {
+                //             foreach ($cards as $card)
+                //             {
+                //                 if ($card->type === 'infantry')
+                //                 {
+                //                     $set[] = $card;
+                //                 }
+                //             }
+                //             if (count($set) > 2)
+                //             {
+                //                 $set = array_slice($set, 0, 3);
+                //             }
+                //             else
+                //             {
+                //                 $set = [];
+                //                 foreach ($cards as $card)
+                //                 {
+                //                     if ($card->type === 'cavalry')
+                //                     {
+                //                         $set[] = $card;
+                //                     }
+                //                 }
+                //                 if (count($set) > 2)
+                //                 {
+                //                     $set = array_slice($set, 0, 3);
+                //                 }
+                //                 else
+                //                 {
+                //                     $set = [];
+                //                     foreach ($cards as $card)
+                //                     {
+                //                         if ($card->type === 'artillery')
+                //                         {
+                //                             $set[] = $card;
+                //                         }
+                //                     }
+                //                     if (count($set) > 2)
+                //                     {
+                //                         $set = array_slice($set, 0, 3);
+                //                     }
+                //                     else
+                //                     {
+                //                         $set = [];
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                // if (count($set) === 3)
+                // {
+                //     //plays the move
+                //     $move = new stdClass();
+                //     $move->set = $set;
+                //     $this->play_cards_process($game_id, $move);
+                //     break;
+                // }
+
+                $move = new stdClass();
+                $move->territories = $state->territories;
+                $enemyStrengths = [];
+                $playerStrengths = [];
+                $territoryVulnerability = [];
+                $distribution = [];
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player)
+                    {
+                        $enemyStrength = 0;
+                        foreach ($neighbours[$territory->name] as $neighbour)
                         {
-                            $enemyStrengths = [];
-                            $playerStrengths = [];
-                            $territoryVulnerability = [];
-                            foreach ($state->territories as $territory)
+                            foreach ($state->territories as $anotherTerritory)
                             {
-                                if ($territory->player === $player)
+                                if ($anotherTerritory->name === $neighbour)
                                 {
-                                    $enemyStrength = 0;
-                                    foreach ($neighbours[$territory->name] as $neighbour)
+                                    if ($anotherTerritory->player !== $player)
                                     {
-                                        foreach ($state->territories as $anotherTerritory)
-                                        {
-                                            if ($anotherTerritory->name === $neighbour)
-                                            {
-                                                if ($anotherTerritory->player !== $player)
-                                                {
-                                                    $enemyStrength += $territory->units;
-                                                }
-                                                break;
-                                            }
-                                        }
+                                        $enemyStrength += $territory->units;
                                     }
-                                    $enemyStrengths[$territory->name] = $enemyStrength;
-                                    $playerStrengths[$territory->name] = $territory->units;
-                                    $territoryVulnerability[$territory->name] = $enemyStrength / $territory->units;
+                                    break;
                                 }
                             }
-                            foreach ($state->territories as $territory)
+                        }
+                        $distribution[$territory->name] = 0;
+                        $enemyStrengths[$territory->name] = $enemyStrength;
+                        $playerStrengths[$territory->name] = $territory->units;
+                        $territoryVulnerability[$territory->name] = $enemyStrength / $territory->units;
+                    }
+                }
+                $availabeUnits = $state->unitsToDeploy;
+                while ($availabeUnits > 0)
+                {
+                    $theMostVulnerableTerritory = array_search(max($territoryVulnerability), $territoryVulnerability);
+                    $distribution[$theMostVulnerableTerritory]++;
+                    $availabeUnits--;
+                    $playerStrengths[$theMostVulnerableTerritory]++;
+                    $territoryVulnerability[$theMostVulnerableTerritory] = $enemyStrengths[$theMostVulnerableTerritory] / $playerStrengths[$theMostVulnerableTerritory];
+                }
+                foreach ($move->territories as $territory)
+                {
+                    if (array_key_exists($territory->name, $distribution))
+                    {
+                        $territory->units += $distribution[$territory->name];
+                    }
+                }
+
+                //plays the move
+                $this->deploy_process($game_id, $move);
+
+            break;
+            
+            case 'attack':
+
+                $linesOfAttack = [];
+                foreach ($state->territories as $territory)
+                {
+                    if ($territory->player === $player && $territory->units > 1)
+                    {
+                        foreach ($neighbours[$territory->name] as $neighbour)
+                        {  
+                            foreach ($state->territories as $anotherTerritory)
                             {
-                                if ($territory->player === $player && $territory->units > 1)
+                                if ($anotherTerritory->name === $neighbour)
                                 {
-                                    $hasNoHostileNeighbours = true;
-                                    foreach ($neighbours[$territory->name] as $neighbour)
+                                    if ($anotherTerritory->player !== $player)
                                     {
-                                        foreach ($state->territories as $anotherTerritory)
-                                        {
-                                            if ($anotherTerritory->name === $neighbour)
-                                            {
-                                                if ($anotherTerritory->player !== $player)
-                                                {
-                                                    $hasNoHostileNeighbours = false;
-                                                }
-                                                break;
-                                            }
-                                        }
+                                        $line = new stdClass();
+                                        $line->attackingTerritory = $territory->name;
+                                        $line->defendingTerritory = $anotherTerritory->name;
+                                        $line->ratio = $territory->units / $anotherTerritory->units;
+                                        $linesOfAttack[] = $line;
                                     }
-                                    if ($hasNoHostileNeighbours)
-                                    {
-                                        foreach ($neighbours[$territory->name] as $neighbour)
-                                        {
-                                            foreach ($state->territories as $anotherTerritory)
-                                            {
-                                                if ($anotherTerritory->name === $neighbour)
-                                                {
-                                                    if ($anotherTerritory->player === $player)
-                                                    {
-                                                        if ($territoryVulnerability[$anotherTerritory->name] > 0)
-                                                        {
-                                                            $move = new stdClass();
-                                                            $move->fromTerritory = $territory->name;
-                                                            $move->toTerritory = $anotherTerritory->name;
-                                                            $move->fromUnits = 1;
-                                                            $move->toUnits = $anotherTerritory->units + ($territory->units - 1);
-                                                        }
-                                                    }
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
+                                    break;
                                 }
                             }
-                        }
-                        catch (Error $e)
-                        {
-                            $move = null;
-                        }
-                        
-                        if ($move !== null)
-                        {
-                            //play the fortify move
-                            $this->fortify_process($game_id, $move);
-                        }
-                        else
-                        {
-                            $move = new stdClass();
-                            $move->fromTerritory = null;
-                            $move->toTerritory = null;
-                            $move->fromUnits = 0;
-                            $move->toUnits = 0;
-                            //play the empty fortify move
-                            $this->fortify_process($game_id, $move);
                         }
                     }
-                break;
-            }
-        }
-        catch (Error $e)
-        {
-            $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
-            $state = json_decode($gamestate->state);
-            if ($state->phase === 'deploy' && $state->players[$state->turn] === $player)
-            {
-                if ($state->turn === count($state->players) - 1)
+                }
+                $maxRatio = -1;
+                $maxLine = null;
+                foreach ($linesOfAttack as $line)
                 {
-                    $state->turn = 0;
+                    if ($line->ratio > $maxRatio)
+                    {
+                        $maxRatio = $line->ratio;
+                        $maxLine = $line;
+                    }
+                }
+
+                $move = null;
+                if(!$state->hasGainedTerritory)
+                {
+                    if ($maxRatio >= 1)
+                    {
+                        $move = new stdClass();
+                        $move->attackingTerritory = $maxLine->attackingTerritory;
+                        $move->defendingTerritory = $maxLine->defendingTerritory;
+                        $move->blitz = 'false';
+                    }
                 }
                 else
                 {
-                    $state->turn++;
+                    if ($maxRatio >= 2)
+                    {
+                        $move = new stdClass();
+                        $move->attackingTerritory = $maxLine->attackingTerritory;
+                        $move->defendingTerritory = $maxLine->defendingTerritory;
+                        $move->blitz = 'false';
+                    }
                 }
+
+                if ($move !== null)
+                {
+                    //play the attack move
+                    $this->attack_process($game_id, $move);
+                }
+                else
+                {
+                    $move = null;
+                    $enemyStrengths = [];
+                    $playerStrengths = [];
+                    $territoryVulnerability = [];
+                    foreach ($state->territories as $territory)
+                    {
+                        if ($territory->player === $player)
+                        {
+                            $enemyStrength = 0;
+                            foreach ($neighbours[$territory->name] as $neighbour)
+                            {
+                                foreach ($state->territories as $anotherTerritory)
+                                {
+                                    if ($anotherTerritory->name === $neighbour)
+                                    {
+                                        if ($anotherTerritory->player !== $player)
+                                        {
+                                            $enemyStrength += $territory->units;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            $enemyStrengths[$territory->name] = $enemyStrength;
+                            $playerStrengths[$territory->name] = $territory->units;
+                            $territoryVulnerability[$territory->name] = $enemyStrength / $territory->units;
+                        }
+                    }
+                    foreach ($state->territories as $territory)
+                    {
+                        if ($territory->player === $player && $territory->units > 1)
+                        {
+                            $hasNoHostileNeighbours = true;
+                            foreach ($neighbours[$territory->name] as $neighbour)
+                            {
+                                foreach ($state->territories as $anotherTerritory)
+                                {
+                                    if ($anotherTerritory->name === $neighbour)
+                                    {
+                                        if ($anotherTerritory->player !== $player)
+                                        {
+                                            $hasNoHostileNeighbours = false;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            if ($hasNoHostileNeighbours)
+                            {
+                                foreach ($neighbours[$territory->name] as $neighbour)
+                                {
+                                    foreach ($state->territories as $anotherTerritory)
+                                    {
+                                        if ($anotherTerritory->name === $neighbour)
+                                        {
+                                            if ($anotherTerritory->player === $player)
+                                            {
+                                                if ($territoryVulnerability[$anotherTerritory->name] > 0)
+                                                {
+                                                    $move = new stdClass();
+                                                    $move->fromTerritory = $territory->name;
+                                                    $move->toTerritory = $anotherTerritory->name;
+                                                    $move->fromUnits = 1;
+                                                    $move->toUnits = $anotherTerritory->units + ($territory->units - 1);
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }                    
+                    if ($move !== null)
+                    {
+                        //play the fortify move
+                        $this->fortify_process($game_id, $move);
+                    }
+                    else
+                    {
+                        $move = new stdClass();
+                        $move->fromTerritory = null;
+                        $move->toTerritory = null;
+                        $move->fromUnits = 0;
+                        $move->toUnits = 0;
+                        //play the empty fortify move
+                        $this->fortify_process($game_id, $move);
+                    }
+                }
+            break;
+        }
+        $gamestate = Gamestate::where('game_id', $game_id)->orderBy('step', 'desc')->first();
+        $state = json_decode($gamestate->state);
+        if ($state->phase === 'deploy' && $state->players[$state->turn] === $player)
+        {
+            if ($state->turn === count($state->players) - 1)
+            {
+                $state->turn = 0;
+            }
+            else
+            {
+                $state->turn++;
             }
         }
 
@@ -1786,11 +1759,5 @@ class GamestateController extends Controller
         {
             $this->computers_turn($game_id);
         }        
-    }
-
-    public function test()
-    {
-        $this->create_initial_manual(25, ['red', 'blue']);
-        return $this->get_current_state(25);
     }
 }
