@@ -1415,115 +1415,115 @@ class GamestateController extends Controller
 
             case 'deploy':
 
-                // $cards = $state->cards->$player;
-                // $set = [];
-                // if (count($cards) > 2)
-                // {
-                //     $thereIsAWildCard = false;
-                //     $index = null;
-                //     foreach ($cards as $i => $card)
-                //     {
-                //         if ($card->type === 'wild')
-                //         {
-                //             $thereIsAWildCard = true;
-                //             $index = $i;
-                //             $set[] = $card;
-                //             break;
-                //         }
-                //     }
-                //     if ($thereIsAWildCard)
-                //     {
-                //         if ($index > 1)
-                //         {
-                //             $set = array_merge($set, array_slice($cards, 0, 2));
-                //         }
-                //         else
-                //         {
-                //             $set = array_slice($cards, 0, 3);
-                //         }
-                //     }
-                //     else
-                //     {
-                //         $infantryCard = null;
-                //         $cavalryCard = null;
-                //         $artilleryCard = null;
-                //         foreach ($cards as $card)
-                //         {
-                //             switch ($card->type)
-                //             {
-                //                 case 'infantry':
-                //                     $infantryCard = $card;
-                //                 break;
-                //                 case 'cavalry':
-                //                     $cavalryCard = $card;
-                //                 break;
-                //                 case 'artillery':
-                //                     $artilleryCard = $card;
-                //                 break;
-                //             }
-                //         }
-                //         if ($infantryCard !== null && $cavalryCard !== null && $artilleryCard !== $null)
-                //         {
-                //             $set = [$infantryCard, $cavalryCard, $artilleryCard];
-                //         }
-                //         else
-                //         {
-                //             foreach ($cards as $card)
-                //             {
-                //                 if ($card->type === 'infantry')
-                //                 {
-                //                     $set[] = $card;
-                //                 }
-                //             }
-                //             if (count($set) > 2)
-                //             {
-                //                 $set = array_slice($set, 0, 3);
-                //             }
-                //             else
-                //             {
-                //                 $set = [];
-                //                 foreach ($cards as $card)
-                //                 {
-                //                     if ($card->type === 'cavalry')
-                //                     {
-                //                         $set[] = $card;
-                //                     }
-                //                 }
-                //                 if (count($set) > 2)
-                //                 {
-                //                     $set = array_slice($set, 0, 3);
-                //                 }
-                //                 else
-                //                 {
-                //                     $set = [];
-                //                     foreach ($cards as $card)
-                //                     {
-                //                         if ($card->type === 'artillery')
-                //                         {
-                //                             $set[] = $card;
-                //                         }
-                //                     }
-                //                     if (count($set) > 2)
-                //                     {
-                //                         $set = array_slice($set, 0, 3);
-                //                     }
-                //                     else
-                //                     {
-                //                         $set = [];
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-                // if (count($set) === 3)
-                // {
-                //     //plays the move
-                //     $move = new stdClass();
-                //     $move->set = $set;
-                //     $this->play_cards_process($game_id, $move);
-                //     break;
-                // }
+                $cards = $state->cards->$player;
+                $set = [];
+                if (count($cards) > 2)
+                {
+                    $thereIsAWildCard = false;
+                    $index = null;
+                    foreach ($cards as $i => $card)
+                    {
+                        if ($card->type === 'wild')
+                        {
+                            $thereIsAWildCard = true;
+                            $index = $i;
+                            $set[] = $card;
+                            break;
+                        }
+                    }
+                    if ($thereIsAWildCard)
+                    {
+                        if ($index > 1)
+                        {
+                            $set = array_merge($set, array_slice($cards, 0, 2));
+                        }
+                        else
+                        {
+                            $set = array_slice($cards, 0, 3);
+                        }
+                    }
+                    else
+                    {
+                        $infantryCard = null;
+                        $cavalryCard = null;
+                        $artilleryCard = null;
+                        foreach ($cards as $card)
+                        {
+                            switch ($card->type)
+                            {
+                                case 'infantry':
+                                    $infantryCard = $card;
+                                break;
+                                case 'cavalry':
+                                    $cavalryCard = $card;
+                                break;
+                                case 'artillery':
+                                    $artilleryCard = $card;
+                                break;
+                            }
+                        }
+                        if ($infantryCard !== null && $cavalryCard !== null && $artilleryCard !== null)
+                        {
+                            $set = [$infantryCard, $cavalryCard, $artilleryCard];
+                        }
+                        else
+                        {
+                            foreach ($cards as $card)
+                            {
+                                if ($card->type === 'infantry')
+                                {
+                                    $set[] = $card;
+                                }
+                            }
+                            if (count($set) > 2)
+                            {
+                                $set = array_slice($set, 0, 3);
+                            }
+                            else
+                            {
+                                $set = [];
+                                foreach ($cards as $card)
+                                {
+                                    if ($card->type === 'cavalry')
+                                    {
+                                        $set[] = $card;
+                                    }
+                                }
+                                if (count($set) > 2)
+                                {
+                                    $set = array_slice($set, 0, 3);
+                                }
+                                else
+                                {
+                                    $set = [];
+                                    foreach ($cards as $card)
+                                    {
+                                        if ($card->type === 'artillery')
+                                        {
+                                            $set[] = $card;
+                                        }
+                                    }
+                                    if (count($set) > 2)
+                                    {
+                                        $set = array_slice($set, 0, 3);
+                                    }
+                                    else
+                                    {
+                                        $set = [];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (count($set) === 3)
+                {
+                    //plays the move
+                    $move = new stdClass();
+                    $move->set = $set;
+                    $this->play_cards_process($game_id, $move);
+                    break;
+                }
 
                 $move = new stdClass();
                 $move->territories = $state->territories;
