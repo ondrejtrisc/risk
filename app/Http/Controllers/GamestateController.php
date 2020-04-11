@@ -1694,26 +1694,20 @@ class GamestateController extends Controller
                             }
                             if ($hasNoHostileNeighbours)
                             {
-                                foreach ($neighbours[$territory->name] as $neighbour)
+                                foreach ($state->territories as $anotherTerritory)
                                 {
-                                    foreach ($state->territories as $anotherTerritory)
+                                    if ($anotherTerritory->player === $player)
                                     {
-                                        if ($anotherTerritory->name === $neighbour)
+                                        if ($territoryVulnerability[$anotherTerritory->name] > 0)
                                         {
-                                            if ($anotherTerritory->player === $player)
-                                            {
-                                                if ($territoryVulnerability[$anotherTerritory->name] > 0)
-                                                {
-                                                    $move = new stdClass();
-                                                    $move->fromTerritory = $territory->name;
-                                                    $move->toTerritory = $anotherTerritory->name;
-                                                    $move->fromUnits = 1;
-                                                    $move->toUnits = $anotherTerritory->units + ($territory->units - 1);
-                                                }
-                                            }
-                                            break;
+                                            $move = new stdClass();
+                                            $move->fromTerritory = $territory->name;
+                                            $move->toTerritory = $anotherTerritory->name;
+                                            $move->fromUnits = 1;
+                                            $move->toUnits = $anotherTerritory->units + ($territory->units - 1);
                                         }
                                     }
+                                    break;
                                 }
                             }
                         }
