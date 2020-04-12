@@ -22,7 +22,7 @@ class GamestateController extends Controller
         }
     }
 
-    public function create_initial_random($game_id, $players, $computerPlayers)
+    public function initialize($game_id, $players, $computerPlayers)
     {
         $gamestate = new Gamestate();
         $gamestate->game_id = $game_id;
@@ -125,84 +125,15 @@ class GamestateController extends Controller
             $state->territories[] = $territory;
         }
 
-        //initial distribution of territories (one troop added to each territory)
-        switch (count($state->players))
-        {
-            case 2:
-                $initial_units = 50;
-                break;
-            case 3:
-                $initial_units = 35;
-                break;
-            case 4:
-                $initial_units = 30;
-                break;
-            case 5:
-                $initial_units = 25;
-                break;
-            case 6:
-                $initial_units = 20;
-                break;          
-        }
+        //returns the gamestate
+        $gamestate->state = $state;
+        return $gamestate;
+    }
 
-        $occupiedBy = [];
-        $unitsToDistribute = new stdClass();
-        foreach ($state->players as $player)
-        {
-            $occupiedBy[$player] = [];
-            $unitsToDistribute->$player = $initial_units;
-        }
-
-        $territories = $state->territories;
-        shuffle($territories);
-        $playerIndex = 0;
-        foreach ($territories as $territory)
-        {
-            $player = $state->players[$playerIndex];
-            $territory->player = $player;
-            $territory->units = 1;
-            $occupiedBy[$player][] = $territory;
-            $unitsToDistribute->$player--;
-
-            if ($playerIndex === count($state->players) - 1)
-            {
-                $playerIndex = 0;
-            }
-            else
-            {
-                $playerIndex++;
-            }
-        }
-
-        //distribution of remaining troops
-        while (true)
-        {
-            $player = $state->players[$playerIndex];
-            $territory = $occupiedBy[$player][rand(0, count($occupiedBy[$player]) - 1)];
-            $territory->units++;
-            $unitsToDistribute->$player--;
-
-            if ($playerIndex === count($state->players) - 1)
-            {
-                $playerIndex = 0;
-            }
-            else
-            {
-                $playerIndex++;
-            }
-
-            $player = $players[$playerIndex];
-            if($unitsToDistribute->$player === 0)
-            {
-                break;
-            }
-        }
-
-        //sets the first player's turn
-        $state->turn = 0;
-
-        //sets the phase to deploy
+    public function set_to_deploy($state)
+    {
         $state->phase = 'deploy';
+        $state->unitsToDistribute = null;
         $state->attackerDice = null;
         $state->defenderDice = null;
         $state->attackerLost = null;
@@ -311,6 +242,93 @@ class GamestateController extends Controller
             $state->unitsOfAustralia = 2;
         }
 
+        return $state;
+    }
+
+    public function create_initial_random($game_id, $players, $computerPlayers)
+    {
+        $gamestate = $this->initialize($game_id, $players, $computerPlayers);
+        $state = $gamestate->state;
+
+        //initial distribution of territories (one troop added to each territory)
+        switch (count($state->players))
+        {
+            case 2:
+                $initial_units = 50;
+                break;
+            case 3:
+                $initial_units = 35;
+                break;
+            case 4:
+                $initial_units = 30;
+                break;
+            case 5:
+                $initial_units = 25;
+                break;
+            case 6:
+                $initial_units = 20;
+                break;          
+        }
+
+        $occupiedBy = [];
+        $unitsToDistribute = new stdClass();
+        foreach ($state->players as $player)
+        {
+            $occupiedBy[$player] = [];
+            $unitsToDistribute->$player = $initial_units;
+        }
+
+        $territories = $state->territories;
+        shuffle($territories);
+        $playerIndex = 0;
+        foreach ($territories as $territory)
+        {
+            $player = $state->players[$playerIndex];
+            $territory->player = $player;
+            $territory->units = 1;
+            $occupiedBy[$player][] = $territory;
+            $unitsToDistribute->$player--;
+
+            if ($playerIndex === count($state->players) - 1)
+            {
+                $playerIndex = 0;
+            }
+            else
+            {
+                $playerIndex++;
+            }
+        }
+
+        //distribution of remaining troops
+        while (true)
+        {
+            $player = $state->players[$playerIndex];
+            $territory = $occupiedBy[$player][rand(0, count($occupiedBy[$player]) - 1)];
+            $territory->units++;
+            $unitsToDistribute->$player--;
+
+            if ($playerIndex === count($state->players) - 1)
+            {
+                $playerIndex = 0;
+            }
+            else
+            {
+                $playerIndex++;
+            }
+
+            $player = $players[$playerIndex];
+            if($unitsToDistribute->$player === 0)
+            {
+                break;
+            }
+        }
+
+        //sets the first player's turn
+        $state->turn = 0;
+
+        //sets the phase to deploy
+        $state = $this->set_to_deploy($state);
+
         $gamestate->state = json_encode($state);
 
         $gamestate->save();
@@ -318,106 +336,8 @@ class GamestateController extends Controller
 
     public function create_initial_manual($game_id, $players, $computerPlayers)
     {
-        $gamestate = new Gamestate();
-        $gamestate->game_id = $game_id;
-        $gamestate->step = 1;
-
-        $state = new stdClass();
-        $state->players = $players;
-        $state->computerPlayers = $computerPlayers;
-        $state->territories = [];
-        
-        $territoryNames = ['alaska', 'northwest_territory', 'greenland', 'alberta', 'ontario', 'eastern_canada', 'western_united_states', 'eastern_united_states', 'central_america', 'venezuela', 'peru', 'brazil', 'argentina', 'iceland', 'scandinavia', 'great_britain', 'northern_europe', 'western_europe', 'southern_europe', 'russia', 'north_africa', 'egypt', 'east_africa', 'central_africa', 'south_africa', 'madagascar', 'ural', 'siberia', 'yakutsk', 'irkutsk', 'kamchatka', 'afghanistan', 'china', 'mongolia', 'japan', 'middle_east', 'india', 'southeast_asia', 'indonesia', 'new_guinea', 'western_australia', 'eastern_australia'];
-        
-        //creates the deck of cards
-        $deck = [];
-        foreach ($territoryNames as $territoryName)
-        {
-            $card = new stdClass();
-            $card->territory = $territoryName;
-            switch ($territoryName)
-            {                  
-                case 'alaska':
-                case 'argentina':
-                case 'central_africa':
-                case 'china':
-                case 'east_africa':
-                case 'egypt':
-                case 'iceland':
-                case 'kamchatka':
-                case 'middle_east':
-                case 'mongolia':
-                case 'new_guinea':
-                case 'peru':
-                case 'southeast_asia':
-                case 'venezuela':
-                    $card->type = 'infantry';
-                break;
-                case 'afghanistan':
-                case 'alberta':
-                case 'eastern_canada':
-                case 'greenland':
-                case 'india':
-                case 'irkutsk':
-                case 'madagascar':
-                case 'north_africa':
-                case 'ontario':
-                case 'russia':
-                case 'scandinavia':
-                case 'siberia':
-                case 'ural':
-                case 'yakutsk':
-                    $card->type = 'cavalry';
-                break;
-                case 'brazil':
-                case 'central_america':
-                case 'eastern_australia':
-                case 'eastern_united_states':
-                case 'great_britain':
-                case 'indonesia':
-                case 'japan':
-                case 'northern_europe':
-                case 'northwest_territory':
-                case 'south_africa':
-                case 'southern_europe':
-                case 'western_australia':
-                case 'western_europe':
-                case 'western_united_states':
-                    $card->type = 'artillery';
-                break;
-            }
-            $deck[] = $card;
-        }
-        $card = new stdClass();
-        $card->territory = 'wild';
-        $card->type = 'wild';
-        $deck[] = $card;
-        $card = new stdClass();
-        $card->territory = 'wild';
-        $card->type = 'wild';
-        $deck[] = $card;
-        shuffle($deck);
-        $state->deck = $deck;
-
-        //creates the cards object
-        $cards = new stdClass();
-        foreach ($state->players as $player)
-        {
-            $cards->$player = [];
-        }
-        $state->cards = $cards;
-        $state->matches = 0;
-        
-        //creates the territories
-        foreach ($territoryNames as $name)
-        {
-            $territory = new stdClass();
-            $territory->name = $name;
-            $territory->player = null;
-            $territory->units = 0;
-
-            $state->territories[] = $territory;
-        }
+        $gamestate = $this->initialize($game_id, $players, $computerPlayers);
+        $state = $gamestate->state;
 
         switch (count($state->players))
         {
@@ -588,111 +508,7 @@ class GamestateController extends Controller
         if($state->unitsToDistribute->$player === 0)
         {
             //sets the phase to deploy
-            $state->phase = 'deploy';
-            $state->unitsToDistribute = null;
-
-            //calculates how many units the first player can deploy
-            $playerHeldTerritories = 0;
-            foreach ($state->territories as $territory)
-            {
-                if ($territory->player === $state->players[$state->turn])
-                {
-                    $playerHeldTerritories++;
-                }
-            }
-            $state->unitsOfTerritories = max(3, floor($playerHeldTerritories / 3));
-            $state->unitsToDeploy = $state->unitsOfTerritories;
-            
-            $state->unitsOfNorthAmerica = null;
-            $state->unitsOfSouthAmerica = null;
-            $state->unitsOfEurope = null;
-            $state->unitsOfAfrica = null;
-            $state->unitsOfAsia = null;
-            $state->unitsOfAustralia = null;
-            $holdsNorthAmerica = true;
-            for ($i = 0; $i < 9; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsNorthAmerica = false;
-                    break;
-                }
-            }
-            if ($holdsNorthAmerica)
-            {
-                $state->unitsToDeploy += 5;
-                $state->unitsOfNorthAmerica = 5;
-            }
-            $holdsSouthAmerica = true;
-            for ($i = 9; $i < 13; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsSouthAmerica = false;
-                    break;
-                }
-            }
-            if ($holdsSouthAmerica)
-            {
-                $state->unitsToDeploy += 2;
-                $state->unitsOfSouthAmerica = 2;
-            }
-            $holdsEurope = true;
-            for ($i = 13; $i < 20; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsEurope = false;
-                    break;
-                }
-            }
-            if ($holdsEurope)
-            {
-                $state->unitsToDeploy += 5;
-                $state->unitsOfEurope = 5;
-            }
-            $holdsAfrica = true;
-            for ($i = 20; $i < 26; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsAfrica = false;
-                    break;
-                }
-            }
-            if ($holdsAfrica)
-            {
-                $state->unitsToDeploy += 3;
-                $state->unitsOfAfrica = 3;
-            }
-            $holdsAsia = true;
-            for ($i = 26; $i < 38; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsAsia = false;
-                    break;
-                }
-            }
-            if ($holdsAsia)
-            {
-                $state->unitsToDeploy += 7;
-                $state->unitsOfAsia = 7;
-            }
-            $holdsAustralia = true;
-            for ($i = 38; $i < 42; $i++)
-            {
-                if ($state->territories[$i]->player !== $state->players[$state->turn])
-                {
-                    $holdsAustralia = false;
-                    break;
-                }
-            }
-            if ($holdsAustralia)
-            {
-                $state->unitsToDeploy += 2;
-                $state->unitsOfAustralia = 2;
-            }
+            $state = $this->set_to_deploy($state);
         }
 
         //creates the new gamestate
@@ -1072,114 +888,7 @@ class GamestateController extends Controller
         }
 
         //changes the phase to deploy
-        $state->phase = 'deploy';
-        $state->attackerDice = null;
-        $state->defenderDice = null;
-        $state->attackerLost = null;
-        $state->defenderLost = null;
-
-        //calculates how many units the first player can deploy
-        $playerHeldTerritories = 0;
-        foreach ($state->territories as $territory)
-        {
-            if ($territory->player === $state->players[$state->turn])
-            {
-                $playerHeldTerritories++;
-            }
-        }
-        $state->unitsOfTerritories = max(3, floor($playerHeldTerritories / 3));
-        $state->unitsToDeploy = $state->unitsOfTerritories;
-        
-        $state->unitsOfNorthAmerica = null;
-        $state->unitsOfSouthAmerica = null;
-        $state->unitsOfEurope = null;
-        $state->unitsOfAfrica = null;
-        $state->unitsOfAsia = null;
-        $state->unitsOfAustralia = null;
-        $holdsNorthAmerica = true;
-        for ($i = 0; $i < 9; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsNorthAmerica = false;
-                break;
-            }
-        }
-        if ($holdsNorthAmerica)
-        {
-            $state->unitsToDeploy += 5;
-            $state->unitsOfNorthAmerica = 5;
-        }
-        $holdsSouthAmerica = true;
-        for ($i = 9; $i < 13; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsSouthAmerica = false;
-                break;
-            }
-        }
-        if ($holdsSouthAmerica)
-        {
-            $state->unitsToDeploy += 2;
-            $state->unitsOfSouthAmerica = 2;
-        }
-        $holdsEurope = true;
-        for ($i = 13; $i < 20; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsEurope = false;
-                break;
-            }
-        }
-        if ($holdsEurope)
-        {
-            $state->unitsToDeploy += 5;
-            $state->unitsOfEurope = 5;
-        }
-        $holdsAfrica = true;
-        for ($i = 20; $i < 26; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsAfrica = false;
-                break;
-            }
-        }
-        if ($holdsAfrica)
-        {
-            $state->unitsToDeploy += 3;
-            $state->unitsOfAfrica = 3;
-        }
-        $holdsAsia = true;
-        for ($i = 26; $i < 38; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsAsia = false;
-                break;
-            }
-        }
-        if ($holdsAsia)
-        {
-            $state->unitsToDeploy += 7;
-            $state->unitsOfAsia = 7;
-        }
-        $holdsAustralia = true;
-        for ($i = 38; $i < 42; $i++)
-        {
-            if ($state->territories[$i]->player !== $state->players[$state->turn])
-            {
-                $holdsAustralia = false;
-                break;
-            }
-        }
-        if ($holdsAustralia)
-        {
-            $state->unitsToDeploy += 2;
-            $state->unitsOfAustralia = 2;
-        }
+        $state = $this->set_to_deploy($state);
 
         //creates the new gamestate
         $newGamestate = new Gamestate();
